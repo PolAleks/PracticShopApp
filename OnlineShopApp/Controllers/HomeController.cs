@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Models;
 
@@ -13,9 +14,27 @@ namespace OnlineShopApp.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public string Index()
         {
-            return View();
+            List<Product> products = InitialProducts();
+
+            var result = new StringBuilder();
+            foreach (var product in products)
+            {
+                result.AppendLine($"ID: {product.Id} - Name: {product.Name} - Cost: {product.Cost}");
+            }
+
+            return result.ToString();
+        }
+
+        private static List<Product> InitialProducts()
+        {
+            return new List<Product>()
+            {
+                new(){Id = 1, Name = "product 1", Cost = 90},
+                new(){Id = 2, Name = "product 2", Cost = 100},
+                new(){Id = 3, Name = "product 3", Cost = 85}
+            };
         }
 
         public IActionResult Privacy()
