@@ -1,32 +1,25 @@
-using System.Diagnostics;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Models;
+using OnlineShopApp.Repositories;
 
 namespace OnlineShopApp.Controllers
 {
     public class HomeController : Controller
-    {
-        private readonly ILogger<HomeController> _logger;
+    {      
 
-        public HomeController(ILogger<HomeController> logger)
+        public string Index()
         {
-            _logger = logger;
+            List<Product> products = ProductsRepository.GetAll();
+
+            var result = new StringBuilder();
+            foreach (var product in products)
+            {
+                result.AppendLine(product.ToString());
+            }
+
+            return result.ToString();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
