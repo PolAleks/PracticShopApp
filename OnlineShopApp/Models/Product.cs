@@ -9,7 +9,9 @@
 
         public override string ToString()
         {
-            return $"Код товара: {Id}{Environment.NewLine}Наименование: {Name}{Environment.NewLine}Цена: {Cost:c}{Environment.NewLine}";
+            return $"Код товара: {Id}{Environment.NewLine}" +
+                $"Наименование: {Name}{Environment.NewLine}" +
+                $"Цена: {Cost:c}{Environment.NewLine}";
         }
     }
 }

@@ -13,5 +13,7 @@ namespace OnlineShopApp.Repositories
             ];
 
         public static List<Product> GetAll() => _products;
+
+        public static Product? TryGetById(int id) => _products.FirstOrDefault(p => p.Id == id);
     }
 }
