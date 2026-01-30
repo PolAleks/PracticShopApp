@@ -6,6 +6,7 @@
         public string Name { get; set; } = name;
         public decimal Cost { get; set; } = cost;
         public string? Description { get; set; } = description;
+        public string PhotoPath { get; set; } = "/img/product.png";
 
         public override string ToString()
         {
