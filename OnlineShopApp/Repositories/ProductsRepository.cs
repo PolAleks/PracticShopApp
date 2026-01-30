@@ -19,6 +19,14 @@ namespace OnlineShopApp.Repositories
 
         public static List<Product> GetAll() => _products;
 
-        public static Product? TryGetById(int id) => _products.FirstOrDefault(p => p.Id == id);
+        public static Product? TryGetById(int id)
+        {
+            return _products.FirstOrDefault(p => p.Id == id);
+        }
+
+        public static void Add(string name, decimal cost, string description)
+        {
+            _products.Add(new Product(++_instanceCounter, name, cost, description));
+        }
     }
 }

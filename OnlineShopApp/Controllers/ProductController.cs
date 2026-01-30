@@ -14,5 +14,12 @@ namespace OnlineShopApp.Controllers
             }
             return $"Товар с идентификатором: {id} отсутствует!";
         }
+
+        public IActionResult Add(string name, decimal cost, string description)
+        {
+            ProductsRepository.Add(name, cost, description);
+
+            return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+        }
     }
 }

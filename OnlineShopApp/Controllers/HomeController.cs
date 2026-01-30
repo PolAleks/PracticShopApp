@@ -8,13 +8,11 @@ namespace OnlineShopApp.Controllers
 {
     public class HomeController : Controller
     {      
-
         public IActionResult Index()
         {
             var products = ProductsRepository.GetAll();
 
             return View(products);
         }
-
     }
 }
