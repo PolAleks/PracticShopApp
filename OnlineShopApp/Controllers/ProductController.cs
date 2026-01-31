@@ -5,14 +5,11 @@ namespace OnlineShopApp.Controllers
 {
     public class ProductController : Controller
     {
-        public string Index(int id)
+        public IActionResult Index(int id)
         {
             var product = ProductsRepository.TryGetById(id);
-            if (product is not null)
-            {
-                return $"{product}{product.Description}"; 
-            }
-            return $"Товар с идентификатором: {id} отсутствует!";
+            
+            return View(product);
         }
 
         public IActionResult Add(string name, decimal cost, string description)
