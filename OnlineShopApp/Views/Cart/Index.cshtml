@@ -21,9 +21,9 @@
                         <tr align="center">
                             <td class="fw-bold">@(i+1)</td>
                             <td align="left">@Model.Items[i].Product.Name</td>
-                            <td align="left">@Model.Items[i].Product.Cost</td>
+                            <td align="left">@Model.Items[i].Product.Cost.ToString("c")</td>
                             <td>@Model.Items[i].Quantity</td>
-                            <td class="fw-bold">@Model.Items[i].Cost</td>
+                            <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
                         </tr>
                     }
                 </tbody>
@@ -31,7 +31,7 @@
                     <tr align="center">
                         <th colspan="2"></th>
                         <th colspan="2">
-                            Общая стоимость: @Model.TotalCost
+                            Общая стоимость: @Model.TotalCost?.ToString("c")
                         </th>
                         <th colspan="1">
                             <a class="btn btn-success"
