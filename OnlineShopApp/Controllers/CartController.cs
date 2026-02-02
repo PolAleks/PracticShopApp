@@ -10,5 +10,15 @@ namespace OnlineShopApp.Controllers
             var card = CartRepository.TryGetbyUserId(Constans.UserId);
             return View(card);
         }
+
+        public IActionResult Add(int productId)
+        {
+            var product = ProductsRepository.TryGetById(productId);
+            if (product is not null)
+            {
+                CartRepository.Add(product, Constans.UserId);
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
