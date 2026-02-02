@@ -3,7 +3,7 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Repositories
 {
-    public static class CartRepository
+    public static class CartsRepository
     {
         private static readonly List<Cart> _card = [];
 

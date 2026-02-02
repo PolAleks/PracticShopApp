@@ -7,7 +7,7 @@ namespace OnlineShopApp.Controllers
     {
         public IActionResult Index()
         {
-            var card = CartRepository.TryGetbyUserId(Constans.UserId);
+            var card = CartsRepository.TryGetbyUserId(Constans.UserId);
             return View(card);
         }
 
@@ -16,7 +16,7 @@ namespace OnlineShopApp.Controllers
             var product = ProductsRepository.TryGetById(productId);
             if (product is not null)
             {
-                CartRepository.Add(product, Constans.UserId);
+                CartsRepository.Add(product, Constans.UserId);
             }
             return RedirectToAction(nameof(Index));
         }
