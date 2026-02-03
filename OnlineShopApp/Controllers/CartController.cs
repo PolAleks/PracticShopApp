@@ -6,10 +6,12 @@ namespace OnlineShopApp.Controllers
     public class CartController : Controller
     {
         private readonly CartsRepository _cartsRepository;
+        private readonly ProductsRepository _productsRepository;
 
-        public CartController(CartsRepository cartsRepository)
+        public CartController(CartsRepository cartsRepository, ProductsRepository productsRepository)
         {
             _cartsRepository = cartsRepository;
+            _productsRepository = productsRepository;
         }
 
         public IActionResult Index()
@@ -20,7 +22,7 @@ namespace OnlineShopApp.Controllers
 
         public IActionResult Add(int productId)
         {
-            var product = ProductsRepository.TryGetById(productId);
+            var product = _productsRepository.TryGetById(productId);
             if (product is not null)
             {
                 _cartsRepository.Add(product, Constans.UserId);

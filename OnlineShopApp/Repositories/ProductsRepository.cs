@@ -2,11 +2,14 @@
 
 namespace OnlineShopApp.Repositories
 {
-    public static class ProductsRepository
+    public class ProductsRepository
     {
-        private static int _instanceCounter = 0;
-        private static readonly List<Product> _products =
-            [
+        private int _instanceCounter = 0;
+        private readonly List<Product> _products;
+
+        public ProductsRepository()
+        {
+            _products = [
                 new Product(++_instanceCounter, "Товар 1", 1000, "Описание 1"),
                 new Product(++_instanceCounter, "Товар 2", 2000, "Описание 2"),
                 new Product(++_instanceCounter, "Товар 3", 1500, "Описание 3"),
@@ -16,15 +19,15 @@ namespace OnlineShopApp.Repositories
                 new Product(++_instanceCounter, "Товар 7", 2750, "Описание 7"),
                 new Product(++_instanceCounter, "Товар 8", 500, "Описание 8")
             ];
+        }
+        public List<Product> GetAll() => _products;
 
-        public static List<Product> GetAll() => _products;
-
-        public static Product? TryGetById(int id)
+        public Product? TryGetById(int id)
         {
             return _products.FirstOrDefault(p => p.Id == id);
         }
 
-        public static void Add(string name, decimal cost, string description)
+        public void Add(string name, decimal cost, string description)
         {
             _products.Add(new Product(++_instanceCounter, name, cost, description));
         }
