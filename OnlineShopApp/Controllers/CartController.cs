@@ -3,14 +3,14 @@ using OnlineShopApp.Repositories;
 
 namespace OnlineShopApp.Controllers
 {
-    public class CartController(CartsRepository cartsRepository, ProductsRepository productsRepository) : Controller
+    public class CartController(ICartsRepository cartsRepository, IProductsRepository productsRepository) : Controller
     {
-        private readonly CartsRepository _cartsRepository = cartsRepository;
-        private readonly ProductsRepository _productsRepository = productsRepository;
+        private readonly ICartsRepository _cartsRepository = cartsRepository;
+        private readonly IProductsRepository _productsRepository = productsRepository;
 
         public IActionResult Index()
         {
-            var card = _cartsRepository.TryGetbyUserId(Constans.UserId);
+            var card = _cartsRepository.TryGetByUserId(Constans.UserId);
             return View(card);
         }
 

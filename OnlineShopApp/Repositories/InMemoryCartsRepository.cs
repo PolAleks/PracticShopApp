@@ -2,18 +2,18 @@
 
 namespace OnlineShopApp.Repositories
 {
-    public class CartsRepository
+    public class InMemoryCartsRepository : ICartsRepository
     {
         private readonly List<Cart> _card = [];
 
-        public Cart? TryGetbyUserId(string userId)
+        public Cart? TryGetByUserId(string userId)
         {
             return _card.FirstOrDefault(c => c.UserId == userId);
         }
 
         public void Add(Product product, string userId)
         {
-            var existingCart = TryGetbyUserId(userId);
+            var existingCart = TryGetByUserId(userId);
             if (existingCart is null)
             {
                 _card.Add(new Cart
