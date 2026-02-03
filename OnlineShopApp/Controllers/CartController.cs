@@ -5,9 +5,16 @@ namespace OnlineShopApp.Controllers
 {
     public class CartController : Controller
     {
+        private readonly CartsRepository _cartsRepository;
+
+        public CartController(CartsRepository cartsRepository)
+        {
+            _cartsRepository = cartsRepository;
+        }
+
         public IActionResult Index()
         {
-            var card = CartsRepository.TryGetbyUserId(Constans.UserId);
+            var card = _cartsRepository.TryGetbyUserId(Constans.UserId);
             return View(card);
         }
 
@@ -16,7 +23,7 @@ namespace OnlineShopApp.Controllers
             var product = ProductsRepository.TryGetById(productId);
             if (product is not null)
             {
-                CartsRepository.Add(product, Constans.UserId);
+                _cartsRepository.Add(product, Constans.UserId);
             }
             return RedirectToAction(nameof(Index));
         }

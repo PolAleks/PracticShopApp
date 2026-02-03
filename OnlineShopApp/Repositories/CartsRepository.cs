@@ -3,16 +3,16 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Repositories
 {
-    public static class CartsRepository
+    public class CartsRepository
     {
-        private static readonly List<Cart> _card = [];
+        private readonly List<Cart> _card = [];
 
-        public static Cart? TryGetbyUserId(string userId)
+        public Cart? TryGetbyUserId(string userId)
         {
             return _card.FirstOrDefault(c => c.UserId == userId);
         }
 
-        internal static void Add(Product product, string userId)
+        public void Add(Product product, string userId)
         {
             var existingCart = TryGetbyUserId(userId);
             if (existingCart is null)
