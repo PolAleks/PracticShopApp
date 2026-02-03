@@ -10,6 +10,7 @@ namespace OnlineShopApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddSingleton<CartsRepository>();
             builder.Services.AddSingleton<ProductsRepository>();
 

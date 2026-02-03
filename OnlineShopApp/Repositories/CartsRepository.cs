@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using OnlineShopApp.Models;
+﻿using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Repositories
 {

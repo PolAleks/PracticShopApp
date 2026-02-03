@@ -3,14 +3,9 @@ using OnlineShopApp.Repositories;
 
 namespace OnlineShopApp.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController(ProductsRepository productsRepository) : Controller
     {
-        private readonly ProductsRepository _productsRepository;
-
-        public ProductController(ProductsRepository productsRepository)
-        {
-            _productsRepository = productsRepository;
-        }
+        private readonly ProductsRepository _productsRepository = productsRepository;
 
         public IActionResult Index(int id)
         {
