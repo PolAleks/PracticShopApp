@@ -1,3 +1,4 @@
+using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
 
 namespace OnlineShopApp
