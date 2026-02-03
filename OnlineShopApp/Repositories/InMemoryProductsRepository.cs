@@ -1,13 +1,14 @@
-﻿using OnlineShopApp.Models;
+﻿using OnlineShopApp.Interfaces;
+using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Repositories
 {
-    public class ProductsRepository
+    public class InMemoryProductsRepository : IProductsRepository
     {
         private int _instanceCounter = 0;
         private readonly List<Product> _products;
 
-        public ProductsRepository()
+        public InMemoryProductsRepository()
         {
             _products = [
                 new Product(++_instanceCounter, "Товар 1", 1000, "Описание 1"),

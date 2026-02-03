@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using OnlineShopApp.Repositories;
+using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
-    public class HomeController(ProductsRepository productsRepository) : Controller
+    public class HomeController(IProductsRepository productsRepository) : Controller
     {      
-        private readonly ProductsRepository _productsRepository = productsRepository;
+        private readonly IProductsRepository _productsRepository = productsRepository;
 
         public IActionResult Index()
         {
