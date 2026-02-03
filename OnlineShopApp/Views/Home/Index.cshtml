@@ -7,17 +7,23 @@
 <div class="row">
     @if (Model is not null)
     {
-        @foreach(var product in Model)
+        @foreach (var product in Model)
         {
             <div class="col-3 mb-3">
                 <div class="card shadow">
-                    <img class="card-img-bottom" src="@product.PhotoPath"/>
+                    <img class="card-img-bottom" src="@product.PhotoPath" />
                     <div class="card-body text-center">
-                        <a class="text-success" asp-controller="Product" asp-action="index" asp-route-id="@product.Id">
+                        <a class="text-success"
+                           asp-controller="Product"
+                           asp-action="index"
+                           asp-route-id="@product.Id">
                             <h5>@product.Name</h5>
                         </a>
                         <h2 class="text-danger">@product.Cost.ToString("c")</h2>
-                        <a class="btn btn-success" href="#">Добавить в корзину</a>
+                        <a class="btn btn-success"
+                           asp-controller="Cart"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id">Добавить в корзину</a>
                     </div>
                 </div>
             </div>
