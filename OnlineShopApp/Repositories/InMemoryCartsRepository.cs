@@ -61,5 +61,14 @@ namespace OnlineShopApp.Repositories
                 }
             }
         }
+
+        public void Clear(string userId)
+        {
+            var existingCart = TryGetByUserId(userId);
+            if (existingCart is not null)
+            {
+                existingCart.Items?.Clear();
+            }
+        }
     }
 }

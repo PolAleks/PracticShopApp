@@ -34,5 +34,11 @@ namespace OnlineShopApp.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Clear()
+        {
+            _cartsRepository.Clear(Constans.UserId);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
