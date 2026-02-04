@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
@@ -20,6 +21,16 @@ namespace OnlineShopApp.Controllers
             if (product is not null)
             {
                 _cartsRepository.Add(product, Constans.UserId);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Subtract(int productId) 
+        {
+            var product = _productsRepository.TryGetById(productId);
+            if (product is not null)
+            {
+                _cartsRepository.Subtract(product, Constans.UserId);
             }
             return RedirectToAction(nameof(Index));
         }

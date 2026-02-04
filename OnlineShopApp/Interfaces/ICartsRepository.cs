@@ -6,5 +6,6 @@ namespace OnlineShopApp.Interfaces
     {
         Cart? TryGetByUserId(string userId);
         void Add(Product product, string userId);
+        void Subtract(Product product, string userId);
     }
 }

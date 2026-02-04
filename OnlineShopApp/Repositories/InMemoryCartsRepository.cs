@@ -45,5 +45,21 @@ namespace OnlineShopApp.Repositories
                 }
             }
         }
+
+        public void Subtract(Product product, string userId)
+        {
+            var existingCart = TryGetByUserId(userId);
+            if (existingCart is not null)
+            {
+                var existingItem = existingCart.Items?.FirstOrDefault(item => item.Product?.Id == product.Id);
+                if (existingItem is not null)
+                {
+                    if (--existingItem.Quantity == 0)
+                    {
+                        existingCart.Items?.Remove(existingItem);
+                    }
+                }
+            }
+        }
     }
 }
