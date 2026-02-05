@@ -7,7 +7,7 @@
     <h2 class="row-title">Оформление заказа</h2>
 </div>
 
-@if (Model != null && Model.Items.Count > 0)
+@if (Model != null && Model.Items?.Count > 0)
 {
     <div class="row justify-content-center mt-3">
         <div class="col">
@@ -52,18 +52,18 @@
                                         <tr align="center" class="align-baseline">
                                             <td class="fw-bold">@(i + 1)</td>
                                             <td align="left">@Model.Items[i].Product.Name</td>
-                                            <td align="left">@Model.Items[i].Product.Cost</td>
+                                            <td align="left">@Model.Items[i].Product.Cost.ToString("c")</td>
                                             <td>
                                                 @Model.Items[i].Quantity
                                             </td>
-                                            <td class="fw-bold">@Model.Items[i].Cost</td>
+                                            <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
                                         </tr>
                                     }
                                 </tbody>
                                 <tfoot class="table-borderless ">
                                     <tr align="center">
                                         <th colspan="5">
-                                            Общая стоимость заказа: @Model.TotalCost
+                                            Общая стоимость заказа: @Model.TotalCost?.ToString("c")
                                         </th>
                                     </tr>
                                 </tfoot>
@@ -78,7 +78,7 @@
     <div class="text-center">
         <a class="btn btn-outline-danger"
            asp-controller="Order"
-           asp-action="Create">
+           asp-action="Buy">
             Оплатить заказ
         </a>
     </div>
