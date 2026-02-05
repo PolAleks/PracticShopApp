@@ -25,13 +25,10 @@ namespace OnlineShopApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Subtract(int productId) 
+        public IActionResult Subtract(int productId)
         {
-            var product = _productsRepository.TryGetById(productId);
-            if (product is not null)
-            {
-                _cartsRepository.Subtract(product, Constans.UserId);
-            }
+            _cartsRepository.Subtract(productId, Constans.UserId);
+
             return RedirectToAction(nameof(Index));
         }
 
