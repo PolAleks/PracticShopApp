@@ -5,11 +5,11 @@ namespace OnlineShopApp.Repositories
 {
     public class InMemoryCartsRepository : ICartsRepository
     {
-        private readonly List<Cart> _card = [];
+        private readonly List<Cart> _carts = [];
 
         public Cart? TryGetByUserId(string userId)
         {
-            return _card.FirstOrDefault(c => c.UserId == userId);
+            return _carts.FirstOrDefault(c => c.UserId == userId);
         }
 
         public void Add(Product product, string userId)
@@ -17,7 +17,7 @@ namespace OnlineShopApp.Repositories
             var existingCart = TryGetByUserId(userId);
             if (existingCart is null)
             {
-                _card.Add(new Cart
+                _carts.Add(new Cart
                 {
                     Id = new Guid(),
                     UserId = userId,
@@ -43,6 +43,30 @@ namespace OnlineShopApp.Repositories
                 {
                     existingItem.Quantity++;
                 }
+            }
+        }
+
+        public void Subtract(int productId, string userId)
+        {
+            var existingCart = TryGetByUserId(userId);
+
+            var existingCartItem = existingCart?.Items?.FirstOrDefault(item => item.Product?.Id == productId);
+
+            if (existingCartItem is not null)
+            {
+                if (--existingCartItem.Quantity == 0)
+                {
+                    existingCart!.Items!.Remove(existingCartItem);
+                }
+            }
+        }
+
+        public void Clear(string userId)
+        {
+            var existingCart = TryGetByUserId(userId);
+            if (existingCart is not null)
+            {
+                _carts.Remove(existingCart);
             }
         }
     }

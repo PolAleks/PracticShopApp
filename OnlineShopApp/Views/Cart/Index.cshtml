@@ -22,7 +22,17 @@
                             <td class="fw-bold">@(i+1)</td>
                             <td align="left">@Model.Items[i].Product.Name</td>
                             <td align="left">@Model.Items[i].Product.Cost.ToString("c")</td>
-                            <td>@Model.Items[i].Quantity</td>
+                            <td>
+                                <a class="btn btn-success me-2"
+                                   asp-controller="Cart"
+                                   asp-action="Subtract"
+                                   asp-route-productId="@Model.Items[i].Product.Id">-</a>
+                                @Model.Items[i].Quantity
+                                <a class="btn btn-success ms-2"
+                                   asp-controller="Cart"
+                                   asp-action="Add"
+                                   asp-route-productId="@Model.Items[i].Product.Id">+</a>
+                            </td>
                             <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
                         </tr>
                     }
@@ -45,6 +55,16 @@
             </table>
 
         </div>
+
+        <div class="row justify-content-center">
+            <div class="col-auto m-4">
+                <a class="btn btn-outline-danger"
+                   asp-controller="Cart"
+                   asp-action="Clear">
+                    Очистить корзину
+                </a>
+            </div>
+        </div>
     }
     else
     {
@@ -55,11 +75,8 @@
     }
 </div>
 
-
-
-
 <div class="row justify-content-center">
-    <div class="col-auto m-5">
+    <div class="col-auto m-4">
         <a class="btn btn-outline-success"
            asp-controller="Home"
            asp-action="Index">
