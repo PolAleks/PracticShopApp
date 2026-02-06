@@ -13,10 +13,18 @@
                     <h4>@Model.Name</h4>
                     <h2 class="text-danger">@Model.Cost</h2>
 
-                    <a class="btn btn-success" 
+                    <a class="btn btn-success"
                        asp-controller="Cart"
                        asp-action="Add"
-                       asp-route-productId="@Model.Id">Добавить в корзину</a>
+                       asp-route-productId="@Model.Id">
+                        Добавить в корзину
+                    </a>
+                    <a class="btn btn-outline-secondary mt-3"
+                       asp-controller="Favorite"
+                       asp-action="Add"
+                       asp-route-productId="@Model.Id">
+                        Добавить в избранное
+                    </a>
                 </div>
             </div>
         </div>
