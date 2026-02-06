@@ -3,40 +3,46 @@ using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
-    public class FavoriteController(IFavoritesRepository wishlistsRepository, IProductsRepository productsRepository) : Controller
+    public class FavoriteController(IFavoritesRepository favoritesRepository, IProductsRepository productsRepository) : Controller
     {
-        private readonly IFavoritesRepository _wishlistsRepository = wishlistsRepository;
+        private readonly IFavoritesRepository _favoritesRepository = favoritesRepository;
         private readonly IProductsRepository _productsRepository = productsRepository;
         public IActionResult Index()
         {
-            var wishlist = _wishlistsRepository.TryGetByUserId(Constans.UserId);
+            var favorite = _favoritesRepository.TryGetByUserId(Constans.UserId);
 
-            return View(wishlist);
+            return View(favorite);
         }
 
         public IActionResult Add(int productId)
         {
-            var existingProduct = _productsRepository.TryGetById(productId);
-            if (existingProduct is not null)
+            var product = _productsRepository.TryGetById(productId);
+
+            if (product is not null)
             {
-                _wishlistsRepository.Add(existingProduct, Constans.UserId);
+                _favoritesRepository.Add(product, Constans.UserId);
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+            }
         }
 
         public IActionResult Delete(int productId)
         {
-            var existingProduct = _productsRepository.TryGetById(productId);
-            if (existingProduct is not null)
+            var product = _productsRepository.TryGetById(productId);
+
+            if (product is not null)
             {
-                _wishlistsRepository.Delete(existingProduct, Constans.UserId);
+                _favoritesRepository.Delete(product, Constans.UserId);
             }
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Clear()
         {
-            _wishlistsRepository.Clear(Constans.UserId);
+            _favoritesRepository.Clear(Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
