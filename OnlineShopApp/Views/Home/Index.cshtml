@@ -10,7 +10,20 @@
         @foreach (var product in Model)
         {
             <div class="col-3 mb-3">
-                <div class="card shadow">
+                <div class="card shadow position-relative">
+                    <!-- Иконка избранного -->
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <a asp-controller="Wishlist"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id">
+                            <button class="btn btn-outline-danger btn-sm rounded-circle favorite-btn"
+                                    data-product-id="@product.Id"
+                                    title="Добавить в избранное">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                        </a>
+                    </div>
+
                     <img class="card-img-bottom" src="@product.PhotoPath" />
                     <div class="card-body text-center">
                         <a class="text-success"
@@ -20,10 +33,14 @@
                             <h5>@product.Name</h5>
                         </a>
                         <h2 class="text-danger">@product.Cost.ToString("c")</h2>
-                        <a class="btn btn-success"
-                           asp-controller="Cart"
-                           asp-action="Add"
-                           asp-route-productId="@product.Id">Добавить в корзину</a>
+                        <div class="d-grid gap-2">
+                            <a class="btn btn-success"
+                               asp-controller="Cart"
+                               asp-action="Add"
+                               asp-route-productId="@product.Id">
+                                Добавить в корзину
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
