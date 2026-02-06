@@ -1,6 +1,6 @@
 ﻿namespace OnlineShopApp.Models
 {
-    public class Wishlist
+    public class Favorite
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }

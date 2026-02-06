@@ -3,13 +3,13 @@ using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
-    public class WishlistController(IWishlistsRepository wishlistsRepository, IProductsRepository productsRepository) : Controller
+    public class FavoriteController(IFavoritesRepository wishlistsRepository, IProductsRepository productsRepository) : Controller
     {
-        private readonly IWishlistsRepository _wishlistsRepository = wishlistsRepository;
+        private readonly IFavoritesRepository _wishlistsRepository = wishlistsRepository;
         private readonly IProductsRepository _productsRepository = productsRepository;
         public IActionResult Index()
         {
-            var wishlist = _wishlistsRepository.TryGetWishlistByUserId(Constans.UserId);
+            var wishlist = _wishlistsRepository.TryGetByUserId(Constans.UserId);
 
             return View(wishlist);
         }
@@ -24,12 +24,12 @@ namespace OnlineShopApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Remove(int productId)
+        public IActionResult Delete(int productId)
         {
             var existingProduct = _productsRepository.TryGetById(productId);
             if (existingProduct is not null)
             {
-                _wishlistsRepository.Remove(existingProduct, Constans.UserId);
+                _wishlistsRepository.Delete(existingProduct, Constans.UserId);
             }
             return RedirectToAction(nameof(Index));
         }

@@ -11,19 +11,6 @@
         {
             <div class="col-3 mb-3">
                 <div class="card shadow position-relative">
-                    <!-- Иконка избранного -->
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <a asp-controller="Wishlist"
-                           asp-action="Add"
-                           asp-route-productId="@product.Id">
-                            <button class="btn btn-outline-danger btn-sm rounded-circle favorite-btn"
-                                    data-product-id="@product.Id"
-                                    title="Добавить в избранное">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </a>
-                    </div>
-
                     <img class="card-img-bottom" src="@product.PhotoPath" />
                     <div class="card-body text-center">
                         <a class="text-success"
@@ -39,6 +26,12 @@
                                asp-action="Add"
                                asp-route-productId="@product.Id">
                                 Добавить в корзину
+                            </a>
+                            <a class="btn btn-outline-secondary mt-3"
+                               asp-controller="Favorite"
+                               asp-action="Add"
+                               asp-route-productId="@product.Id">
+                                Добавить в избранное
                             </a>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-﻿@model Wishlist
+﻿@model Favorite
 @{
     ViewData["Title"] = "Избранное";
 }
@@ -33,8 +33,8 @@
                             Добавить в корзину
                         </a>
                         <a class="btn btn-outline-danger mt-3"
-                           asp-controller="Wishlist"
-                           asp-action="Remove"
+                           asp-controller="Favorite"
+                           asp-action="Delete"
                            asp-route-productId="@product.Id">
                             Убрать из избранного
                         </a>
@@ -45,7 +45,7 @@
 
         <div class="text-center mt-5">
             <a class="btn btn-outline-danger"
-               asp-controller="Wishlist"
+               asp-controller="Favorite"
                asp-action="Clear">
                 Очистить список избранного
             </a>
