@@ -15,12 +15,12 @@ namespace OnlineShopApp.Repositories
                 {
                     Id = Guid.NewGuid(),
                     UserId = userId,
-                    Products = [product]
+                    Items = [product]
                 });
             }
             else
             {
-                existingWishlist.Products.Add(product);
+                existingWishlist.Items.Add(product);
             }
         }
 
@@ -39,10 +39,10 @@ namespace OnlineShopApp.Repositories
 
             if (existingWishlist is not null)
             {
-                var isWishlist = existingWishlist.Products.Contains(product);
+                var isWishlist = existingWishlist.Items.Contains(product);
                 if (isWishlist)
                 {
-                    existingWishlist.Products.Remove(product);
+                    existingWishlist.Items.Remove(product);
                 }
             }
         }
