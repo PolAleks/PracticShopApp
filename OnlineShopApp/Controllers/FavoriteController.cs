@@ -31,12 +31,8 @@ namespace OnlineShopApp.Controllers
 
         public IActionResult Delete(int productId)
         {
-            var product = _productsRepository.TryGetById(productId);
+            _favoritesRepository.Delete(productId, Constans.UserId);
 
-            if (product is not null)
-            {
-                _favoritesRepository.Delete(product, Constans.UserId);
-            }
             return RedirectToAction(nameof(Index));
         }
 
