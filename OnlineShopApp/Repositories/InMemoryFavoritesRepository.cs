@@ -26,10 +26,6 @@ namespace OnlineShopApp.Repositories
                 {
                     favorite.Items.Add(product);
                 }
-                //else
-                //{
-                //    favorite.Items.Remove(product);
-                //}
             }
         }
 
