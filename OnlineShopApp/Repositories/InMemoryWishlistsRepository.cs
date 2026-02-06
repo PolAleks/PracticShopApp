@@ -20,7 +20,15 @@ namespace OnlineShopApp.Repositories
             }
             else
             {
-                existingWishlist.Items.Add(product);
+                var existingItem = existingWishlist.Items.FirstOrDefault(item => item.Id == product.Id);
+                if (existingItem is null)
+                {
+                    existingWishlist.Items.Add(product);
+                }
+                else
+                {
+                    existingWishlist.Items.Remove(product);
+                }
             }
         }
 
