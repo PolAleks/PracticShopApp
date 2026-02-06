@@ -6,7 +6,7 @@ namespace OnlineShopApp.Interfaces
     {
         Favorite? TryGetByUserId(string userId);
         void Add(Product product, string userId);
-        void Delete(Product product, string userId);
+        void Delete(int productId, string userId);
         void Clear(string userId);
     }
 }

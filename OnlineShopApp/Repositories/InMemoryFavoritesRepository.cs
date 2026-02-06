@@ -43,17 +43,15 @@ namespace OnlineShopApp.Repositories
             }
         }
 
-        public void Delete(Product product, string userId)
+        public void Delete(int productId, string userId)
         {
             var favorite = TryGetByUserId(userId);
 
-            if (favorite is not null)
+            var existingFavoriteItem = favorite?.Items.FirstOrDefault(item => item.Id == productId);
+
+            if(existingFavoriteItem is not null)
             {
-                var isFavorite = favorite.Items.Contains(product);
-                if (isFavorite)
-                {
-                    favorite.Items.Remove(product);
-                }
+                favorite!.Items.Remove(existingFavoriteItem);
             }
         }
 
