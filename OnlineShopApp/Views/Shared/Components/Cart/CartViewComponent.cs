@@ -12,6 +12,5 @@ namespace OnlineShopApp.Views.Shared.Components.Cart
 
             return View(nameof(Cart), countProduct);
         }
-        
     }
 }
