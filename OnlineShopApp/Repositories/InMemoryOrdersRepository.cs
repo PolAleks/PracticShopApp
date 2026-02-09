@@ -11,6 +11,9 @@ namespace OnlineShopApp.Repositories
             if (order is not null)
             {
                 order.Id = Guid.NewGuid();
+                order.CreationDateTime = DateTime.Now;
+                order.DeliveryUser.Id = Guid.NewGuid();
+
                 _orders.Add(order);
             }
         }
