@@ -15,7 +15,8 @@ namespace OnlineShopApp.Controllers
             return View(cart);
         }
 
-        public IActionResult Buy()
+        [HttpPost]
+        public IActionResult Buy(DeliveryUser deliveryUser)
         {
             var cart = _cartsRepository.TryGetByUserId(Constans.UserId);
             
@@ -25,7 +26,8 @@ namespace OnlineShopApp.Controllers
             var order = new Order
             {
                 UserId = Constans.UserId,
-                Items = cart.Items
+                Items = cart.Items,
+                DeliveryUser = deliveryUser
             };
 
             _ordersRepository.Add(order);
