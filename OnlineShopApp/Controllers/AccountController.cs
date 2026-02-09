@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopApp.Models;
 using Authorization = OnlineShopApp.Models.Authorization;
 
 namespace OnlineShopApp.Controllers
@@ -16,10 +17,15 @@ namespace OnlineShopApp.Controllers
             return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
         }
 
-        [HttpPost]
         public IActionResult Registration()
         {
-            return RedirectToAction(nameof(Index));
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Registration(Registration registration)
+        {
+            return View();
         }
     }
 }
