@@ -1,9 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly IProductsRepository _productsRepository;
+
+        public AdminController(IProductsRepository productsRepository)
+        {
+            _productsRepository = productsRepository;
+        }
+
         public IActionResult Orders()
         {
             return View();
@@ -18,7 +26,8 @@ namespace OnlineShopApp.Controllers
         }
         public IActionResult Products()
         {
-            return View();
+            var products = _productsRepository.GetAll();
+            return View(products);
         }
     }
 }
