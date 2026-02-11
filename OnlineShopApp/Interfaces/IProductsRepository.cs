@@ -8,7 +8,8 @@ namespace OnlineShopApp.Interfaces
     {
         List<Product> GetAll();
         Product? TryGetById(int id);
-        void Add(CreateProductViewModel newProduct);
-        void Update(EditProductViewModel editedProduct);
+        void Add(Product product);
+        void Update(Product product);
+        void Delete(int id);
     }
 }
