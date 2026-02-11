@@ -22,11 +22,16 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(string name, decimal cost, string description)
+        public IActionResult Add(CreateProductViewModel newProduct)
         {
-            _productsRepository.Add(name, cost, description);
+            if (!ModelState.IsValid)
+            {
+                return View(newProduct);
+            }
 
-            return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+            _productsRepository.Add(newProduct);
+
+            return RedirectToAction("Products", nameof(AdminController).Replace("Controller", ""));
         }
 
         [HttpGet]
