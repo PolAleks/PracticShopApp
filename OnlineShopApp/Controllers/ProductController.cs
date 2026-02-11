@@ -15,6 +15,13 @@ namespace OnlineShopApp.Controllers
             return View(product);
         }
 
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public IActionResult Add(string name, decimal cost, string description)
         {
             _productsRepository.Add(name, cost, description);
