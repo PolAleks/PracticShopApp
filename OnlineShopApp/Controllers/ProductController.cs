@@ -14,53 +14,5 @@ namespace OnlineShopApp.Controllers
             
             return View(product);
         }
-
-        [HttpGet]
-        public IActionResult Add()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Add(CreateProductViewModel newProduct)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(newProduct);
-            }
-
-            _productsRepository.Add(newProduct);
-
-            return RedirectToAction("Products", nameof(AdminController).Replace("Controller", ""));
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var updatedProduct = _productsRepository.TryGetById(id);
-
-            EditProductViewModel editProductView = new()
-            {
-                Id = updatedProduct.Id,
-                Name = updatedProduct.Name,
-                Cost = updatedProduct.Cost,
-                Description = updatedProduct.Description
-            };
-
-            return View(editProductView);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(EditProductViewModel editProduct)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(editProduct);
-            }
-
-            _productsRepository.Update(editProduct);
-
-            return RedirectToAction(nameof(Edit));
-        }
     }
 }
