@@ -37,5 +37,18 @@ namespace OnlineShopApp.Controllers
 
             return View(editProductView);
         }
+
+        [HttpPost]
+        public IActionResult Edit(EditProductViewModel editProduct)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(editProduct);
+            }
+
+            _productsRepository.Update(editProduct);
+
+            return RedirectToAction(nameof(Edit));
+        }
     }
 }
