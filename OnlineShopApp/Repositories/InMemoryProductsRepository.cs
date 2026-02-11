@@ -29,21 +29,23 @@ namespace OnlineShopApp.Repositories
             return _products.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Add(CreateProductViewModel newProduct)
+        public void Add(Product product)
         {
-            Product product = new Product(++_instanceCounter, newProduct.Name, newProduct.Cost, newProduct.Description);
-            _products.Add(product);
+            throw new NotImplementedException();
         }
 
-        public void Update(EditProductViewModel editProduct)
+        public void Update(Product product)
         {
-            var updateProduct = TryGetById(editProduct.Id);
+            throw new NotImplementedException();
+        }
 
-            if(updateProduct is not null)
+        public void Delete(int id)
+        {
+            var existingProduct = TryGetById(id);
+
+            if (existingProduct != null)
             {
-                updateProduct.Name = editProduct.Name;
-                updateProduct.Cost = editProduct.Cost;
-                updateProduct.Description = editProduct.Description;
+                _products.Remove(existingProduct);
             }
         }
     }

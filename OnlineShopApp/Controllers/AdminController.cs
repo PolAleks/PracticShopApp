@@ -19,11 +19,20 @@ namespace OnlineShopApp.Controllers
         }
 
         #region Products
+
         public IActionResult Products()
         {
             var products = _productsRepository.GetAll();
             return View(products);
         }
+
+        public IActionResult DeleteProduct(int id) 
+        {
+            _productsRepository.Delete(id);
+
+            return RedirectToAction(nameof(Products));
+        }
+
         #endregion
     }
 }
