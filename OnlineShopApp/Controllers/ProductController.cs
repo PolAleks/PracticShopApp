@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Interfaces;
+using OnlineShopApp.Models.ViewModels.Product;
 
 namespace OnlineShopApp.Controllers
 {
@@ -19,6 +20,22 @@ namespace OnlineShopApp.Controllers
             _productsRepository.Add(name, cost, description);
 
             return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var updatedProduct = _productsRepository.TryGetById(id);
+
+            EditProductViewModel editProductView = new()
+            {
+                Id = updatedProduct.Id,
+                Name = updatedProduct.Name,
+                Cost = updatedProduct.Cost,
+                Description = updatedProduct.Description
+            };
+
+            return View(editProductView);
         }
     }
 }
