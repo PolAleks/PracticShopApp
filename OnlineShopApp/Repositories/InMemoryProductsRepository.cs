@@ -29,9 +29,10 @@ namespace OnlineShopApp.Repositories
             return _products.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Add(string name, decimal cost, string description)
+        public void Add(CreateProductViewModel newProduct)
         {
-            _products.Add(new Product(++_instanceCounter, name, cost, description));
+            Product product = new Product(++_instanceCounter, newProduct.Name, newProduct.Cost, newProduct.Description);
+            _products.Add(product);
         }
 
         public void Update(EditProductViewModel editProduct)
