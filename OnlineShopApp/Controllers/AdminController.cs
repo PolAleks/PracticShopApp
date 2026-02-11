@@ -6,6 +6,7 @@ namespace OnlineShopApp.Controllers
 {
     public class AdminController(IProductsRepository productsRepository) : Controller
     {
+        private readonly IProductsRepository _productsRepository = productsRepository;
         public IActionResult Orders()
         {
             return View();
@@ -25,6 +26,20 @@ namespace OnlineShopApp.Controllers
         {
             var products = _productsRepository.GetAll();
             return View(products);
+        }
+
+        [HttpGet]
+        public IActionResult AddProduct()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(Product product)
+        {
+            _productsRepository.Add(product);
+
+            return RedirectToAction(nameof(Products));
         }
 
         public IActionResult DeleteProduct(int id) 

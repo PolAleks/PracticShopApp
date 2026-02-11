@@ -32,7 +32,9 @@ namespace OnlineShopApp.Repositories
 
         public void Add(Product product)
         {
-            throw new NotImplementedException();
+            product.Id = ++_instanceCounter;
+
+            _products.Add(product);
         }
 
         [HttpPost]
