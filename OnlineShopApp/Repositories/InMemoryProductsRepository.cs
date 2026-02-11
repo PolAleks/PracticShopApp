@@ -1,5 +1,6 @@
 ﻿using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
+using OnlineShopApp.Models.ViewModels.Product;
 
 namespace OnlineShopApp.Repositories
 {
@@ -31,6 +32,18 @@ namespace OnlineShopApp.Repositories
         public void Add(string name, decimal cost, string description)
         {
             _products.Add(new Product(++_instanceCounter, name, cost, description));
+        }
+
+        public void Update(EditProductViewModel editProduct)
+        {
+            var updateProduct = TryGetById(editProduct.Id);
+
+            if(updateProduct is not null)
+            {
+                updateProduct.Name = editProduct.Name;
+                updateProduct.Cost = editProduct.Cost;
+                updateProduct.Description = editProduct.Description;
+            }
         }
     }
 }
