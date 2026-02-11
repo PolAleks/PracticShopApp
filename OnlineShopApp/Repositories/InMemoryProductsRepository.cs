@@ -1,4 +1,5 @@
-﻿using OnlineShopApp.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
 using OnlineShopApp.Models.ViewModels.Product;
 
@@ -34,9 +35,17 @@ namespace OnlineShopApp.Repositories
             throw new NotImplementedException();
         }
 
+        [HttpPost]
         public void Update(Product product)
         {
-            throw new NotImplementedException();
+            var existingProduct = TryGetById(product.Id);
+
+            if (existingProduct is not null)
+            {
+                existingProduct.Name = product.Name;
+                existingProduct.Cost = product.Cost;
+                existingProduct.Description = product.Description;
+            }
         }
 
         public void Delete(int id)
