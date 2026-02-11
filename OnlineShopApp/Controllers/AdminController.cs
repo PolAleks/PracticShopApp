@@ -3,15 +3,8 @@ using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController(IProductsRepository productsRepository) : Controller
     {
-        private readonly IProductsRepository _productsRepository;
-
-        public AdminController(IProductsRepository productsRepository)
-        {
-            _productsRepository = productsRepository;
-        }
-
         public IActionResult Orders()
         {
             return View();
@@ -24,10 +17,13 @@ namespace OnlineShopApp.Controllers
         {
             return View();
         }
+
+        #region Products
         public IActionResult Products()
         {
             var products = _productsRepository.GetAll();
             return View(products);
         }
+        #endregion
     }
 }
