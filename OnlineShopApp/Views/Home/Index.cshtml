@@ -1,8 +1,19 @@
 ﻿@model List<Product>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная";
 }
+
+<div class="row justify-content-end">
+    <form asp-controller="Home" asp-action="Search" class="d-flex w-50" method="get">
+        <input class="form-control me-2" type="search" placeholder="Поиск..." name="query">
+        <button class="btn btn-outline-success" type="submit" value="search">Искать</button>
+    </form>
+</div>
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Каталог товаров</h2>
+</div>
 
 <div class="row">
     @if (Model is not null)

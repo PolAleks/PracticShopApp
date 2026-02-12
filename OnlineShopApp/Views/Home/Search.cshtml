@@ -1,0 +1,64 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="row justify-content-end">
+    <form asp-controller="Home" asp-action="Search" class="d-flex w-50" method="get">
+        <input class="form-control me-2" type="search" placeholder="Поиск..." name="query">
+        <button class="btn btn-outline-success" type="submit" value="search">Искать</button>
+    </form>
+</div>
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Товары, соответствующие запросу</h2>
+</div>
+
+<div class="row justify-content-center mt-3">
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var product in Model)
+        {
+            <div class="col-3 mb-3">
+                <div class="card shadow">
+                    <img class="card-img-top" src=@product.PhotoPath>
+                    <div class="card-body text-center">
+                        <a class="text-success"
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-id="@product.Id">
+                            <h5>@product.Name</h5>
+                        </a>
+                        <h2 class="text-danger">@product.Cost.ToString("c")</h2>
+                        <a class="btn btn-success"
+                           asp-controller="Cart"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id">
+                            Добавить в корзину
+                        </a>
+                        <a class="btn btn-outline-secondary mt-3"
+                           asp-controller="Favorite"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id">
+                            Добавить в избранное
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center">
+            <h2>Нет товаров для отображения!</h2>
+        </div>
+    }
+</div>
+
+<div class="text-center m-5">
+    <a class="btn btn-outline-success"
+       asp-controller="Home"
+       asp-action="Index">
+        Отобразить весь каталог товаров
+    </a>
+</div>
