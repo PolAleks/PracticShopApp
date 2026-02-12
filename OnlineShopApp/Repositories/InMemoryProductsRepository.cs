@@ -59,5 +59,11 @@ namespace OnlineShopApp.Repositories
                 _products.Remove(existingProduct);
             }
         }
+
+        public List<Product> Search(string query)
+        {
+             return _products.Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+             || (p.Description?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)).ToList();
+        }
     }
 }
