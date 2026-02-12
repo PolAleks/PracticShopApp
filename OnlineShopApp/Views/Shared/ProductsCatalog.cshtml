@@ -1,0 +1,40 @@
+﻿@if (Model is not null && Model.Count > 0)
+{
+    @foreach (var product in Model)
+    {
+        <div class="col-3 mb-3">
+            <div class="card shadow position-relative">
+                <img class="card-img-bottom" src="@product.PhotoPath" />
+                <div class="card-body text-center">
+                    <a class="text-success"
+                       asp-controller="Product"
+                       asp-action="index"
+                       asp-route-id="@product.Id">
+                        <h5>@product.Name</h5>
+                    </a>
+                    <h2 class="text-danger">@product.Cost.ToString("c")</h2>
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-success"
+                           asp-controller="Cart"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id">
+                            Добавить в корзину
+                        </a>
+                        <a class="btn btn-outline-secondary mt-3"
+                           asp-controller="Favorite"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id">
+                            Добавить в избранное
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center">
+        <h2>Нет товаров для отображения!</h2>
+    </div>
+}
