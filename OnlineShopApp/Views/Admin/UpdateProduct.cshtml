@@ -1,0 +1,34 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Редактирование товара";
+}
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Редактирование товара</h2>
+</div>
+<form method="post">
+    <div class="row justify-content-center mt-3">
+        <div class="col-6 mb-3">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <p>
+                <label class="form-label">Наименование товара</label><br />
+                <input class="form-control" placeholder="Наименование товара" name="Name" value="@Model.Name"/>
+            </p>
+            <p>
+                <label class="form-label">Цена, руб.</label><br />
+                <input class="form-control" placeholder="Цена, руб." name="Cost" value="@Model.Cost"/>
+            </p>
+            <p>
+                <label class="form-label">Описание товара</label><br />
+                <input class="form-control" placeholder="Описание товара" name="Description" value="@Model.Description"/>
+            </p>
+        </div>
+    </div>
+    <div class="text-center m-3">
+        <button class="btn btn-outline-success" type="submit"
+                asp-controller="Admin"
+                asp-action="UpdateProduct">
+            Редактировать
+        </button>
+    </div>
+</form>

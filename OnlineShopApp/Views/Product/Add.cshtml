@@ -1,0 +1,46 @@
+﻿@model OnlineShopApp.Models.ViewModels.Product.CreateProductViewModel
+@{
+    ViewData["Title"] = "Добавление товара";
+}
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Добавление нового товара</h2>
+</div>
+<form asp-action="Add" method="post">
+    <div class="row justify-content-center mt-3">
+        <div class="col-6 mb-3">
+            <p>
+                <label asp-for="Name" class="form-label"></label><br />
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </p>
+            <p>
+                <label asp-for="Cost" class="form-label"></label><br />
+                <input asp-for="Cost" class="form-control" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </p>
+            <p>
+                <label asp-for="Description" class="form-label"></label><br />
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="row text-center m-3">
+        <div class="col-6 text-end">
+            <button class="btn btn-outline-success" type="submit"
+                    asp-controller="Product"
+                    asp-action="Add">
+                Добавить
+            </button>
+        </div>
+        <div class="col-6 text-start">
+            <a class="btn btn-outline-success"
+               asp-controller="Admin"
+               asp-action="Products">
+                Назад
+            </a>
+        </div>
+    </div>
+</form>

@@ -1,5 +1,7 @@
-﻿using OnlineShopApp.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
+using OnlineShopApp.Models.ViewModels.Product;
 
 namespace OnlineShopApp.Repositories
 {
@@ -28,9 +30,34 @@ namespace OnlineShopApp.Repositories
             return _products.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Add(string name, decimal cost, string description)
+        public void Add(Product product)
         {
-            _products.Add(new Product(++_instanceCounter, name, cost, description));
+            product.Id = ++_instanceCounter;
+
+            _products.Add(product);
+        }
+
+        [HttpPost]
+        public void Update(Product product)
+        {
+            var existingProduct = TryGetById(product.Id);
+
+            if (existingProduct is not null)
+            {
+                existingProduct.Name = product.Name;
+                existingProduct.Cost = product.Cost;
+                existingProduct.Description = product.Description;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            var existingProduct = TryGetById(id);
+
+            if (existingProduct != null)
+            {
+                _products.Remove(existingProduct);
+            }
         }
     }
 }
