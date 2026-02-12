@@ -17,12 +17,14 @@ namespace OnlineShopApp.Controllers
         [HttpGet]
         public IActionResult Search(string? query)
         {
-            if (query is not null)
+            if (query is null)
             {
-                var products = _productsRepository.Search(query);
-                return View(products);
+                return View();
             }
-            return RedirectToAction(nameof(Index));
+
+            var products = _productsRepository.Search(query!);
+
+            return View(products);
         }
     }
 }
