@@ -22,9 +22,9 @@
                            asp-route-id="@product.Id">
                             <h5>@product.Name</h5>
                         </a>
-                        <h2 class="text-danger">@product.Cost</h2>
+                        <h2 class="text-danger">@product.Cost.ToString("c")</h2>
                         <hr />
-                        <h6>ОПИСАНИЕ_ТОВАРА</h6>
+                        <h6>@product.Description</h6>
                         <hr />
                         <a class="btn btn-success"
                            asp-controller="Cart"
