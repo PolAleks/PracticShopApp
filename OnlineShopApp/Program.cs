@@ -16,6 +16,7 @@ namespace OnlineShopApp
             builder.Services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
             builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             builder.Services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
+            builder.Services.AddSingleton<IComparisonRepository, InMemoryComparisonsRepository>();
 
             var app = builder.Build();
 
