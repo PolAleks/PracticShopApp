@@ -3,7 +3,7 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Repositories
 {
-    public class InMemoryComparisonRepository : IComparisonRepository
+    public class InMemoryComparisonsRepository : IComparisonRepository
     {
         private readonly List<Comparison> _comparisons = [];
 
