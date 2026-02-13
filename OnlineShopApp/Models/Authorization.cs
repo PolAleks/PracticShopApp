@@ -17,7 +17,7 @@ namespace OnlineShopApp.Models
         [StringLength(60, ErrorMessage = "Пароль должен содержать от {2} до {1} символов", MinimumLength = 6)]
         public string Password { get; set; } = null!;
 
-
+        [Display(Name = "Запонить меня")]
         public bool IsRememberMe { get; set; }
     }
 }
