@@ -28,20 +28,20 @@ namespace OnlineShopApp.Controllers
             {
                 _comparisonRepository.Add(product, Constans.UserId);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int productId)
         {
             _comparisonRepository.Delete(productId, Constans.UserId);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Clear()
         {
             _comparisonRepository.Clear(Constans.UserId);
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }
