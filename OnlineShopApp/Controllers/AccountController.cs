@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Models;
+using System.Net;
 using Authorization = OnlineShopApp.Models.Authorization;
 
 namespace OnlineShopApp.Controllers
@@ -14,6 +15,11 @@ namespace OnlineShopApp.Controllers
         [HttpPost]
         public IActionResult Authorization(Authorization authorization)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(authorization);
+            }
+
             return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
         }
 
@@ -25,7 +31,17 @@ namespace OnlineShopApp.Controllers
         [HttpPost]
         public IActionResult Registration(Registration registration)
         {
-            return View();
+            if (registration.Login == registration.Password)
+            {
+                ModelState.AddModelError("", "Логин и пароль не должны совпадать");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(registration);
+            }
+
+            return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
         }
     }
 }
