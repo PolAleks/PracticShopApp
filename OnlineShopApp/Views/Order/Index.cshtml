@@ -1,4 +1,4 @@
-﻿@model Cart
+﻿@model Order
 @{
     ViewData["Title"] = "Оформление заказа";
 }
@@ -22,25 +22,31 @@
                     <tbody>
                         <tr>
                             <td class="w-50 p-4">
+                                <div asp-validation-summary="All" class="text-uppercase text-danger fw-bold"></div>
                                 <p>
-                                    <label class="form-label">Имя</label><br />
-                                    <input type="text" class="form-control" placeholder="Иванов" name="Name"/>
+                                    <label asp-for="DeliveryUser.Name" class="form-label"></label><br />
+                                    <input asp-for="DeliveryUser.Name" class="form-control" />
+                                    <span asp-validation-for="DeliveryUser.Name" class="text-danger"></span>
                                 </p>
                                 <p>
-                                    <label class="form-label">Адрес доставки</label><br />
-                                    <input type="text" class="form-control" placeholder="СПб, Косыгина, 25-117" name="Address"/>
+                                    <label asp-for="DeliveryUser.Address" class="form-label"></label><br />
+                                    <input asp-for="DeliveryUser.Address" class="form-control" />
+                                    <span asp-validation-for="DeliveryUser.Address" class="text-danger"></span>
                                 </p>
                                 <p>
-                                    <label class="form-label">Телефон</label><br />
-                                    <input type="tel" class="form-control" placeholder="+7 (___) ___-__-__" name="Phone"/>
+                                    <label asp-for="DeliveryUser.Phone" class="form-label"></label><br />
+                                    <input asp-for="DeliveryUser.Phone" class="form-control" />
+                                    <span asp-validation-for="DeliveryUser.Phone" class="text-danger"></span>
                                 </p>
                                 <p>
-                                    <label class="form-label">Дата доставки</label>
-                                    <input type="date" class="form-control" name="Date"/>
+                                    <label asp-for="DeliveryUser.Date" class="form-label"></label>
+                                    <input asp-for="DeliveryUser.Date" class="form-control" />
+                                    <span asp-validation-for="DeliveryUser.Date" class="text-danger"></span>
                                 </p>
                                 <p>
-                                    <label class="form-label">Комментарий</label>
-                                    <textarea class="form-control" placeholder="Комментарий" name="Comment"></textarea>
+                                    <label asp-for="DeliveryUser.Comment" class="form-label"></label>
+                                    <textarea asp-for="DeliveryUser.Comment" class="form-control"></textarea>
+                                    <span asp-validation-for="DeliveryUser.Comment" class="text-danger"></span>
                                 </p>
                             </td>
 
@@ -60,19 +66,25 @@
                                         {
                                             <tr align="center" class="align-baseline">
                                                 <td class="fw-bold">@(i + 1)</td>
-                                                <td align="left">@Model.Items[i].Product.Name</td>
-                                                <td align="left">@Model.Items[i].Product.Cost.ToString("c")</td>
+                                                <td align="left">
+                                                    @Model.Items[i].Product!.Name
+                                                </td>
+                                                <td align="left">
+                                                    @Model.Items[i].Product!.Cost.ToString("c")
+                                                </td>
                                                 <td>
                                                     @Model.Items[i].Quantity
                                                 </td>
-                                                <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
+                                                <td class="fw-bold">
+                                                    @Model.Items[i].Cost?.ToString("c")
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
                                     <tfoot class="table-borderless ">
                                         <tr align="center">
                                             <th colspan="5">
-                                                Общая стоимость заказа: @Model.TotalCost?.ToString("c")
+                                                Общая стоимость заказа: @Model.TotalCost?.ToString("c");
                                             </th>
                                         </tr>
                                     </tfoot>
@@ -86,8 +98,8 @@
 
         <div class="text-center">
             <button class="btn btn-outline-danger" type="submit"
-               asp-controller="Order"
-               asp-action="Buy">
+                    asp-controller="Order"
+                    asp-action="Buy">
                 Оплатить заказ
             </button>
         </div>
