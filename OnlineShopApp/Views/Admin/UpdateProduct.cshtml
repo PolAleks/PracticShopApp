@@ -10,17 +10,21 @@
     <div class="row justify-content-center mt-3">
         <div class="col-6 mb-3">
             <input type="hidden" name="Id" value="@Model.Id" />
+            <div asp-validation-summary="All" class="text-uppercase text-danger fw-bold"></div>
             <p>
-                <label class="form-label">Наименование товара</label><br />
-                <input class="form-control" placeholder="Наименование товара" name="Name" value="@Model.Name"/>
+                <label asp-for="Name" class="form-label">Наименование товара</label><br />
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </p>
             <p>
-                <label class="form-label">Цена, руб.</label><br />
-                <input class="form-control" placeholder="Цена, руб." name="Cost" value="@Model.Cost"/>
+                <label asp-for="Cost" class="form-label"></label><br />
+                <input asp-for="Cost" class="form-control" type="number"/>
+                <span asp-validation-for="Cost" class="text-danger"></span> 
             </p>
             <p>
-                <label class="form-label">Описание товара</label><br />
-                <input class="form-control" placeholder="Описание товара" name="Description" value="@Model.Description"/>
+                <label asp-for="Description" class="form-label"></label><br />
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
             </p>
         </div>
     </div>
@@ -28,7 +32,7 @@
         <button class="btn btn-outline-success" type="submit"
                 asp-controller="Admin"
                 asp-action="UpdateProduct">
-            Редактировать
+            Обновить
         </button>
     </div>
 </form>
