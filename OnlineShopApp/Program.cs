@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Localization;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
+using System.Globalization;
 
 namespace OnlineShopApp
 {
@@ -18,6 +20,17 @@ namespace OnlineShopApp
             builder.Services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
             builder.Services.AddSingleton<IComparisonRepository, InMemoryComparisonsRepository>();
 
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-US")
+                };
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,6 +43,8 @@ namespace OnlineShopApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseRequestLocalization();
 
             app.UseRouting();
 
