@@ -12,23 +12,29 @@ namespace OnlineShopApp.Controllers
         {
             var cart = _cartsRepository.TryGetByUserId(Constans.UserId);
 
-            return View(cart);
+            var order = new Order()
+            {
+                Items = cart?.Items ?? []
+            };
+
+            return View(order);
         }
 
         [HttpPost]
-        public IActionResult Buy(DeliveryUser deliveryUser)
+        public IActionResult Buy(Order order)
         {
             var cart = _cartsRepository.TryGetByUserId(Constans.UserId);
             
             if (cart is null) 
                 return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
 
-            var order = new Order
+            order.UserId = Constans.UserId;
+            order.Items = cart!.Items!;
+
+            if (!ModelState.IsValid)
             {
-                UserId = Constans.UserId,
-                Items = cart.Items,
-                DeliveryUser = deliveryUser
-            };
+                return View(nameof(Index), order);
+            }
 
             _ordersRepository.Add(order);
 
