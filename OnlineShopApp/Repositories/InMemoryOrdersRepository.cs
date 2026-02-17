@@ -18,19 +18,18 @@ namespace OnlineShopApp.Repositories
             }
         }
 
-        public List<Order> GetAll()
-        {
-            return _orders;
-        }
+        public List<Order> GetAll() => _orders;
 
-        public Order? TryGetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public Order? TryGetById(Guid id) => _orders.FirstOrDefault(o => o.Id == id);
 
-        public void UpdateStatus(Guid id, Order order)
+        public void UpdateStatus(Guid id, OrderStatus newStatus)
         {
-            throw new NotImplementedException();
+            var existingOrder = TryGetById(id);
+
+            if (existingOrder is not null)
+            {
+                existingOrder.Status = newStatus;
+            }
         }
     }
 }

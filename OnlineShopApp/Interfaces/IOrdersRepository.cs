@@ -7,6 +7,6 @@ namespace OnlineShopApp.Interfaces
         void Add(Order order);
         List<Order> GetAll();
         Order? TryGetById(Guid id);
-        void UpdateStatus(Guid id, Order order);
+        void UpdateStatus(Guid id, OrderStatus status);
     }
 }
