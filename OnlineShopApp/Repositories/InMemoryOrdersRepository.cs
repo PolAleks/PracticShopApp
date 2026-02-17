@@ -17,5 +17,19 @@ namespace OnlineShopApp.Repositories
                 _orders.Add(order);
             }
         }
+
+        public List<Order> GetAll() => _orders;
+
+        public Order? TryGetById(Guid id) => _orders.FirstOrDefault(o => o.Id == id);
+
+        public void UpdateStatus(Guid id, OrderStatus newStatus)
+        {
+            var existingOrder = TryGetById(id);
+
+            if (existingOrder is not null)
+            {
+                existingOrder.Status = newStatus;
+            }
+        }
     }
 }

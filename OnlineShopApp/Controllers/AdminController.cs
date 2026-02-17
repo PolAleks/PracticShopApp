@@ -4,21 +4,54 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AdminController(IProductsRepository productsRepository) : Controller
+    public class AdminController(IProductsRepository productsRepository, IOrdersRepository ordersRepository) : Controller
     {
         private readonly IProductsRepository _productsRepository = productsRepository;
+        private readonly IOrdersRepository _ordersRepository = ordersRepository;
+
+        #region Orders
+        
         public IActionResult Orders()
         {
-            return View();
+            var orders = _ordersRepository.GetAll();
+
+            return View(orders);
         }
+
+        public IActionResult DetailOrder(Guid id)
+        {
+            var order = _ordersRepository.TryGetById(id);
+
+            return View(order);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrderStatus(Guid id, OrderStatus status)
+        {
+            _ordersRepository.UpdateStatus(id, status);
+
+            return RedirectToAction(nameof(Orders));
+        }
+
+        #endregion
+
+        #region Users
+
         public IActionResult Users()
         {
             return View();
         }
+
+        #endregion
+
+        #region Roles
+
         public IActionResult Roles()
         {
             return View();
         }
+
+        #endregion
 
         #region Products
 
@@ -47,7 +80,7 @@ namespace OnlineShopApp.Controllers
             return RedirectToAction(nameof(Products));
         }
 
-        public IActionResult DeleteProduct(int id) 
+        public IActionResult DeleteProduct(int id)
         {
             _productsRepository.Delete(id);
 

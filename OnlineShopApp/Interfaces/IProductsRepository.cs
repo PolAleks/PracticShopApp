@@ -1,6 +1,4 @@
 ﻿using OnlineShopApp.Models;
-using OnlineShopApp.Models.ViewModels.Product;
-using System.Security.Cryptography;
 
 namespace OnlineShopApp.Interfaces
 {
