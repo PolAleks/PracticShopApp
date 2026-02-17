@@ -18,6 +18,21 @@ namespace OnlineShopApp.Controllers
             return View(orders);
         }
 
+        public IActionResult DetailOrder(Guid id)
+        {
+            var order = _ordersRepository.TryGetById(id);
+
+            return View(order);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrderStatus(Guid id, OrderStatus status)
+        {
+            _ordersRepository.UpdateStatus(id, status);
+
+            return RedirectToAction(nameof(Orders));
+        }
+
         #endregion
 
         #region Users
