@@ -24,9 +24,9 @@ namespace OnlineShopApp
             {
                 var supportedCultures = new[]
                 {
-                    new CultureInfo("en-US")
+                    new CultureInfo("ru-RU")
                 };
-                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.DefaultRequestCulture = new RequestCulture("ru-RU");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
             });
