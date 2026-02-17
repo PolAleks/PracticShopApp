@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
-using OnlineShopApp.Models.ViewModels.Product;
 
 namespace OnlineShopApp.Repositories
 {
