@@ -19,6 +19,9 @@ namespace OnlineShopApp.Models
         [ValidateNever]
         public DateTime CreationDateTime { get; set; }
 
+        [Required]
+        public OrderStatus Status { get; set; } = OrderStatus.Created;
+
         public decimal? TotalCost => Items?.Sum(item => item.Cost);
 
         public int? ItemsQuantity => Items?.Sum(item => item.Quantity);
