@@ -17,5 +17,20 @@ namespace OnlineShopApp.Repositories
                 _orders.Add(order);
             }
         }
+
+        public List<Order> GetAll()
+        {
+            return _orders;
+        }
+
+        public Order? TryGetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateStatus(Guid id, Order order)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
