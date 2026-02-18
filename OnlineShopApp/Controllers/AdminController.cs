@@ -4,10 +4,11 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AdminController(IProductsRepository productsRepository, IOrdersRepository ordersRepository) : Controller
+    public class AdminController(IProductsRepository productsRepository, IOrdersRepository ordersRepository, IRolesRepository rolesRepository) : Controller
     {
         private readonly IProductsRepository _productsRepository = productsRepository;
         private readonly IOrdersRepository _ordersRepository = ordersRepository;
+        private readonly IRolesRepository _rolesRepository = rolesRepository;
 
         #region Orders
         
@@ -48,7 +49,42 @@ namespace OnlineShopApp.Controllers
 
         public IActionResult Roles()
         {
+            var roles = _rolesRepository.GetAll();
+
+            return View(roles);
+        }
+
+        [HttpGet]
+        public IActionResult AddRole()
+        {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddRole(Role role)
+        {
+            var existingName = _rolesRepository.TryGetByName(role.Name);
+
+            if (existingName is not null)
+            {
+                ModelState.AddModelError("", "Такая роль уже существует!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(role);
+            }
+            
+            _rolesRepository.Add(role);
+
+            return RedirectToAction(nameof(Roles));
+        }
+
+        public IActionResult DeleteRole(Guid roleId)
+        {
+            _rolesRepository.Delete(roleId);
+
+            return RedirectToAction(nameof(Roles));
         }
 
         #endregion
