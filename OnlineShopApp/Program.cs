@@ -19,6 +19,7 @@ namespace OnlineShopApp
             builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             builder.Services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
             builder.Services.AddSingleton<IComparisonRepository, InMemoryComparisonsRepository>();
+            builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
 
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
