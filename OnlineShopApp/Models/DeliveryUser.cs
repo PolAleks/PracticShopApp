@@ -8,7 +8,7 @@ namespace OnlineShopApp.Models
         public Guid Id { get; set; }
 
         [Display(Name = "Имя покупателя", Prompt = "Ваше имя")]
-        [Required(ErrorMessage = "Не указано мия покупателя")]
+        [Required(ErrorMessage = "Не указано имя покупателя")]
         [DataType(DataType.Text)]
         [StringLength(25, ErrorMessage = "Имя должно содержать от {2} до {1} символов", MinimumLength = 2)]
         public string Name { get; set; }
