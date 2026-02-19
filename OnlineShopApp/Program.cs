@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
+using Serilog;
 using System.Globalization;
 
 namespace OnlineShopApp
@@ -10,6 +11,10 @@ namespace OnlineShopApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, configuration) => configuration
+                        .ReadFrom.Configuration(context.Configuration)
+                        .Enrich.WithProperty("ApplicationName", "Online Shop"));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -33,6 +38,8 @@ namespace OnlineShopApp
             });
 
             var app = builder.Build();
+
+            app.UseSerilogRequestLogging();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
