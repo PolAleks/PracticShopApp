@@ -3,29 +3,33 @@
         <ul class="sidebar-nav">
             <li class="nav-link">
                 <a class="nav-link"
-                   asp-controller="Admin"
-                   asp-action="Orders">
+                   asp-area="Admin"
+                   asp-controller="Order"
+                   asp-action="Index">
                     Заказы
                 </a>
             </li>
             <li class="nav-link">
                 <a class="nav-link"
-                   asp-controller="Admin"
-                   asp-action="Users">
+                   asp-area="Admin"
+                   asp-controller="User"
+                   asp-action="Index">
                     Пользователи
                 </a>
             </li>
             <li class="nav-link">
                 <a class="nav-link"
-                   asp-controller="Admin"
-                   asp-action="Roles">
+                   asp-area="Admin"
+                   asp-controller="Role"
+                   asp-action="Index">
                     Роли
                 </a>
             </li>
             <li class="nav-link">
                 <a class="nav-link"
-                   asp-controller="Admin"
-                   asp-action="Products">
+                   asp-area="Admin"
+                   asp-controller="Product"
+                   asp-action="Index">
                     Товары
                 </a>
             </li>

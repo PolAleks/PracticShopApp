@@ -17,7 +17,7 @@
             </p>
             <p>
                 <label asp-for="Cost" class="form-label"></label><br />
-                <input asp-for="Cost" class="form-control" type="number"/>
+                <input asp-for="Cost" class="form-control" type="number" />
                 <span asp-validation-for="Cost" class="text-danger"></span>
             </p>
             <p>
@@ -29,8 +29,9 @@
     </div>
     <div class="text-center m-3">
         <button class="btn btn-outline-success" type="submit"
-                asp-controller="Admin"
-                asp-action="AddProduct">
+                asp-area="Admin"
+                asp-controller="Product"
+                asp-action="Add">
             Добавить
         </button>
     </div>
