@@ -38,8 +38,9 @@
                                     <td>@Model[i].CreationDateTime.ToString("HH:mm")</td>
                                     <td align="left">
                                         <a class="text-success"
-                                           asp-controller="Admin"
-                                           asp-action="DetailOrder"
+                                           asp-area="Admin"
+                                           asp-controller="Order"
+                                           asp-action="Detail"
                                            asp-route-id="@Model[i].Id">
                                             Подробнее
                                         </a>

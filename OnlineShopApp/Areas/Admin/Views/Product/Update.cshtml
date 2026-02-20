@@ -18,8 +18,8 @@
             </p>
             <p>
                 <label asp-for="Cost" class="form-label"></label><br />
-                <input asp-for="Cost" class="form-control" type="number"/>
-                <span asp-validation-for="Cost" class="text-danger"></span> 
+                <input asp-for="Cost" class="form-control" type="number" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
             </p>
             <p>
                 <label asp-for="Description" class="form-label"></label><br />
@@ -30,8 +30,9 @@
     </div>
     <div class="text-center m-3">
         <button class="btn btn-outline-success" type="submit"
-                asp-controller="Admin"
-                asp-action="UpdateProduct">
+                asp-area="Admin"
+                asp-controller="Product"
+                asp-action="Update">
             Обновить
         </button>
     </div>

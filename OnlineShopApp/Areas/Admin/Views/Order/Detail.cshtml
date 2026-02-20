@@ -133,8 +133,9 @@
 
                 <div class="text-center mt-5">
                     <button class="btn btn-outline-success" type="submit"
-                            asp-controller="Admin"
-                            asp-action="UpdateOrderStatus"
+                            asp-area="Admin"
+                            asp-controller="Order"
+                            asp-action="UpdateStatus"
                             asp-route-id="@Model.Id">
                         Обновить статус
                     </button>
