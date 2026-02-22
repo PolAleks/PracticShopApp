@@ -6,6 +6,13 @@ namespace OnlineShopApp.Repositories
     public class InMemoryUsersRepository : IUsersRepository
     {
         private readonly List<User> _users = [];
+
+        public List<User>? GetAll() => _users;
+        
+        public User? TryGetByLogin(string login) => _users.FirstOrDefault(u => u.Login == login);
+
+        public User? TryGetById(Guid id) => _users.FirstOrDefault(u => u.Id == id);
+
         public void Add(User newUser)
         {
             newUser.Id = Guid.NewGuid();
@@ -19,17 +26,18 @@ namespace OnlineShopApp.Repositories
             throw new NotImplementedException();
         }
 
-        public User? TryGetByLogin(string login)
-        {
-            return _users.FirstOrDefault(u => u.Login == login);
-        }
 
         public void Update(Guid id, User user)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRole(Guid id, Role newRole)
+        public void ChangeRole(string login, Role newRole)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangePassword(string login, string newPassword)
         {
             throw new NotImplementedException();
         }
