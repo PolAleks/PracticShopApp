@@ -22,5 +22,24 @@ namespace OnlineShopApp.Models
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; } = null!;
+
+        [Display(Name = "Телефон", Prompt = "Введите телефон")]
+        [Required(ErrorMessage = "Не указан телефон пользователя")]
+        [DataType(DataType.PhoneNumber)]
+        [Phone(ErrorMessage = "Телефон может содержать только цифры")]
+        [StringLength(16, MinimumLength = 5, ErrorMessage = "Телефон должен быть от {2} до {1} символов")]
+        public required string Phone { get; set; }
+
+        [Display(Name = "Имя", Prompt = "Введите имя")]
+        [Required(ErrorMessage = "Не указано имя пользователя")]
+        [DataType(DataType.Text)]
+        [StringLength(25, MinimumLength = 2, ErrorMessage = "Имя должно быть от {2} до {1} символов")]
+        public required string FirstName { get; set; }
+
+        [Display(Name = "Фамилия", Prompt = "Введите фамилию")]
+        [Required(ErrorMessage = "Не указано фамилия пользователя")]
+        [DataType(DataType.Text)]
+        [StringLength(25, MinimumLength = 2, ErrorMessage = "Фамилия должна быть от {2} до {1} символов")]
+        public required string LastName { get; set; }
     }
 }

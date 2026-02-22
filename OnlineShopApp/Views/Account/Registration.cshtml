@@ -11,6 +11,21 @@
         <div class="col-6 mb-3">
             <div asp-validation-summary="All" class="text-uppercase text-danger fw-bold"></div>
             <p>
+                <label asp-for="FirstName" class="form-label"></label><br />
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </p>
+            <p>
+                <label asp-for="LastName" class="form-label"></label><br />
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </p>
+            <p>
+                <label asp-for="Phone" class="form-label"></label><br />
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </p>
+            <p>
                 <label asp-for="Login" class="form-label"></label><br />
                 <input asp-for="Login" class="form-control" />
                 <span asp-validation-for="Login" class="text-danger"></span>
