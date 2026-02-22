@@ -64,10 +64,13 @@ namespace OnlineShopApp.Controllers
                 return View(registration);
             }
 
-            User newUser = new()
+            var newUser = new User
             {
                 Login = registration.Login,
-                Password = registration.Password
+                Password = registration.Password,
+                FirstName = registration.FirstName,
+                LastName = registration.LastName,
+                Phone = registration.Phone
             };
 
             usersRepository.Add(newUser);
