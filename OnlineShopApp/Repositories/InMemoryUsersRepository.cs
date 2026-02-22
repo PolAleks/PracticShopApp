@@ -23,9 +23,13 @@ namespace OnlineShopApp.Repositories
 
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var deletedUser = TryGetById(id);
 
+            if (deletedUser is not null)
+            {
+                _users.Remove(deletedUser);
+            }
+        }
 
         public void Update(Guid id, User user)
         {
