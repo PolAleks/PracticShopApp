@@ -11,20 +11,20 @@ namespace OnlineShopApp.Models
         [Required(ErrorMessage = "Не указано имя покупателя")]
         [DataType(DataType.Text)]
         [StringLength(25, ErrorMessage = "Имя должно содержать от {2} до {1} символов", MinimumLength = 2)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Display(Name = "Адрес доставки", Prompt = "Ваш адрес")]
         [Required(ErrorMessage = "Не указан адрес доставки")]
         [DataType(DataType.Text)]
         [StringLength(100, ErrorMessage = "Адрес должен содержать от {2} до {1} символов", MinimumLength = 5)]
-        public string Address { get; set; }
+        public required string Address { get; set; }
 
         [Display(Name = "Телефон", Prompt = "Ваш телефон")]
         [Required(ErrorMessage = "Не указан телефон покупателя")]
         [DataType(DataType.PhoneNumber)]
         [Phone(ErrorMessage = "Телефон может содержать только цифры")]
         [StringLength(16, ErrorMessage = "Телефон должен содержать от {2} до {1} цифр", MinimumLength = 5)]
-        public string Phone { get; set; }
+        public required string Phone { get; set; }
 
         [Display(Name = "Дата доставки", Prompt = "дд.мм.гггг")]
         [Required(ErrorMessage = "Не указана дата доставки")]
