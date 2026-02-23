@@ -5,7 +5,19 @@ namespace OnlineShopApp.Repositories
 {
     public class InMemoryRolesRepository : IRolesRepository
     {
-        private readonly List<Role> _roles = [];
+        private readonly List<Role> _roles;
+
+        public InMemoryRolesRepository()
+        {
+            _roles = 
+                [
+                    new Role(){Id = Guid.NewGuid(), Name = "Admin"},
+                    new Role(){Id = Guid.NewGuid(), Name = "Moderator"},
+                    new Role(){Id = Guid.NewGuid(), Name = "User"},
+                    new Role(){Id = Guid.NewGuid(), Name = "Developer"},
+                    new Role(){Id = Guid.NewGuid(), Name = "Guest"}
+                ];
+        }
 
         public List<Role> GetAll() => _roles;
         public Role? TryGetById(Guid id) => _roles.FirstOrDefault(role => role.Id.Equals(id));
