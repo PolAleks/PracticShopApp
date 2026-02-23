@@ -31,9 +31,16 @@ namespace OnlineShopApp.Repositories
             }
         }
 
-        public void Update(Guid id, User user)
+        public void Update(User user)
         {
-            throw new NotImplementedException();
+            var existingUser = TryGetById(user.Id);
+            
+            if (existingUser is not null)
+            {
+                existingUser.FirstName = user.FirstName;
+                existingUser.LastName = user.LastName;
+                existingUser.Phone = user.Phone;
+            }
         }
 
         public void ChangeRole(string login, Role newRole)
