@@ -53,5 +53,26 @@ namespace OnlineShopApp.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult Update(Guid id)
+        {
+            var user = usersRepository.TryGetById(id);
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Update(User updateUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(updateUser);
+            }
+
+            usersRepository.Update(updateUser);
+
+            return RedirectToAction(nameof(Index));            
+        }
     }
 }
