@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class UserController(IUsersRepository usersRepository) : Controller
+    public class UserController(IUsersRepository usersRepository, IRolesRepository rolesRepository) : Controller
     {
         public IActionResult Index()
         {
@@ -72,7 +73,43 @@ namespace OnlineShopApp.Areas.Admin.Controllers
 
             usersRepository.Update(updateUser);
 
-            return RedirectToAction(nameof(Index));            
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult ChangeRole(Guid id)
+        {
+            var existingUser = usersRepository.TryGetById(id);
+
+            var changeRole = new ChangeRole()
+            {
+                Login = existingUser?.Login,
+                Role = existingUser?.Role?.ToString(),
+                Roles = rolesRepository.GetAll()
+                    .Select(role => new SelectListItem { Text = role.Name.ToString(), Value = role.Name })
+                    .ToList()
+            };
+
+            return View(changeRole);
+        }
+
+        [HttpPost]
+        public IActionResult ChangeRole(ChangeRole changeRole)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(changeRole);
+            }
+
+            var login = changeRole.Login;
+            var role = rolesRepository.TryGetByName(changeRole.Role);
+            
+            if (role is not null)
+            {
+                usersRepository.ChangeRole(login, role);
+            }
+
+            return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(login)?.Id });
         }
     }
 }

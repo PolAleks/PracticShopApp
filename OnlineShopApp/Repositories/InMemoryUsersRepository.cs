@@ -45,7 +45,12 @@ namespace OnlineShopApp.Repositories
 
         public void ChangeRole(string login, Role newRole)
         {
-            throw new NotImplementedException();
+            var existingUser = TryGetByLogin(login);
+            
+            if (existingUser is not null)
+            {
+                existingUser.Role = newRole;
+            }
         }
 
         public void ChangePassword(string login, string newPassword)
