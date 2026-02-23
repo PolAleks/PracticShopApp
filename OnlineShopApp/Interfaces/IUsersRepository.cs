@@ -11,6 +11,6 @@ namespace OnlineShopApp.Interfaces
         void Update(User user);
         void Delete(Guid id);
         void ChangePassword(string login, string newPassword);
-        void ChangeRole(string login, Role newRole);
+        void ChangeRole(string login, Role? newRole);
     }
 }

@@ -111,5 +111,40 @@ namespace OnlineShopApp.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(login)?.Id });
         }
+
+        [HttpGet]
+        public IActionResult ChangePassword(Guid id)
+        {
+            var existingUser = usersRepository.TryGetById(id);
+
+            ChangePassword changePassword = new() { Login = existingUser?.Login };
+
+            return View(changePassword);
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(ChangePassword changePassword)
+        {
+            var existingUser = usersRepository.TryGetByLogin(changePassword.Login);
+
+            if (existingUser?.Password == changePassword.Password)
+            {
+                ModelState.AddModelError("", "Нельзя использовать старый пароль!");
+            }
+
+            if (changePassword.Login == changePassword.Password)
+            {
+                ModelState.AddModelError("", "Логин и пароль не должны совпадать!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(changePassword);
+            }
+
+            usersRepository.ChangePassword(changePassword.Login, changePassword.Password);
+
+            return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(changePassword.Login)?.Id });
+        }
     }
 }

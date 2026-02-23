@@ -43,7 +43,7 @@ namespace OnlineShopApp.Repositories
             }
         }
 
-        public void ChangeRole(string login, Role newRole)
+        public void ChangeRole(string login, Role? newRole)
         {
             var existingUser = TryGetByLogin(login);
             
@@ -55,7 +55,12 @@ namespace OnlineShopApp.Repositories
 
         public void ChangePassword(string login, string newPassword)
         {
-            throw new NotImplementedException();
+            var user = TryGetByLogin(login);
+            
+            if (user is not null)
+            {
+                user.Password = newPassword;
+            }
         }
     }
 }
