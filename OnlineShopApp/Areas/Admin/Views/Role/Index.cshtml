@@ -39,13 +39,40 @@
                                         <h5>@Model[i].Name</h5>
                                     </td>
                                     <td>
-                                        <a class="btn btn-outline-success"
-                                           asp-area="Admin"
-                                           asp-controller="Role"
-                                           asp-action="Delete"
-                                           asp-route-roleId="@Model[i].Id">
+                                        <a class="btn btn-outline-success" data-bs-target="#Returned_@i" data-bs-toggle="modal">
                                             Удалить
                                         </a>
+
+                                        <div class="modal fade" id="Returned_@i" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalWindow" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <p class="modal-title fw-bold" id="modalWindow">Удаление роли</p>
+                                                    </div>
+                                                    <form method="post">
+                                                        <div class="modal-body">
+                                                            Вы действительно хотите удалить роль "@Model[i].Name"?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-outline-danger w-25" type="submit"
+                                                                    asp-area="Admin"
+                                                                    asp-controller="Role"
+                                                                    asp-action="Delete"
+                                                                    asp-route-roleId="@Model[i].Id">
+                                                                Удалить
+                                                            </button>
+
+                                                            <a class="btn btn-outline-success w-25" role="button" data-bs-dismiss="modal"
+                                                               asp-area="Admin"
+                                                               asp-controller="Role"
+                                                               asp-action="Index">
+                                                                Отмена
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             }
