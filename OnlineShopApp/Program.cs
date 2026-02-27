@@ -1,4 +1,8 @@
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db;
+using OnlineShop.Db.Interfaces;
+using OnlineShop.Db.Repositories;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
 using Serilog;
@@ -12,6 +16,11 @@ namespace OnlineShopApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Получение строки соединения с БД из appsettings.json 
+            string connection = builder.Configuration.GetConnectionString("OnlineShopConnection");
+            // Добавление в контейнер зависимостей DatabaseContext для работы с БД
+            builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection));
+
             builder.Host.UseSerilog((context, configuration) => configuration
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.WithProperty("ApplicationName", "Online Shop"));
@@ -20,7 +29,10 @@ namespace OnlineShopApp
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddSingleton<ICartsRepository, InMemoryCartsRepository>();
-            builder.Services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
+
+            //builder.Services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
+            builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
+
             builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             builder.Services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
             builder.Services.AddSingleton<IComparisonRepository, InMemoryComparisonsRepository>();
