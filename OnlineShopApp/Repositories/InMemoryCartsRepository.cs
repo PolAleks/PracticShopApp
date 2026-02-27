@@ -12,7 +12,7 @@ namespace OnlineShopApp.Repositories
             return _carts.FirstOrDefault(c => c.UserId == userId);
         }
 
-        public void Add(Product product, string userId)
+        public void Add(ProductViewModel product, string userId)
         {
             var existingCart = TryGetByUserId(userId);
             if (existingCart is null)

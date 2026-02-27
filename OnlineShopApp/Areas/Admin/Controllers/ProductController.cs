@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopApp.Interfaces;
+using OnlineShop.Db.Interfaces;
+using OnlineShopApp.Helpers;
 using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
@@ -10,7 +11,7 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var products = productsRepository.GetAll();
-            return View(products);
+            return View(products.ToViewModels());
         }
 
         [HttpGet]
@@ -20,14 +21,14 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product product)
+        public IActionResult Add(ProductViewModel product)
         {
             if (!ModelState.IsValid)
             {
                 return View(product);
             }
 
-            productsRepository.Add(product);
+            productsRepository.Add(product.ToProductDb());
 
             return RedirectToAction(nameof(Index));
         }
@@ -43,18 +44,18 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         public IActionResult Update(int id)
         {
             var product = productsRepository.TryGetById(id);
-            return View(product);
+            return View(product?.ToViewModel());
         }
 
         [HttpPost]
-        public IActionResult Update(Product product)
+        public IActionResult Update(ProductViewModel product)
         {
             if (!ModelState.IsValid)
             {
                 return View(product);
             }
 
-            productsRepository.Update(product);
+            productsRepository.Update(product.ToProductDb());
 
             return RedirectToAction(nameof(Index));
         }
