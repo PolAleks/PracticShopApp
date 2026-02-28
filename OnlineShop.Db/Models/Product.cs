@@ -7,5 +7,8 @@
         public decimal Cost { get; set; }
         public string? Description { get; set; }
         public string? PhotoPath { get; set; }
+
+        // Навигационные свойства
+        public ICollection<CartItem>? CartItems { get; set; }
     }
 }
