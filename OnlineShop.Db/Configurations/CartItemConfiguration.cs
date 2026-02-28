@@ -13,8 +13,7 @@ namespace OnlineShop.Db.Configurations
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-                .HasColumnName("cart_item_id")
-                .ValueGeneratedNever(); // Запрет генерации GUID в БД
+                .HasColumnName("cart_item_id");
 
             builder.Property(ci => ci.Quantity)
                 .HasColumnName("quantity")
