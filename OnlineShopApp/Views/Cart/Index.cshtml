@@ -1,8 +1,8 @@
-﻿@model Cart
+﻿@model CartViewModel
 
 <div class="row justify-content-evenly">
 
-    @if (Model != null && Model.Items.Count > 0)
+    @if (Model != null && Model.Items?.Count > 0)
     {
         <div class="col-9">
             <table class="table table-responsive table-striped table-hover mb-5">
@@ -20,18 +20,18 @@
                     {
                         <tr align="center">
                             <td class="fw-bold">@(i+1)</td>
-                            <td align="left">@Model.Items[i].Product.Name</td>
-                            <td align="left">@Model.Items[i].Product.Cost.ToString("c")</td>
+                            <td align="left">@Model.Items[i].Product!.Name</td>
+                            <td align="left">@Model.Items[i].Product!.Cost.ToString("c")</td>
                             <td>
                                 <a class="btn btn-success me-2"
                                    asp-controller="Cart"
                                    asp-action="Subtract"
-                                   asp-route-productId="@Model.Items[i].Product.Id">-</a>
+                                   asp-route-productId="@Model.Items[i].Product!.Id">-</a>
                                 @Model.Items[i].Quantity
                                 <a class="btn btn-success ms-2"
                                    asp-controller="Cart"
                                    asp-action="Add"
-                                   asp-route-productId="@Model.Items[i].Product.Id">+</a>
+                                   asp-route-productId="@Model.Items[i].Product!.Id">+</a>
                             </td>
                             <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
                         </tr>

@@ -28,9 +28,7 @@ namespace OnlineShopApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddSingleton<ICartsRepository, InMemoryCartsRepository>();
-
-            //builder.Services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
+            builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
             builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
 
             builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
