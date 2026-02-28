@@ -3,7 +3,7 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Helpers
 {
-    public static class Mapping
+    public static class ProductMapping
     {
         public static IEnumerable<ProductViewModel> ToViewModels(this IEnumerable<Product> products)
         {
