@@ -2,7 +2,7 @@
 
 namespace OnlineShopApp.Models
 {
-    public class Product
+    public class ProductViewModel
     {
         public int Id { get; set; }
 
@@ -22,14 +22,5 @@ namespace OnlineShopApp.Models
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; } 
         public string PhotoPath { get; set; } = "/img/product.png";
-
-        public Product(int id, string name, decimal cost, string? description)
-        {
-            Id = id;
-            Name = name;
-            Cost = cost;
-            Description = description;
-        }
-        public Product() { }
     }
 }

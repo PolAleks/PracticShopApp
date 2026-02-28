@@ -1,4 +1,4 @@
-﻿@model List<Product>
+﻿@model List<ProductViewModel>
 @{
     ViewData["Title"] = "Товары";
 }
@@ -39,6 +39,7 @@
                                     <td class="fw-bold">@(i + 1)</td>
                                     <td align="left">
                                         <a class="text-success"
+                                           asp-area=""
                                            asp-controller="Product"
                                            asp-action="Index"
                                            asp-route-Id="@Model[i].Id">

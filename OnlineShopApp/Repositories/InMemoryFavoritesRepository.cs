@@ -6,7 +6,7 @@ namespace OnlineShopApp.Repositories
     public class InMemoryFavoritesRepository : IFavoritesRepository
     {
         private readonly List<Favorite> _favorites = [];
-        public void Add(Product product, string userId)
+        public void Add(ProductViewModel product, string userId)
         {
             var favorite = TryGetByUserId(userId);
             if (favorite is null)

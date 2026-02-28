@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopApp.Interfaces;
+using OnlineShop.Db.Interfaces;
+using OnlineShopApp.Helpers;
 
 namespace OnlineShopApp.Controllers
 {
@@ -11,7 +12,7 @@ namespace OnlineShopApp.Controllers
         {
             var product = _productsRepository.TryGetById(id);
             
-            return View(product);
+            return View(product?.ToViewModel());
         }
     }
 }
