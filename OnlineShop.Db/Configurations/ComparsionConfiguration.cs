@@ -8,7 +8,7 @@ namespace OnlineShop.Db.Configurations
     {
         public void Configure(EntityTypeBuilder<Comparison> builder)
         {
-            builder.ToTable("comparison");
+            builder.ToTable("comparisons");
 
             builder.HasKey(c => c.Id);
 

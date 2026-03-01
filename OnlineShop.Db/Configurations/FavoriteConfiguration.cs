@@ -8,7 +8,7 @@ namespace OnlineShop.Db.Configurations
     {
         public void Configure(EntityTypeBuilder<Favorite> builder)
         {
-            builder.ToTable("favorite");
+            builder.ToTable("favorites");
 
             builder.HasKey(f => f.Id);
 
