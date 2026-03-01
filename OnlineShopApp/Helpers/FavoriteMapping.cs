@@ -5,8 +5,11 @@ namespace OnlineShopApp.Helpers
 {
     public static class FavoriteMapping
     {
-        public static FavoriteViewModel ToViewModel(this Favorite favorite)
+        public static FavoriteViewModel? ToViewModel(this Favorite? favorite)
         {
+            if(favorite is null)
+                return null;
+
             return new FavoriteViewModel()
             {
                 Id = favorite.Id,

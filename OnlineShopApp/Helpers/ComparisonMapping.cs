@@ -1,12 +1,16 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Db.Configurations;
+using OnlineShop.Db.Models;
 using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Helpers
 {
     public static class ComparisonMapping
     {
-        public static ComparisonViewModel ToViewModel(this Comparison comparison)
+        public static ComparisonViewModel? ToViewModel(this Comparison? comparison)
         {
+            if(comparison is null)
+                return null;
+
             return new ComparisonViewModel()
             {
                 Id = comparison.Id,

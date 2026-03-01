@@ -11,7 +11,7 @@ namespace OnlineShopApp.Controllers
         {
             var favorite = favoritesRepository.TryGetByUserId(Constans.UserId);
 
-            return View(favorite?.ToViewModel());
+            return View(favorite.ToViewModel());
         }
 
         public IActionResult Add(int productId)

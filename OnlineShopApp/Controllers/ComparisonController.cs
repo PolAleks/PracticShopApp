@@ -10,7 +10,7 @@ namespace OnlineShopApp.Controllers
         {
             var comparison = comparisonRepository.TryGetByUserId(Constans.UserId);
 
-            return View(comparison?.ToViewModel());
+            return View(comparison.ToViewModel());
         }
 
         public IActionResult Add(int productId)
