@@ -10,5 +10,7 @@
 
         // Навигационные свойства
         public ICollection<CartItem>? CartItems { get; set; }
+        public ICollection<Favorite>? Favorites { get; set; }
+        public ICollection<Comparison>? Comparisons { get; set; }
     }
 }
