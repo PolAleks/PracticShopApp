@@ -12,21 +12,21 @@ namespace OnlineShop.Db.Repositories
 
             if (existingComparison == null)
             {
-                Comparison newComparison = new() 
-                { 
-                    UserId = userId, 
-                    Products = [product] 
+                Comparison newComparison = new()
+                {
+                    UserId = userId,
+                    Products = [product]
                 };
 
                 databaseContext.Comparisons.Add(newComparison);
             }
             else
             {
-                var existingProductInComparison = existingComparison.Products?.FirstOrDefault(p => p.Id == product.Id);
+                var existingProductInComparison = existingComparison.Products.FirstOrDefault(p => p.Id == product.Id);
 
                 if (existingProductInComparison == null)
                 {
-                    existingComparison.Products!.Add(product);
+                    existingComparison.Products.Add(product);
                 }
             }
             databaseContext.SaveChanges();
@@ -47,15 +47,12 @@ namespace OnlineShop.Db.Repositories
         {
             Comparison? existingComparison = TryGetByUserId(userId);
 
-            if (existingComparison != null)
-            {
-                var existingProductInComparison = existingComparison.Products!.FirstOrDefault(p => p.Id.Equals(productId));
+            var existingProductInComparison = existingComparison?.Products.FirstOrDefault(p => p.Id.Equals(productId));
 
-                if(existingProductInComparison != null)
-                {
-                    existingComparison.Products!.Remove(existingProductInComparison);
-                    databaseContext.SaveChanges();
-                }
+            if (existingProductInComparison != null)
+            {
+                existingComparison!.Products.Remove(existingProductInComparison);
+                databaseContext.SaveChanges();
             }
         }
 

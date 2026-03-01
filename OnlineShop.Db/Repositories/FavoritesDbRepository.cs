@@ -22,11 +22,11 @@ namespace OnlineShop.Db.Repositories
             }
             else
             {
-                var existingProductInFavorite = existingFavorite.Products?.FirstOrDefault(p => p.Id == product.Id);
+                var existingProductInFavorite = existingFavorite.Products.FirstOrDefault(p => p.Id == product.Id);
 
                 if (existingProductInFavorite == null)
                 {
-                    existingFavorite.Products!.Add(product);
+                    existingFavorite.Products.Add(product);
                 }
             }
 
@@ -48,11 +48,11 @@ namespace OnlineShop.Db.Repositories
         {
             Favorite? existingFavorite = TryGetByUserId(userId);
 
-            var existingProductInFavorite = existingFavorite?.Products!.FirstOrDefault(p => p.Id == productId);
+            var existingProductInFavorite = existingFavorite?.Products.FirstOrDefault(p => p.Id == productId);
 
             if(existingProductInFavorite != null)
             {
-                existingFavorite!.Products!.Remove(existingProductInFavorite);
+                existingFavorite!.Products.Remove(existingProductInFavorite);
                 databaseContext.SaveChanges();
             }
         }
