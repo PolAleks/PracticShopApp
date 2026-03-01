@@ -1,47 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
 using OnlineShopApp.Helpers;
-using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
-    public class ComparisonController : Controller
+    public class ComparisonController(IComparisonRepository comparisonRepository, IProductsRepository productsRepository) : Controller
     {
-        private readonly IComparisonRepository _comparisonRepository;
-        private readonly IProductsRepository _productsRepository;
-
-        public ComparisonController(IComparisonRepository comparisonRepository, IProductsRepository productsRepository)
-        {
-            _comparisonRepository = comparisonRepository;
-            _productsRepository = productsRepository;
-        }
-
         public IActionResult Index()
         {
-            var comparison = _comparisonRepository.TryGetByUserId(Constans.UserId);
+            var comparison = comparisonRepository.TryGetByUserId(Constans.UserId);
 
-            return View(comparison);
+            return View(comparison.ToViewModel());
         }
 
         public IActionResult Add(int productId)
         {
-            var product = _productsRepository.TryGetById(productId);
+            var product = productsRepository.TryGetById(productId);
+
             if (product is not null)
             {
-                _comparisonRepository.Add(product.ToViewModel(), Constans.UserId);
+                comparisonRepository.Add(product, Constans.UserId);
             }
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int productId)
         {
-            _comparisonRepository.Delete(productId, Constans.UserId);
+            comparisonRepository.Delete(productId, Constans.UserId);
+
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Clear()
         {
-            _comparisonRepository.Clear(Constans.UserId);
+            comparisonRepository.Clear(Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }

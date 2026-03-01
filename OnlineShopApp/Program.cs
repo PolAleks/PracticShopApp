@@ -30,10 +30,10 @@ namespace OnlineShopApp
 
             builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
             builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
+            builder.Services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
+            builder.Services.AddTransient<IComparisonRepository, ComparisonsDbRepository>();
 
             builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
-            builder.Services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
-            builder.Services.AddSingleton<IComparisonRepository, InMemoryComparisonsRepository>();
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
             builder.Services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
 
