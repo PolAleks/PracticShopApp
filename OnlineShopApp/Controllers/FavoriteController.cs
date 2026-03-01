@@ -1,28 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
 using OnlineShopApp.Helpers;
-using OnlineShopApp.Interfaces;
 
 namespace OnlineShopApp.Controllers
 {
     public class FavoriteController(IFavoritesRepository favoritesRepository, IProductsRepository productsRepository) : Controller
     {
-        private readonly IFavoritesRepository _favoritesRepository = favoritesRepository;
-        private readonly IProductsRepository _productsRepository = productsRepository;
+
         public IActionResult Index()
         {
-            var favorite = _favoritesRepository.TryGetByUserId(Constans.UserId);
+            var favorite = favoritesRepository.TryGetByUserId(Constans.UserId);
 
-            return View(favorite);
+            return View(favorite?.ToViewModel());
         }
 
         public IActionResult Add(int productId)
         {
-            var product = _productsRepository.TryGetById(productId);
+            var product = productsRepository.TryGetById(productId);
 
             if (product is not null)
             {
-                _favoritesRepository.Add(product.ToViewModel(), Constans.UserId);
+                favoritesRepository.Add(product, Constans.UserId);
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -33,14 +31,14 @@ namespace OnlineShopApp.Controllers
 
         public IActionResult Delete(int productId)
         {
-            _favoritesRepository.Delete(productId, Constans.UserId);
+            favoritesRepository.Delete(productId, Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Clear()
         {
-            _favoritesRepository.Clear(Constans.UserId);
+            favoritesRepository.Clear(Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
