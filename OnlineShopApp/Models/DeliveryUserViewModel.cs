@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopApp.Models
 {
-    public class DeliveryUser
+    public class DeliveryUserViewModel
     {
         public Guid Id { get; set; }
 
