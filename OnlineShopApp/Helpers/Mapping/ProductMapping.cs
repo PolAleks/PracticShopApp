@@ -1,7 +1,7 @@
 ﻿using OnlineShop.Db.Models;
 using OnlineShopApp.Models;
 
-namespace OnlineShopApp.Helpers
+namespace OnlineShopApp.Helpers.Mapping
 {
     public static class ProductMapping
     {
@@ -29,7 +29,7 @@ namespace OnlineShopApp.Helpers
             };
         }
 
-        public static Product ToProductDb(this ProductViewModel productViewModel)
+        public static Product ToDbModel(this ProductViewModel productViewModel)
         {
             return new Product()
             {
@@ -39,6 +39,11 @@ namespace OnlineShopApp.Helpers
                 Description = productViewModel.Description,
                 PhotoPath = productViewModel.PhotoPath
             };
+        }
+
+        public static IEnumerable<Product>? ToDbModels(this IEnumerable<ProductViewModel> products)
+        {
+            return products?.Select(ToDbModel);
         }
     }
 }
