@@ -13,9 +13,14 @@ namespace OnlineShop.Db
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Comparison> Comparisons { get; set; }
 
+      
+        public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<DeliveryUser> DeliveryUsers { get; set; } = null!;
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
             Database.EnsureCreated();
+            //Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
