@@ -1,7 +1,7 @@
 ﻿using OnlineShop.Db.Models;
 using OnlineShopApp.Models;
 
-namespace OnlineShopApp.Helpers
+namespace OnlineShopApp.Helpers.Mapping
 {
     public static class FavoriteMapping
     {
