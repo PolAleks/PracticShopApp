@@ -19,7 +19,23 @@ namespace OnlineShop.Db.Configurations
                 .HasColumnName("user_id");
 
             builder.HasMany(f => f.Products)
-                .WithMany(p => p.Favorites);                
+                .WithMany(p => p.Favorites)
+                .UsingEntity<FavoriteProduct>(
+                    j => j.HasOne(fp => fp.Product)
+                          .WithMany(p => p.FavoriteProducts)
+                          .HasForeignKey(fp => fp.ProductId)
+                          .OnDelete(DeleteBehavior.Cascade),
+                    j => j.HasOne(fp => fp.Favorite)
+                          .WithMany(f => f.FavoriteProducts)
+                          .HasForeignKey(fp => fp.FavoriteId)
+                          .OnDelete(DeleteBehavior.Cascade),
+                    j =>
+                    {
+                        j.ToTable("favorite_products");
+                        j.HasKey(fp => new { fp.FavoriteId, fp.ProductId });
+                        j.Property(fp => fp.FavoriteId).HasColumnName("favorite_id");
+                        j.Property(fp => fp.ProductId).HasColumnName("product_id");
+                    });
         }
     }
 }

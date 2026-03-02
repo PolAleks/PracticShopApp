@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopApp.Models
 {
-    public class Order
+    public class OrderViewModel
     {
         public Guid Id { get; set; }
 
@@ -14,13 +14,13 @@ namespace OnlineShopApp.Models
         public List<CartItemViewModel> Items { get; set; }
 
         [Required]
-        public DeliveryUser DeliveryUser { get; set; }
+        public DeliveryUserViewModel DeliveryUser { get; set; }
 
         [ValidateNever]
         public DateTime CreationDateTime { get; set; }
 
         [Required]
-        public OrderStatus Status { get; set; } = OrderStatus.Created;
+        public OrderStatusViewModel Status { get; set; } = OrderStatusViewModel.Created;
 
         public decimal? TotalCost => Items?.Sum(item => item.Cost);
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
-using OnlineShopApp.Helpers;
-using OnlineShopApp.Interfaces;
+using OnlineShop.Db.Models;
+using OnlineShopApp.Helpers.Mapping;
 using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Controllers
@@ -12,31 +12,43 @@ namespace OnlineShopApp.Controllers
         {
             var cart = cartsRepository.TryGetByUserId(Constans.UserId);
 
-            var order = new Order()
+            var order = new OrderViewModel()
             {
-                Items = cart?.Items?.ToViewModels().ToList() ?? []
+                Items = cart?.Items.ToViewModels().ToList() ?? []
             };
 
             return View(order);
         }
 
         [HttpPost]
-        public IActionResult Buy(Order order)
+        public IActionResult Buy(OrderViewModel order)
         {
             var cart = cartsRepository.TryGetByUserId(Constans.UserId);
-            
-            if (cart is null) 
-                return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+
+            if (cart == null)
+            {
+                return View(nameof(Index), order);
+            }
 
             order.UserId = Constans.UserId;
-            order.Items = cart!.Items!.ToViewModels().ToList();
+            order.Items = cart.Items.ToViewModels().ToList();
 
             if (!ModelState.IsValid)
             {
                 return View(nameof(Index), order);
             }
 
-            ordersRepository.Add(order);
+            var orderDb = new Order()
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                Items = cart.Items,
+                DeliveryUser = order.DeliveryUser.ToDbModel(),
+                CreationDateTime = order.CreationDateTime,
+                Status = (OrderStatus)order.Status,
+            };
+
+            ordersRepository.Add(orderDb);
 
             cartsRepository.Clear(Constans.UserId);
 
