@@ -14,6 +14,9 @@ namespace OnlineShopApp
     {
         public static void Main(string[] args)
         {
+            // Установка глобального поведения для всех DateTime
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Получение строки соединения с БД из appsettings.json 
@@ -32,8 +35,8 @@ namespace OnlineShopApp
             builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
             builder.Services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
             builder.Services.AddTransient<IComparisonRepository, ComparisonsDbRepository>();
+            builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
 
-            builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
             builder.Services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
 

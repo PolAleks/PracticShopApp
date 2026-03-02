@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
-using OnlineShopApp.Helpers;
+using OnlineShopApp.Helpers.Mapping;
 using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
@@ -28,7 +28,7 @@ namespace OnlineShopApp.Areas.Admin.Controllers
                 return View(product);
             }
 
-            productsRepository.Add(product.ToProductDb());
+            productsRepository.Add(product.ToDbModel());
 
             return RedirectToAction(nameof(Index));
         }
@@ -55,7 +55,7 @@ namespace OnlineShopApp.Areas.Admin.Controllers
                 return View(product);
             }
 
-            productsRepository.Update(product.ToProductDb());
+            productsRepository.Update(product.ToDbModel());
 
             return RedirectToAction(nameof(Index));
         }
