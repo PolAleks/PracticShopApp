@@ -53,6 +53,14 @@ namespace OnlineShopApp
 
             var app = builder.Build();
 
+
+            // Применяем миграции если они есть, до запуска приложения
+            using(var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                context.Database.Migrate();
+            }
+
             app.UseSerilogRequestLogging();
 
             // Configure the HTTP request pipeline.
