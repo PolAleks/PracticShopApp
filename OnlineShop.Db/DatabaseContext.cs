@@ -17,11 +17,7 @@ namespace OnlineShop.Db
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<DeliveryUser> DeliveryUsers { get; set; } = null!;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-        {
-            Database.EnsureCreated();
-            //Database.Migrate();
-        }
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
