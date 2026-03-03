@@ -4,7 +4,7 @@ using OnlineShop.Db.Models;
 
 namespace OnlineShop.Db.Configurations
 {
-    public class ComparsionConfiguration : IEntityTypeConfiguration<Comparison>
+    public class ComparisonConfiguration : IEntityTypeConfiguration<Comparison>
     {
         public void Configure(EntityTypeBuilder<Comparison> builder)
         {
