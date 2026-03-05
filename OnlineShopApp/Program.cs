@@ -96,10 +96,10 @@ namespace OnlineShopApp
 
             app.UseRequestLocalization();
 
-            app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseRouting();
             app.MapControllerRoute(
                 name: "MyArea",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}");
