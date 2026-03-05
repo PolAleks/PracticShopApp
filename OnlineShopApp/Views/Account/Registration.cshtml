@@ -46,7 +46,8 @@
     <div class="text-center m-3">
         <button class="btn btn-outline-success" type="submit"
                 asp-controller="Account"
-                asp-action="Registration">
+                asp-action="Registration"
+                asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]">
             Зарегистрироваться
         </button>
     </div>

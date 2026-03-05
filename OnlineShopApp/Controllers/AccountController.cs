@@ -59,7 +59,7 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegistrationViewModel registration)
+        public async Task<IActionResult> Registration(RegistrationViewModel registration, string? ReturnUrl)
         {
             if (registration.Login == registration.Password)
             {
@@ -85,6 +85,11 @@ namespace OnlineShopApp.Controllers
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, isPersistent: false);
+
+                if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                {
+                    LocalRedirect(ReturnUrl);
+                }
 
                 return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
             }
