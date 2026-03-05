@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models.IdentityEntities;
-using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models;
-using Authorization = OnlineShopApp.Models.Authorization;
+using OnlineShopApp.Models.ViewModel;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AccountController(IUsersRepository usersRepository, 
-                                   UserManager<ApplicationUser> userManager,
+    public class AccountController(UserManager<ApplicationUser> userManager,
                                    SignInManager<ApplicationUser> signInManager) : Controller
     {
         #region Authorization
@@ -19,22 +16,11 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Authorization(Authorization authorization)
+        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization)
         {
             if (authorization.Login == authorization.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
-            }
-
-            var user = usersRepository.TryGetByLogin(authorization.Login);
-
-            if (user is null)
-            {
-                ModelState.AddModelError("", "Такого пользователя не существует!\r\nПройдите регистрацию!");
-            }
-            else if (user.Password != authorization.Password)
-            {
-                ModelState.AddModelError("", "Неправильный пароль!");
             }
 
             if (!ModelState.IsValid)
@@ -42,8 +28,22 @@ namespace OnlineShopApp.Controllers
                 return View(authorization);
             }
 
-            return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+            var result = await signInManager.PasswordSignInAsync(userName: authorization.Login, 
+                                                                 password: authorization.Password, 
+                                                                 isPersistent: authorization.IsRememberMe, 
+                                                                 lockoutOnFailure: false);
+
+            if (result.Succeeded) 
+            {
+                return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Неправильный логин или пароль!");
+                return View(authorization);
+            }
         }
+
         #endregion
 
 
@@ -54,19 +54,12 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(Registration registration)
+        public async Task<IActionResult> Registration(RegistrationViewModel registration)
         {
             if (registration.Login == registration.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
-
-            //var existingUser = usersRepository.TryGetByLogin(registration.Login);
-
-            //if (existingUser is not null)
-            //{
-            //    ModelState.AddModelError("", "Пользователь с таким именем уже зарегистрирован!\r\nНеобходимо зарегистрироваться под другим логином");
-            //}
 
             if (!ModelState.IsValid)
             {
