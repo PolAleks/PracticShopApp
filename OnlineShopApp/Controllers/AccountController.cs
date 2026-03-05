@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
-using System.Threading.Tasks;
 using Authorization = OnlineShopApp.Models.Authorization;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AccountController(IUsersRepository usersRepository, UserManager<ApplicationUser> userManager) : Controller
+    public class AccountController(IUsersRepository usersRepository, 
+                                   UserManager<ApplicationUser> userManager,
+                                   SignInManager<ApplicationUser> signInManager) : Controller
     {
         #region Authorization
 
@@ -85,6 +86,8 @@ namespace OnlineShopApp.Controllers
 
             if (result.Succeeded)
             {
+                await signInManager.SignInAsync(user, isPersistent: false);
+
                 return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
             }
             else
@@ -97,5 +100,11 @@ namespace OnlineShopApp.Controllers
             }            
         }
         #endregion
+
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Index), "Home");
+        }
     }
 }
