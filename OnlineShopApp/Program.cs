@@ -68,6 +68,13 @@ namespace OnlineShopApp
                 // Настройка хранилища для ролей
                 .AddRoleStore<RoleStore<ApplicationRole, DatabaseContext, Guid>>();
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.LoginPath = "/Account/Authorization"; // Сылка для авторизации, если нет доступа
+                options.LogoutPath = "/Account/Logout"; // Сылка на метод выхода
+                options.Cookie = new CookieBuilder() { IsEssential = true }; // В каждом запросе должны быть cookies
+            });
 
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -104,11 +111,11 @@ namespace OnlineShopApp
             app.UseStaticFiles();
 
             app.UseRequestLocalization();
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseRouting();
             app.MapControllerRoute(
                 name: "MyArea",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}");
