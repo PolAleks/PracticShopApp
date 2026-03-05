@@ -20,7 +20,9 @@ namespace OnlineShopApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Получение строки соединения с БД из appsettings.json 
-            string connection = builder.Configuration.GetConnectionString("OnlineShopConnection");
+            string connection = builder.Configuration.GetConnectionString("OnlineShopConnection")
+                ?? throw new InvalidOperationException("Строка подключения 'OnlineShopConnection' не найдена"); 
+
             // Добавление в контейнер зависимостей DatabaseContext для работы с БД
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection));
 
