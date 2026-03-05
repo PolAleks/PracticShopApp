@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
+using System.Threading.Tasks;
 using Authorization = OnlineShopApp.Models.Authorization;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AccountController(IUsersRepository usersRepository) : Controller
+    public class AccountController(IUsersRepository usersRepository, UserManager<ApplicationUser> userManager) : Controller
     {
+        #region Authorization
+
         public IActionResult Authorization()
         {
             return View();
@@ -38,44 +43,59 @@ namespace OnlineShopApp.Controllers
 
             return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
         }
+        #endregion
 
+
+        #region Registration
         public IActionResult Registration()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Registration(Registration registration)
+        public async Task<IActionResult> Registration(Registration registration)
         {
             if (registration.Login == registration.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
 
-            var existingUser = usersRepository.TryGetByLogin(registration.Login);
+            //var existingUser = usersRepository.TryGetByLogin(registration.Login);
 
-            if (existingUser is not null)
-            {
-                ModelState.AddModelError("", "Пользователь с таким именем уже зарегистрирован!\r\nНеобходимо зарегистрироваться под другим логином");
-            }
+            //if (existingUser is not null)
+            //{
+            //    ModelState.AddModelError("", "Пользователь с таким именем уже зарегистрирован!\r\nНеобходимо зарегистрироваться под другим логином");
+            //}
 
             if (!ModelState.IsValid)
             {
                 return View(registration);
             }
 
-            var newUser = new User
+            ApplicationUser user = new()
             {
-                Login = registration.Login,
-                Password = registration.Password,
                 FirstName = registration.FirstName,
                 LastName = registration.LastName,
-                Phone = registration.Phone
+                Email = registration.Login,
+                UserName = registration.Login,
+                PhoneNumber = registration.Phone
             };
 
-            usersRepository.Add(newUser);
+            IdentityResult result = await userManager.CreateAsync(user, registration.Password);
 
-            return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
+            }
+            else
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View(registration);
+            }            
         }
+        #endregion
     }
 }
