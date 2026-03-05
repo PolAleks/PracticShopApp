@@ -50,6 +50,8 @@ namespace OnlineShopApp
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 // Добавили провайдер токенов по умолчанию
                 .AddDefaultTokenProviders()
+                // Руссификация ошибок IdentityError
+                .AddRussianIdentityErrorDescriber()
                 // Указываем какой именно контекст БД использовать для работы с наборами пользователей и ролей!
                 .AddEntityFrameworkStores<DatabaseContext>()
                 // Настройка и создание автоматического хранилища пользователя(репозитория)
