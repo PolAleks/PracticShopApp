@@ -16,7 +16,7 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization)
+        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization, string returnUrl)
         {
             if (authorization.Login == authorization.Password)
             {
@@ -35,6 +35,11 @@ namespace OnlineShopApp.Controllers
 
             if (result.Succeeded) 
             {
+                if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return LocalRedirect(returnUrl);
+                }
+
                 return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
             }
             else
