@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
 using OnlineShop.Db.Interfaces;
+using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShop.Db.Repositories;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
@@ -41,6 +44,19 @@ namespace OnlineShopApp
 
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
             builder.Services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
+
+            // Добавления в Ioc контейнер сервис аутентификации и настраиваем его
+            // Указываем модели которые содержат пользователей и роли
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+                // Добавили провайдер токенов по умолчанию
+                .AddDefaultTokenProviders()
+                // Указываем какой именно контекст БД использовать для работы с наборами пользователей и ролей!
+                .AddEntityFrameworkStores<DatabaseContext>()
+                // Настройка и создание автоматического хранилища пользователя(репозитория)
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, DatabaseContext, Guid>>()
+                // Настройка хранилища для ролей
+                .AddRoleStore<RoleStore<ApplicationRole, DatabaseContext, Guid>>();
+
 
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
