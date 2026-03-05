@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
 using OnlineShopApp.Helpers.Mapping;
 
 namespace OnlineShopApp.Controllers
 {
+    [Authorize]
     public class CartController(ICartsRepository cartsRepository, IProductsRepository productsRepository) : Controller
     {
 
