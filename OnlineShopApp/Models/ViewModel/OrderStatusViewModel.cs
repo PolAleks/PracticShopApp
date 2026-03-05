@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopApp.Models
+namespace OnlineShopApp.Models.ViewModel
 {
     public enum OrderStatusViewModel
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopApp.Models
+namespace OnlineShopApp.Models.ViewModel
 {
-    public class Authorization
+    public class AuthorizationViewModel
     {
         [Display(Name = "Логин", Prompt = "Ваш логин")]
         [Required(ErrorMessage = "Не указан логин")]
