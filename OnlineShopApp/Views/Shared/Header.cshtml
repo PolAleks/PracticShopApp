@@ -9,7 +9,12 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                        <a class="nav-link text-dark"
+                           asp-area=""
+                           asp-controller="Home"
+                           asp-action="Index">
+                            Главная
+                        </a>
                     </li>
                     <li class="nav-item">
                         @await Component.InvokeAsync("Cart")
@@ -17,36 +22,54 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Favorite" asp-action="Index">Избранное</a>
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            @User.Identity?.Name
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Logout">
+                                Выйти
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Authorization">
+                                Авторизация
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Registration">
+                                Регистрация
+                            </a>
+                        </li>
+                    }
+
                     <li class="nav-item">
-                        <a class="nav-link text-dark" 
-                           asp-area="" 
-                           asp-controller="Account" 
-                           asp-action="Authorization">
-                        Авторизация
+                        <a class="nav-link text-dark"
+                           asp-area="Admin"
+                           asp-controller="Order"
+                           asp-action="Index">
+                            Панель администратора
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" 
-                           asp-area="" 
-                           asp-controller="Account" 
-                           asp-action="Registration">
-                        Регистрация
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" 
-                           asp-area="Admin" 
-                           asp-controller="Order" 
+                        <a class="nav-link text-dark"
+                           asp-area=""
+                           asp-controller="Comparison"
                            asp-action="Index">
-                           Панель администратора
-                           </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" 
-                           asp-area="" 
-                           asp-controller="Comparison" 
-                           asp-action="Index">
-                        Сравнение товаров
+                            Сравнение товаров
                         </a>
                     </li>
                 </ul>
