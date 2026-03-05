@@ -10,6 +10,7 @@ using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
 using Serilog;
 using System.Globalization;
+using System.Runtime;
 
 namespace OnlineShopApp
 {
@@ -47,7 +48,15 @@ namespace OnlineShopApp
 
             // Добавления в Ioc контейнер сервис аутентификации и настраиваем его
             // Указываем модели которые содержат пользователей и роли
-            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredUniqueChars = 3;
+            })
                 // Добавили провайдер токенов по умолчанию
                 .AddDefaultTokenProviders()
                 // Руссификация ошибок IdentityError
