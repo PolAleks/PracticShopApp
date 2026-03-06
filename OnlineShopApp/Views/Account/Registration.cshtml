@@ -1,5 +1,4 @@
-﻿@using OnlineShopApp.Models.ViewModel
-@model RegistrationViewModel
+﻿@model RegistrationViewModel
 @{
     ViewData["Title"] = "Регистрация пользователя";
 }
@@ -47,7 +46,7 @@
         <button class="btn btn-outline-success" type="submit"
                 asp-controller="Account"
                 asp-action="Registration"
-                asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]">
+                asp-route-returnUrl="@ViewData["ReturnUrl"]">
             Зарегистрироваться
         </button>
     </div>
