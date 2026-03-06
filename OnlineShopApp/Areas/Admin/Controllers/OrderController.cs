@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using OnlineShopApp.Helpers.Mapping;
@@ -7,6 +8,7 @@ using OnlineShopApp.Models.ViewModel;
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class OrderController(IOrdersRepository ordersRepository) : Controller
     {     
         public IActionResult Index()

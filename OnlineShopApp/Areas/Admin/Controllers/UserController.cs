@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Models;
@@ -6,6 +7,7 @@ using OnlineShopApp.Models;
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserController(IUsersRepository usersRepository, IRolesRepository rolesRepository) : Controller
     {
         public IActionResult Index()
