@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShopApp.Models.ViewModel;
 
@@ -16,7 +17,7 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization, string returnUrl)
+        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization, string? returnUrl)
         {
             if (authorization.Login == authorization.Password)
             {
@@ -84,6 +85,7 @@ namespace OnlineShopApp.Controllers
 
             if (result.Succeeded)
             {
+                await userManager.AddToRoleAsync(user, BaseTypeRole.User.ToString());
                 await signInManager.SignInAsync(user, isPersistent: false);
 
                 if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
