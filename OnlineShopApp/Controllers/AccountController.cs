@@ -54,8 +54,9 @@ namespace OnlineShopApp.Controllers
 
 
         #region Registration
-        public IActionResult Registration()
+        public IActionResult Registration(string? returnUrl)
         {
+            ViewData.Add(nameof(returnUrl), returnUrl);
             return View();
         }
 
@@ -90,7 +91,7 @@ namespace OnlineShopApp.Controllers
 
                 if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
                 {
-                    LocalRedirect(ReturnUrl);
+                    return LocalRedirect(ReturnUrl);
                 }
 
                 return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
