@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
 using OnlineShop.Db.Interfaces;
+using OnlineShop.Db.Migrations;
 using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShop.Db.Repositories;
 using OnlineShopApp.Interfaces;
@@ -16,7 +17,7 @@ namespace OnlineShopApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // Установка глобального поведения для всех DateTime
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -25,7 +26,7 @@ namespace OnlineShopApp
 
             // Получение строки соединения с БД из appsettings.json 
             string connection = builder.Configuration.GetConnectionString("OnlineShopConnection")
-                ?? throw new InvalidOperationException("Строка подключения 'OnlineShopConnection' не найдена"); 
+                ?? throw new InvalidOperationException("Строка подключения 'OnlineShopConnection' не найдена");
 
             // Добавление в контейнер зависимостей DatabaseContext для работы с БД
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection));
@@ -90,11 +91,17 @@ namespace OnlineShopApp
             var app = builder.Build();
 
 
-            // Применяем миграции если они есть, до запуска приложения
-            using(var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
+                // Применяем миграции если они есть, до запуска приложения
                 var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 context.Database.Migrate();
+
+                // Добавляем роли у учетную запись администратора, если их нет
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+                await IdentityInit.IntitFirstData(userManager, roleManager);
             }
 
             app.UseSerilogRequestLogging();
