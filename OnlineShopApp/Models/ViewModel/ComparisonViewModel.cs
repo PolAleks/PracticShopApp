@@ -1,6 +1,6 @@
-﻿namespace OnlineShopApp.Models
+﻿namespace OnlineShopApp.Models.ViewModel
 {
-    public class FavoriteViewModel
+    public class ComparisonViewModel
     {
         public Guid Id { get; set; }
         public required string UserId { get; set; }

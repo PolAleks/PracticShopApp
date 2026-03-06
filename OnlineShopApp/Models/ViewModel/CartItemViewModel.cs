@@ -1,4 +1,4 @@
-﻿namespace OnlineShopApp.Models
+﻿namespace OnlineShopApp.Models.ViewModel
 {
     public class CartItemViewModel
     {

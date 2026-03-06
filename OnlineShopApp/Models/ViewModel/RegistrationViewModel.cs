@@ -1,9 +1,9 @@
 ﻿using OnlineShopApp.Helpers;
 using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopApp.Models
+namespace OnlineShopApp.Models.ViewModel
 {
-    public class Registration
+    public class RegistrationViewModel
     {
         [Display(Name = "Логин", Prompt = "Ваш логин")]
         [Required(ErrorMessage = "Не указан логин")]

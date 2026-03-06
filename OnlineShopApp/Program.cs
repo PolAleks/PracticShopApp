@@ -1,18 +1,23 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
 using OnlineShop.Db.Interfaces;
+using OnlineShop.Db.Migrations;
+using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShop.Db.Repositories;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
 using Serilog;
 using System.Globalization;
+using System.Runtime;
 
 namespace OnlineShopApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // Установка глобального поведения для всех DateTime
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -20,7 +25,9 @@ namespace OnlineShopApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Получение строки соединения с БД из appsettings.json 
-            string connection = builder.Configuration.GetConnectionString("OnlineShopConnection");
+            string connection = builder.Configuration.GetConnectionString("OnlineShopConnection")
+                ?? throw new InvalidOperationException("Строка подключения 'OnlineShopConnection' не найдена");
+
             // Добавление в контейнер зависимостей DatabaseContext для работы с БД
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql(connection));
 
@@ -40,6 +47,36 @@ namespace OnlineShopApp
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
             builder.Services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
 
+            // Добавления в Ioc контейнер сервис аутентификации и настраиваем его
+            // Указываем модели которые содержат пользователей и роли
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredUniqueChars = 3;
+            })
+                // Добавили провайдер токенов по умолчанию
+                .AddDefaultTokenProviders()
+                // Руссификация ошибок IdentityError
+                .AddRussianIdentityErrorDescriber()
+                // Указываем какой именно контекст БД использовать для работы с наборами пользователей и ролей!
+                .AddEntityFrameworkStores<DatabaseContext>()
+                // Настройка и создание автоматического хранилища пользователя(репозитория)
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, DatabaseContext, Guid>>()
+                // Настройка хранилища для ролей
+                .AddRoleStore<RoleStore<ApplicationRole, DatabaseContext, Guid>>();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.LoginPath = "/Account/Authorization"; // Сылка для авторизации, если нет доступа
+                options.LogoutPath = "/Account/Logout"; // Сылка на метод выхода
+                options.Cookie = new CookieBuilder() { IsEssential = true }; // В каждом запросе должны быть cookies
+            });
+
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -54,11 +91,17 @@ namespace OnlineShopApp
             var app = builder.Build();
 
 
-            // Применяем миграции если они есть, до запуска приложения
-            using(var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
+                // Применяем миграции если они есть, до запуска приложения
                 var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 context.Database.Migrate();
+
+                // Добавляем роли у учетную запись администратора, если их нет
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+                await IdentityInit.IntitFirstData(userManager, roleManager);
             }
 
             app.UseSerilogRequestLogging();
@@ -75,9 +118,9 @@ namespace OnlineShopApp
             app.UseStaticFiles();
 
             app.UseRequestLocalization();
-
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

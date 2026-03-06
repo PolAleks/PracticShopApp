@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using OnlineShopApp.Helpers.Mapping;
-using OnlineShopApp.Models;
+using OnlineShopApp.Models.ViewModel;
 
 namespace OnlineShopApp.Controllers
 {
+    [Authorize]
     public class OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository) : Controller
     {
         public IActionResult Index()
