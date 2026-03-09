@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models;
+using OnlineShopApp.Models.ViewModel;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class UserController(IUsersRepository usersRepository, IRolesRepository rolesRepository) : Controller
+    public class UserController(IUserService userService, 
+                                IRolesRepository rolesRepository) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = usersRepository.GetAll();
-
+            var users = await userService.GetAllAsync();
+            
             return View(users);
         }
 
-        public IActionResult Detail(Guid id)
+        public async Task<IActionResult> Detail(Guid id)
         {
-            var user = usersRepository.TryGetById(id);
+            var user = await userService.TryGetByIdAsync(id);
 
             return View(user);
         }
@@ -31,62 +33,76 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(User newUser)
+        public async Task<IActionResult> Add(UserViewModel newUser)
         {
-            var existingUser = usersRepository.TryGetByLogin(newUser.Login);
-
-            if (existingUser is not null)
-            {
-                ModelState.AddModelError("", "Такой пользователь уже существует!");
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(newUser);
             }
+            
+            var existingUser = await userService.TryGetByLoginAsync(newUser.Login!);
 
-            usersRepository.Add(newUser);
+            if (existingUser is not null)
+            {
+                ModelState.AddModelError("", "Такой пользователь уже существует!");
+                return View(newUser);
+            }
+
+            await userService.CreateUserAsync(newUser);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid userId)
         {
-            usersRepository.Delete(id);
+             await userService.DeleteUserAsync(userId);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> UpdateAsync(Guid userId)
         {
-            var user = usersRepository.TryGetById(id);
+            var user = await userService.TryGetByIdAsync(userId);
+            
+            if (user is null) return NotFound();
 
-            return View(user);
+            EditUserViewModel editUser = new()
+            {
+                Id = user.Id.ToString(),
+                Login = user.Login,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+            };
+
+            return View(editUser);
         }
 
         [HttpPost]
-        public IActionResult Update(User updateUser)
+        public async Task<IActionResult> UpdateAsync(EditUserViewModel updateUser)
         {
             if (!ModelState.IsValid)
             {
                 return View(updateUser);
             }
 
-            usersRepository.Update(updateUser);
+            await userService.UpdateUserAsync(updateUser);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult ChangeRole(Guid id)
+        public async Task<IActionResult> ChangeRole(Guid userId)
         {
-            var existingUser = usersRepository.TryGetById(id);
+            var existingUser = await userService.TryGetByIdAsync(userId);
+                          
+            if (existingUser is null) return NotFound();
 
-            var changeRole = new ChangeRole()
+            var changeRole = new ChangeRoleViewModel()
             {
-                Login = existingUser?.Login,
-                Role = existingUser?.Role?.ToString(),
+                Id = existingUser.Id,
+                Role = existingUser.Role,
                 Roles = rolesRepository.GetAll()
                     .Select(role => new SelectListItem { Text = role.Name.ToString(), Value = role.Name })
                     .ToList()
@@ -96,57 +112,54 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(ChangeRole changeRole)
+        public async Task<IActionResult> ChangeRole(ChangeRoleViewModel changeRole)
         {
             if (!ModelState.IsValid)
             {
                 return View(changeRole);
             }
 
-            var login = changeRole.Login;
             var role = rolesRepository.TryGetByName(changeRole.Role);
             
             if (role is not null)
             {
-                usersRepository.ChangeRole(login, role);
+                await userService.ChangeRoleAsync(changeRole);
             }
 
-            return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(login)?.Id });
+            return RedirectToAction(nameof(Detail), new { changeRole.Id });
         }
 
         [HttpGet]
-        public IActionResult ChangePassword(Guid id)
+        public async Task<IActionResult> ChangePassword(Guid userId)
         {
-            var existingUser = usersRepository.TryGetById(id);
+            var existingUser = await userService.TryGetByIdAsync(userId);
 
-            ChangePassword changePassword = new() { Login = existingUser?.Login };
+            ChangePasswordViewModel changePassword = new() { Id = existingUser.Id };
 
             return View(changePassword);
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangePassword changePassword)
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePassword)
         {
-            var existingUser = usersRepository.TryGetByLogin(changePassword.Login);
-
-            if (existingUser?.Password == changePassword.Password)
-            {
-                ModelState.AddModelError("", "Нельзя использовать старый пароль!");
-            }
-
-            if (changePassword.Login == changePassword.Password)
-            {
-                ModelState.AddModelError("", "Логин и пароль не должны совпадать!");
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(changePassword);
             }
+            
+            IdentityResult result = await userService.ChangePasswordAsync(changePassword);
 
-            usersRepository.ChangePassword(changePassword.Login, changePassword.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Detail), new { changePassword.Id });
+            }
+            
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
 
-            return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(changePassword.Login)?.Id });
+            return View(changePassword);
         }
     }
 }
