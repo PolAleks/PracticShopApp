@@ -6,5 +6,6 @@ namespace OnlineShop.Db.Models.IdentityEntities
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
     }
 }
