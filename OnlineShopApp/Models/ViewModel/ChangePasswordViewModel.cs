@@ -1,17 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace OnlineShopApp.Models
+namespace OnlineShopApp.Models.ViewModel
 {
-    public class ChangePassword
+    public class ChangePasswordViewModel
     {
-        [Display(Name = "Логин", Prompt = "Ваш логин")]
-        [Required(ErrorMessage = "Не указан логин")]
-        [DataType(DataType.EmailAddress)]
-        [EmailAddress(ErrorMessage = "Введите валидный email")]
-        [StringLength(30, MinimumLength = 5, ErrorMessage = "Логин должен быть от {2} до {1} символов")]
-        [AllowNull]
-        public string Login { get; set; }
+        [Required]
+        public Guid Id { get; set; }
 
         [Display(Name = "Пароль", Prompt = "Ваш пароль")]
         [Required(ErrorMessage = "Не указан пароль")]

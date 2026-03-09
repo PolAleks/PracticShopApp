@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopApp.Models
+namespace OnlineShopApp.Models.ViewModel
 {
-    public class Role
+    public class RoleViewModel
     {
         public Guid Id { get; set; }
 
