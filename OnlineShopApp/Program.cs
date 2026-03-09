@@ -9,6 +9,7 @@ using OnlineShop.Db.Models.IdentityEntities;
 using OnlineShop.Db.Repositories;
 using OnlineShopApp.Interfaces;
 using OnlineShopApp.Repositories;
+using OnlineShopApp.Services;
 using Serilog;
 using System.Globalization;
 using System.Runtime;
@@ -43,9 +44,9 @@ namespace OnlineShopApp
             builder.Services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
             builder.Services.AddTransient<IComparisonRepository, ComparisonsDbRepository>();
             builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
+            builder.Services.AddTransient<IUserService, UserService>();
 
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
-            builder.Services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
 
             // ƒобавлени€ в Ioc контейнер сервис аутентификации и настраиваем его
             // ”казываем модели которые содержат пользователей и роли
