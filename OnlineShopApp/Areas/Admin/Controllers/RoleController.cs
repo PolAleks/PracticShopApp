@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models;
+using OnlineShopApp.Models.ViewModel;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
@@ -23,7 +23,7 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Role role)
+        public IActionResult Add(RoleViewModel role)
         {
             var existingName = rolesRepository.TryGetByName(role.Name);
 
