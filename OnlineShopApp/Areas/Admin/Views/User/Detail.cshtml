@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model UserViewModel
 @{
     ViewData["Title"] = "Пользователь";
 }
@@ -28,7 +28,7 @@
                                asp-area="Admin"
                                asp-controller="User"
                                asp-action="ChangePassword"
-                               asp-route-id="@Model.Id">
+                               asp-route-userId="@Model.Id">
                                 Смена пароля
                             </a>
                         </li>
@@ -37,7 +37,7 @@
                                asp-area="Admin"
                                asp-controller="User"
                                asp-action="Update"
-                               asp-route-id="@Model.Id">
+                               asp-route-userId="@Model.Id">
                                 Редактирование данных
                             </a>
                         </li>
@@ -46,7 +46,7 @@
                                asp-area="Admin"
                                asp-controller="User"
                                asp-action="ChangeRole"
-                               asp-route-id="@Model.Id">
+                               asp-route-userId="@Model.Id">
                                 Смена прав доступа
                             </a>
                         </li>
@@ -82,7 +82,7 @@
 
                     <tr>
                         <td><span>Роль</span></td>
-                        <td>@Model.Role?.Name</td>
+                        <td>@Model.Role</td>
                     </tr>
                     <tr>
                         <td class="w-25"><span>Дата регистрации</span></td>
@@ -113,7 +113,7 @@
                                     asp-area="Admin"
                                     asp-controller="User"
                                     asp-action="Delete"
-                                    asp-route-id=@Model.Id>
+                                    asp-route-userId=@Model.Id>
                                 Удалить
                             </button>
 
