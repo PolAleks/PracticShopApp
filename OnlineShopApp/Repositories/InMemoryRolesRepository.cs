@@ -1,7 +1,7 @@
-﻿using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models.ViewModel;
+﻿using OnlineShop.Web.Interfaces;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Repositories
+namespace OnlineShop.Web.Repositories
 {
     public class InMemoryRolesRepository : IRolesRepository
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
+using OnlineShop.Core.Interfaces.Repositories;
 using OnlineShopApp.Helpers.Mapping;
 
 namespace OnlineShopApp.Views.Shared.Components.Cart

@@ -1,29 +1,38 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models.ViewModel;
+using OnlineShop.Core.DTO.User;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.Interfaces;
+using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Areas.Admin.Controllers
+namespace OnlineShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class UserController(IUserService userService, 
+    public class UserController(IUserService userService,
+                                IMapper mapper,
                                 IRolesRepository rolesRepository) : Controller
     {
         public async Task<IActionResult> Index()
         {
             var users = await userService.GetAllAsync();
-            
-            return View(users);
+
+            var model = mapper.Map<IEnumerable<UserViewModel>>(users);
+
+            return View(model);
         }
 
-        public async Task<IActionResult> Detail(Guid id)
+        public async Task<IActionResult> Detail(string id)
         {
             var user = await userService.TryGetByIdAsync(id);
 
-            return View(user);
+            var model = mapper.Map<UserViewModel>(user);
+
+            return View(model);
         }
 
         [HttpGet]
@@ -33,71 +42,68 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(UserViewModel newUser)
+        public async Task<IActionResult> Add(RegisterViewModel registerViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(newUser);
+                return View(registerViewModel);
             }
-            
-            var existingUser = await userService.TryGetByLoginAsync(newUser.Login!);
 
-            if (existingUser is not null)
+            var existingUser = await userService.TryGetByLoginAsync(registerViewModel.UserName);
+
+            if (existingUser != null)
             {
                 ModelState.AddModelError("", "Такой пользователь уже существует!");
-                return View(newUser);
+                return View(registerViewModel);
             }
 
-            await userService.CreateUserAsync(newUser);
+            var userDto = mapper.Map<RegisterUserDto>(registerViewModel);
+
+            await userService.CreateUserAsync(userDto);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(Guid userId)
+        public async Task<IActionResult> Delete(string id)
         {
-             await userService.DeleteUserAsync(userId);
+            await userService.DeleteUserAsync(id);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public async Task<IActionResult> UpdateAsync(Guid userId)
+        public async Task<IActionResult> UpdateAsync(string id)
         {
-            var user = await userService.TryGetByIdAsync(userId);
-            
-            if (user is null) return NotFound();
+            var userDto = await userService.TryGetByIdAsync(id);
 
-            EditUserViewModel editUser = new()
-            {
-                Id = user.Id.ToString(),
-                Login = user.Login,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Phone = user.Phone,
-            };
+            if (userDto == null) return NotFound();
 
-            return View(editUser);
+            var editUserModel = mapper.Map<EditUserViewModel>(userDto);
+
+            return View(editUserModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateAsync(EditUserViewModel updateUser)
+        public async Task<IActionResult> UpdateAsync(EditUserViewModel editViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(updateUser);
+                return View(editViewModel);
             }
 
-            await userService.UpdateUserAsync(updateUser);
+            var updateUserDto = mapper.Map<UpdateUserDto>(editViewModel);
+
+            await userService.UpdateUserAsync(updateUserDto);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangeRole(Guid userId)
+        public async Task<IActionResult> ChangeRole(string id)
         {
-            var existingUser = await userService.TryGetByIdAsync(userId);
-                          
-            if (existingUser is null) return NotFound();
+            var existingUser = await userService.TryGetByIdAsync(id);
+
+            if (existingUser == null) return NotFound();
 
             var changeRole = new ChangeRoleViewModel()
             {
@@ -120,46 +126,55 @@ namespace OnlineShopApp.Areas.Admin.Controllers
             }
 
             var role = rolesRepository.TryGetByName(changeRole.Role);
-            
+
             if (role is not null)
             {
-                await userService.ChangeRoleAsync(changeRole);
+                var roleDto = mapper.Map<ChangeUserRoleDto>(changeRole);
+
+                await userService.ChangeRoleAsync(roleDto);
             }
 
             return RedirectToAction(nameof(Detail), new { changeRole.Id });
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangePassword(Guid userId)
+        public async Task<IActionResult> ChangePassword(string id)
         {
-            var existingUser = await userService.TryGetByIdAsync(userId);
+            var existingUser = await userService.TryGetByIdAsync(id);
 
-            ChangePasswordViewModel changePassword = new() { Id = existingUser.Id };
+            if(existingUser == null) return NotFound();
 
-            return View(changePassword);
+            var changePasswordViewModel = new ChangeUserPasswordViewModel() 
+            { 
+                Id = existingUser.Id 
+            };
+
+            return View(changePasswordViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePassword)
+        public async Task<IActionResult> ChangePassword(ChangeUserPasswordViewModel changePasswordViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(changePassword);
+                return View(changePasswordViewModel);
             }
-            
-            IdentityResult result = await userService.ChangePasswordAsync(changePassword);
+
+            var changePasswordDto = mapper.Map<ChangeUserPasswordDto>(changePasswordViewModel);
+
+            var result = await userService.ChangePasswordAsync(changePasswordDto);
 
             if (result.Succeeded)
             {
-                return RedirectToAction(nameof(Detail), new { changePassword.Id });
+                return RedirectToAction(nameof(Detail), new { changePasswordViewModel.Id });
             }
-            
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
             }
 
-            return View(changePassword);
+            return View(changePasswordViewModel);
         }
     }
 }

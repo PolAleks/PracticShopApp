@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models.ViewModel;
+using OnlineShop.Web.Interfaces;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {

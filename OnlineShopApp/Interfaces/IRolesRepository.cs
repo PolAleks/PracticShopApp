@@ -1,6 +1,6 @@
-﻿using OnlineShopApp.Models.ViewModel;
+﻿using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Interfaces
+namespace OnlineShop.Web.Interfaces
 {
     public interface IRolesRepository
     {

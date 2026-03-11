@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.DAL.Entities;
 using OnlineShop.Db.Models;
-using OnlineShop.Db.Models.IdentityEntities;
-using OnlineShopApp.Models.ViewModel;
+using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShopApp.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> userManager,
-                                   SignInManager<ApplicationUser> signInManager) : Controller
+    public class AccountController(UserManager<User> userManager,
+                                   SignInManager<User> signInManager) : Controller
     {
         #region Authorization
 
@@ -61,7 +62,7 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegistrationViewModel registration, string? ReturnUrl)
+        public async Task<IActionResult> Registration(RegisterViewModel registration, string? ReturnUrl)
         {
             if (registration.Login == registration.Password)
             {
@@ -73,7 +74,7 @@ namespace OnlineShopApp.Controllers
                 return View(registration);
             }
 
-            ApplicationUser user = new()
+            User user = new()
             {
                 FirstName = registration.FirstName,
                 LastName = registration.LastName,

@@ -1,5 +1,5 @@
 ﻿using OnlineShop.Db.Models;
-using OnlineShopApp.Models.ViewModel;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShopApp.Helpers.Mapping
 {

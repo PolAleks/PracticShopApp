@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.DAL.Entities;
 using OnlineShop.Db.Models;
-using OnlineShop.Db.Models.IdentityEntities;
+using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels;
 using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models.ViewModel;
 
 namespace OnlineShopApp.Services
 {
-    public class UserService(UserManager<ApplicationUser> userManager) : IUserService
+    public class UserService(UserManager<User> userManager) : IUserService
     {
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordViewModel changePassword)
+        public async Task<IdentityResult> ChangePasswordAsync(ChangeUserPasswordViewModel changePassword)
         {
             var user = await userManager.FindByIdAsync(changePassword.Id.ToString());
             
@@ -52,7 +53,7 @@ namespace OnlineShopApp.Services
 
         public async Task<IdentityResult> CreateUserAsync(UserViewModel userViewModel)
         {
-            ApplicationUser user = new()
+            User user = new()
             {
                 UserName = userViewModel.Login,
                 Email = userViewModel.Login,
@@ -114,7 +115,7 @@ namespace OnlineShopApp.Services
 
         public async Task<IdentityResult> UpdateUserAsync(EditUserViewModel user)
         {
-            ApplicationUser? applicationUser = await userManager.FindByIdAsync(user.Id);
+            User? applicationUser = await userManager.FindByIdAsync(user.Id);
 
             if (applicationUser is null)
             {

@@ -28,7 +28,7 @@
                                asp-area="Admin"
                                asp-controller="User"
                                asp-action="ChangePassword"
-                               asp-route-userId="@Model.Id">
+                               asp-route-id="@Model.Id">
                                 Смена пароля
                             </a>
                         </li>
@@ -37,7 +37,7 @@
                                asp-area="Admin"
                                asp-controller="User"
                                asp-action="Update"
-                               asp-route-userId="@Model.Id">
+                               asp-route-id="@Model.Id">
                                 Редактирование данных
                             </a>
                         </li>
@@ -46,7 +46,7 @@
                                asp-area="Admin"
                                asp-controller="User"
                                asp-action="ChangeRole"
-                               asp-route-userId="@Model.Id">
+                               asp-route-id="@Model.Id">
                                 Смена прав доступа
                             </a>
                         </li>
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <td><span>Email (логин)</span></td>
-                        <td class="fw-bold">@Model.Login</td>
+                        <td class="fw-bold">@Model.UserName</td>
                     </tr>
                     <tr>
                         <td><span>Имя</span></td>
@@ -77,7 +77,7 @@
                     </tr>
                     <tr>
                         <td><span>Телефон</span></td>
-                        <td>@Model.Phone</td>
+                        <td>@Model.PhoneNumber</td>
                     </tr>
 
                     <tr>
@@ -106,14 +106,14 @@
                             <p class="modal-title fw-bold" id="modalWindow">Удаление пользователя</p>
                         </div>
                         <div class="modal-body">
-                            Вы действительно хотите удалить пользователя "@Model!.Login"?
+                            Вы действительно хотите удалить пользователя "@Model!.UserName"?
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-outline-danger w-25" type="submit"
                                     asp-area="Admin"
                                     asp-controller="User"
                                     asp-action="Delete"
-                                    asp-route-userId=@Model.Id>
+                                    asp-route-id=@Model.Id>
                                 Удалить
                             </button>
 
