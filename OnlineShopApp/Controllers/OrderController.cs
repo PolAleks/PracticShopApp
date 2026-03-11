@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces.Repositories;
-using OnlineShop.Db.Models;
+using OnlineShop.Domain.Entities;
+using OnlineShop.Web.Helpers.Mapping;
 using OnlineShop.Web.ViewModels;
-using OnlineShopApp.Helpers.Mapping;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShop.Web.Controllers
 {
     [Authorize]
     public class OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository) : Controller

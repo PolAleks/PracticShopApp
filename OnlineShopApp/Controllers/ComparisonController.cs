@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces.Repositories;
-using OnlineShopApp.Helpers;
-using OnlineShopApp.Helpers.Mapping;
+using OnlineShop.Web.Helpers.Mapping;
 
-namespace OnlineShopApp.Controllers
+
+namespace OnlineShop.Web.Controllers
 {
  
     public class ComparisonController(IComparisonRepository comparisonRepository, IProductsRepository productsRepository) : Controller

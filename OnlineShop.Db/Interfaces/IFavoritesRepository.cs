@@ -1,6 +1,6 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Domain.Entities;
 
-namespace OnlineShop.Db.Interfaces
+namespace OnlineShop.Infrastructure.Interfaces
 {
     public interface IFavoritesRepository
     {

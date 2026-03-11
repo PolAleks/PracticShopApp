@@ -1,8 +1,7 @@
-﻿using OnlineShop.Db.Models;
-using OnlineShop.Web.ViewModels;
+﻿using OnlineShop.Domain.Entities;
 using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Helpers.Mapping
+namespace OnlineShop.Web.Helpers.Mapping
 {
     public static class CartMapping
     {

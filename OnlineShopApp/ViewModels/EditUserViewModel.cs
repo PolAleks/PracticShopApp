@@ -1,4 +1,4 @@
-﻿using OnlineShopApp.Helpers;
+﻿using OnlineShop.Web.Helpers;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Web.ViewModels

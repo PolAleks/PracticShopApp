@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces.Repositories;
-using OnlineShopApp.Helpers.Mapping;
+using OnlineShop.Web.Helpers.Mapping;
 
-namespace OnlineShopApp.Views.Shared.Components.Cart
+namespace OnlineShop.Web.Views.Shared.Components.Cart
 {
     public class CartViewComponent(ICartsRepository cartsRepository) : ViewComponent
     {

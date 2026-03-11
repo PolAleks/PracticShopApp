@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShop.Web.Controllers
 {
     public class ContactsController : Controller
     {

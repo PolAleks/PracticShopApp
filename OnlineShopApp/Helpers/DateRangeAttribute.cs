@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopApp.Helpers
+namespace OnlineShop.Web.Helpers
 {
     public class DateRangeAttribute : ValidationAttribute
     {

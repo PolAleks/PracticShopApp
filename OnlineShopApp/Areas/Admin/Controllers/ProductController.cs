@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces.Repositories;
 using OnlineShop.Web.ViewModels;
-using OnlineShopApp.Helpers.Mapping;
+using OnlineShop.Web.Helpers.Mapping;
 
-namespace OnlineShopApp.Areas.Admin.Controllers
+namespace OnlineShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
