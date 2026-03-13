@@ -49,6 +49,7 @@ namespace OnlineShop.Web
             builder.Services.AddAutoMapper(typeof(InfrastructureMappingProfile).Assembly, typeof(WebMappingProfile).Assembly);
 
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IProductService, ProductService>();
 
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
 
