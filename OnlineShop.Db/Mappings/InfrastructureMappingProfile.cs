@@ -19,8 +19,8 @@ namespace OnlineShop.Infrastructure.Mappings
             #endregion
 
             #region Product
-            // ProductDto -> Product
-            CreateMap<ProductDto, Product>();
+            // ProductDto <-> Product
+            CreateMap<ProductDto, Product>().ReverseMap();
 
             // CreateProductDto -> Product
             CreateMap<CreateProductDto, Product>();
