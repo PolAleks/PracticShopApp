@@ -1,31 +1,37 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Core.Interfaces.Repositories;
-using OnlineShop.Web.Helpers.Mapping;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    public class HomeController(IProductsRepository productsRepository) : Controller
+    public class HomeController(IProductService productService ,IMapper mapper) : Controller
     {
-        private readonly IProductsRepository _productsRepository = productsRepository;
+        private readonly IProductService _productService = productService;
+        private readonly IMapper _mapper = mapper;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productsRepository.GetAll();
+            var productsDto = await _productService.GetAllProductsAsync();
 
-            return View(products.ToViewModels());
+            var productsViewModel = _mapper.Map<IEnumerable<ProductViewModel>>(productsDto);
+
+            return View(productsViewModel);
         }
 
         [HttpGet]
-        public IActionResult Search(string? query)
+        public async Task<IActionResult> Search(string? query)
         {
             if (query is null)
             {
                 return View();
             }
 
-            var products = _productsRepository.Search(query!);
+            var productsDto = await _productService.SearchProductsAsync(query);
 
-            return View(products.ToViewModels());
+            var productsViewModel = _mapper.Map<ProductViewModel>(productsDto);
+
+            return View(productsViewModel);
         }
     }
 }
