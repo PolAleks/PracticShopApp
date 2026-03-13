@@ -5,6 +5,7 @@ using OnlineShop.Core.DTO;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Infrastructure.Data;
+using OnlineShop.Infrastructure.Exceptions;
 
 namespace OnlineShop.Infrastructure.Services
 {
@@ -42,13 +43,13 @@ namespace OnlineShop.Infrastructure.Services
 
             if (productDto == null)
             {
-                throw new Exception($"Товар с идентификатором: {id} не найден");
+                throw new NotFoundException($"Товар с идентификатором: {id} не найден");
             }
 
             return productDto;
         }
 
-        public async Task<ProductDto> GreateProductAsync(CreateProductDto createProductDto)
+        public async Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto)
         {
             var product = _mapper.Map<Product>(createProductDto);
 
@@ -71,7 +72,7 @@ namespace OnlineShop.Infrastructure.Services
 
         public async Task<ProductDto> UpdateProductAsync(UpdateProductDto updateProductDto)
         {
-            var product = await GetProductByIdAsync(updateProductDto.Id) 
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == updateProductDto.Id)
                 ?? throw new Exception($"Товар и идентификатором: {updateProductDto.Id} не найден");
 
             _mapper.Map(updateProductDto, product);
