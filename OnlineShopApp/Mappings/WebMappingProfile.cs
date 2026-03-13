@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OnlineShop.Core.DTO;
 using OnlineShop.Core.DTO.User;
 using OnlineShop.Web.ViewModels;
 
@@ -8,6 +9,7 @@ namespace OnlineShop.Web.Mappings
     {
         public WebMappingProfile()
         {
+            #region User
             // UserDto -> UserViewModel
             CreateMap<UserDto, UserViewModel>();
 
@@ -26,6 +28,21 @@ namespace OnlineShop.Web.Mappings
 
             // ChangaRoleViewModel -> ChangeUserRoleDto
             CreateMap<ChangeRoleViewModel, ChangeUserRoleDto>();
+            #endregion
+
+            #region Product
+            // ProductDto -> ProductViewModel
+            CreateMap<ProductDto, ProductViewModel>();
+
+            // CreateProductViewModel -> CreateProductDto
+            CreateMap<CreateProductViewModel, CreateProductDto>();
+
+            // ProductDto -> UpdateProductViewModel
+            CreateMap<ProductDto, UpdateProductViewModel>();
+
+            // UpdateProductViewModel -> UpdateProductDto
+            CreateMap<UpdateProductViewModel,  UpdateProductDto>();
+            #endregion
         }
     }
 }
