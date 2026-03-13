@@ -1,19 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Core.Interfaces.Repositories;
 using OnlineShop.Web.ViewModels;
-using OnlineShop.Web.Helpers.Mapping;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Core.DTO;
+using OnlineShop.Infrastructure.Exceptions;
 
 namespace OnlineShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class ProductController(IProductsRepository productsRepository) : Controller
+    public class ProductController(IProductService productService,
+                                   IMapper mapper) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = productsRepository.GetAll();
-            return View(products.ToViewModels());
+            var productsDto = await productService.GetAllProductsAsync();
+
+            return View(mapper.Map<IEnumerable<ProductViewModel>>(productsDto));
         }
 
         [HttpGet]
@@ -23,43 +27,63 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ProductViewModel product)
+        public async Task<IActionResult> Add(CreateProductViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(product);
+                return View(viewModel);
             }
 
-            productsRepository.Add(product.ToDbModel());
+            var productDto = mapper.Map<CreateProductDto>(viewModel);
+
+            _ = await productService.CreateProductAsync(productDto);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            productsRepository.Delete(id);
+            _ = await productService.DeleteProductByIdAsync(id);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            var product = productsRepository.TryGetById(id);
-            return View(product?.ToViewModel());
+            try
+            {
+                var productDto = await productService.GetProductByIdAsync(id);
+
+                return View(mapper.Map<UpdateProductViewModel>(productDto));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+
         }
 
         [HttpPost]
-        public IActionResult Update(ProductViewModel product)
+        public async Task<IActionResult> Update(UpdateProductViewModel productModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(product);
+                return View(productModel);
             }
 
-            productsRepository.Update(product.ToDbModel());
+            var productDto = mapper.Map<UpdateProductDto>(productModel);
 
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _ = await productService.UpdateProductAsync(productDto);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }
