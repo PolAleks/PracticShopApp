@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnlineShop.Infrastructure.Data;
 
-
 #nullable disable
 
-namespace OnlineShop.Db.Migrations
+namespace OnlineShop.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260305100225_AddIdentityEntities")]
-    partial class AddIdentityEntities
+    [Migration("20260313095707_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +25,33 @@ namespace OnlineShop.Db.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,8 +65,9 @@ namespace OnlineShop.Db.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -50,7 +76,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,8 +90,9 @@ namespace OnlineShop.Db.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -74,7 +101,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -85,8 +112,9 @@ namespace OnlineShop.Db.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -95,13 +123,13 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -110,10 +138,10 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -129,7 +157,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Cart", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,7 +174,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("carts", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.CartItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,7 +210,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("cart_items", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Comparison", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Comparison", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,7 +227,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("comparisons", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.ComparisonProduct", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.ComparisonProduct", b =>
                 {
                     b.Property<Guid>("ComparisonId")
                         .HasColumnType("uuid")
@@ -216,7 +244,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("comparison_products", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.DeliveryUser", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.DeliveryUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -251,7 +279,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("delivery_user", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Favorite", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Favorite", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -268,7 +296,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("favorites", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.FavoriteProduct", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.FavoriteProduct", b =>
                 {
                     b.Property<Guid>("FavoriteId")
                         .HasColumnType("uuid")
@@ -285,105 +313,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("favorite_products", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.IdentityEntities.ApplicationRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("OnlineShop.Db.Models.IdentityEntities.ApplicationUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -414,7 +344,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("order", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -514,70 +444,143 @@ namespace OnlineShop.Db.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.User", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.IdentityEntities.ApplicationRole", null)
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.IdentityEntities.ApplicationUser", null)
+                    b.HasOne("OnlineShop.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.IdentityEntities.ApplicationUser", null)
+                    b.HasOne("OnlineShop.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.IdentityEntities.ApplicationRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineShop.Db.Models.IdentityEntities.ApplicationUser", null)
+                    b.HasOne("OnlineShop.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.IdentityEntities.ApplicationUser", null)
+                    b.HasOne("OnlineShop.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.CartItem", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.Cart", "Cart")
+                    b.HasOne("OnlineShop.Domain.Entities.Cart", "Cart")
                         .WithMany("Items")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("OnlineShop.Db.Models.Order", "Order")
+                    b.HasOne("OnlineShop.Domain.Entities.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OnlineShop.Db.Models.Product", "Product")
+                    b.HasOne("OnlineShop.Domain.Entities.Product", "Product")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -590,15 +593,15 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.ComparisonProduct", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.ComparisonProduct", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.Comparison", "Comparison")
+                    b.HasOne("OnlineShop.Domain.Entities.Comparison", "Comparison")
                         .WithMany("ComparisonProducts")
                         .HasForeignKey("ComparisonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineShop.Db.Models.Product", "Product")
+                    b.HasOne("OnlineShop.Domain.Entities.Product", "Product")
                         .WithMany("ComparisonProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -609,15 +612,15 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.FavoriteProduct", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.FavoriteProduct", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.Favorite", "Favorite")
+                    b.HasOne("OnlineShop.Domain.Entities.Favorite", "Favorite")
                         .WithMany("FavoriteProducts")
                         .HasForeignKey("FavoriteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineShop.Db.Models.Product", "Product")
+                    b.HasOne("OnlineShop.Domain.Entities.Product", "Product")
                         .WithMany("FavoriteProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -628,44 +631,44 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.DeliveryUser", "DeliveryUser")
+                    b.HasOne("OnlineShop.Domain.Entities.DeliveryUser", "DeliveryUser")
                         .WithOne("Order")
-                        .HasForeignKey("OnlineShop.Db.Models.Order", "DeliveryUserId")
+                        .HasForeignKey("OnlineShop.Domain.Entities.Order", "DeliveryUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("DeliveryUser");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Cart", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Comparison", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Comparison", b =>
                 {
                     b.Navigation("ComparisonProducts");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.DeliveryUser", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.DeliveryUser", b =>
                 {
                     b.Navigation("Order")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Favorite", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Favorite", b =>
                 {
                     b.Navigation("FavoriteProducts");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Order", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Product", b =>
                 {
                     b.Navigation("CartItems");
 
