@@ -11,7 +11,7 @@
         public Guid? OrderId { get; set; }
 
         // Навигационные свойства
-        public required Product Product { get; set; }
+        public Product Product { get; set; } = null!;
         public Cart? Cart { get; set; }
         public Order? Order { get; set; }
     }
