@@ -28,6 +28,16 @@ namespace OnlineShop.Infrastructure.Mappings
             // UpdateProductDto -> Product
             CreateMap<UpdateProductDto, Product>();
             #endregion
+
+            #region Cart
+            // CartItem -> CartItemDto
+            CreateMap<CartItem, CartItemDto>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Cost));
+
+            // Cart -> CartDto
+            CreateMap<Cart, CartDto>();
+            #endregion
         }
     }
 }
