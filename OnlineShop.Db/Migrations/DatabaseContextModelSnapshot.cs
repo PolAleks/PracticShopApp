@@ -171,42 +171,6 @@ namespace OnlineShop.Infrastructure.Migrations
                     b.ToTable("carts", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineShop.Domain.Entities.CartItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("cart_item_id");
-
-                    b.Property<Guid?>("CartId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("cart_id");
-
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("order_id");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer")
-                        .HasColumnName("product_id");
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("quantity");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("cart_items", (string)null);
-                });
-
             modelBuilder.Entity("OnlineShop.Domain.Entities.Comparison", b =>
                 {
                     b.Property<Guid>("Id")
@@ -308,6 +272,42 @@ namespace OnlineShop.Infrastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("favorite_products", (string)null);
+                });
+
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("item_id");
+
+                    b.Property<Guid?>("CartId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cart_id");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("quantity");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("items", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Domain.Entities.Order", b =>
@@ -565,31 +565,6 @@ namespace OnlineShop.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OnlineShop.Domain.Entities.CartItem", b =>
-                {
-                    b.HasOne("OnlineShop.Domain.Entities.Cart", "Cart")
-                        .WithMany("Items")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("OnlineShop.Domain.Entities.Order", "Order")
-                        .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("OnlineShop.Domain.Entities.Product", "Product")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("OnlineShop.Domain.Entities.ComparisonProduct", b =>
                 {
                     b.HasOne("OnlineShop.Domain.Entities.Comparison", "Comparison")
@@ -624,6 +599,31 @@ namespace OnlineShop.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Favorite");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("OnlineShop.Domain.Entities.Item", b =>
+                {
+                    b.HasOne("OnlineShop.Domain.Entities.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OnlineShop.Domain.Entities.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("OnlineShop.Domain.Entities.Product", "Product")
+                        .WithMany("Items")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -667,11 +667,11 @@ namespace OnlineShop.Infrastructure.Migrations
 
             modelBuilder.Entity("OnlineShop.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("ComparisonProducts");
 
                     b.Navigation("FavoriteProducts");
+
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

@@ -300,10 +300,10 @@ namespace OnlineShop.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "cart_items",
+                name: "items",
                 columns: table => new
                 {
-                    cart_item_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    item_id = table.Column<Guid>(type: "uuid", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     product_id = table.Column<int>(type: "integer", nullable: false),
                     cart_id = table.Column<Guid>(type: "uuid", nullable: true),
@@ -311,21 +311,21 @@ namespace OnlineShop.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cart_items", x => x.cart_item_id);
+                    table.PrimaryKey("PK_items", x => x.item_id);
                     table.ForeignKey(
-                        name: "FK_cart_items_carts_cart_id",
+                        name: "FK_items_carts_cart_id",
                         column: x => x.cart_id,
                         principalTable: "carts",
                         principalColumn: "cart_id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_cart_items_order_order_id",
+                        name: "FK_items_order_order_id",
                         column: x => x.order_id,
                         principalTable: "order",
                         principalColumn: "order_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_cart_items_products_product_id",
+                        name: "FK_items_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
                         principalColumn: "product_id",
@@ -385,21 +385,6 @@ namespace OnlineShop.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_cart_items_cart_id",
-                table: "cart_items",
-                column: "cart_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_cart_items_order_id",
-                table: "cart_items",
-                column: "order_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_cart_items_product_id",
-                table: "cart_items",
-                column: "product_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_comparison_products_product_id",
                 table: "comparison_products",
                 column: "product_id");
@@ -407,6 +392,21 @@ namespace OnlineShop.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_favorite_products_product_id",
                 table: "favorite_products",
+                column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_items_cart_id",
+                table: "items",
+                column: "cart_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_items_order_id",
+                table: "items",
+                column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_items_product_id",
+                table: "items",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
@@ -435,13 +435,13 @@ namespace OnlineShop.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "cart_items");
-
-            migrationBuilder.DropTable(
                 name: "comparison_products");
 
             migrationBuilder.DropTable(
                 name: "favorite_products");
+
+            migrationBuilder.DropTable(
+                name: "items");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -450,16 +450,16 @@ namespace OnlineShop.Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "carts");
-
-            migrationBuilder.DropTable(
-                name: "order");
-
-            migrationBuilder.DropTable(
                 name: "comparisons");
 
             migrationBuilder.DropTable(
                 name: "favorites");
+
+            migrationBuilder.DropTable(
+                name: "carts");
+
+            migrationBuilder.DropTable(
+                name: "order");
 
             migrationBuilder.DropTable(
                 name: "products");
