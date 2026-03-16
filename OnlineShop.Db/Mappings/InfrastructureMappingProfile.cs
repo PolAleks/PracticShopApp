@@ -29,15 +29,27 @@ namespace OnlineShop.Infrastructure.Mappings
             CreateMap<UpdateProductDto, Product>();
             #endregion
 
-            #region Cart
-            // CartItem -> CartItemDto
-            CreateMap<CartItem, CartItemDto>()
+            #region Item for Cart & Order
+            // Item -> ItemDto
+            CreateMap<Item, ItemDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Cost));
+            #endregion
 
+            #region Cart
             // Cart -> CartDto
             CreateMap<Cart, CartDto>();
             #endregion
+
+            #region Order
+            // Order -> OrderDto
+            CreateMap<Order, OrderDto>();
+            #endregion
+
+            // DeliveryUserDto -> DeliveryUser
+            CreateMap<DeliveryUserDto, DeliveryUser>();
+
+            // 
         }
     }
 }

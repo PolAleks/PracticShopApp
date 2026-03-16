@@ -6,6 +6,6 @@
         public required string UserId { get; set; }
 
         // Навигационные свойства
-        public ICollection<CartItem> Items { get; set; } = [];
+        public ICollection<Item> Items { get; set; } = [];
     }
 }

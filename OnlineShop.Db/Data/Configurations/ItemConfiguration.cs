@@ -4,16 +4,16 @@ using OnlineShop.Domain.Entities;
 
 namespace OnlineShop.Infrastructure.Data.Configurations
 {
-    public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
+    public class ItemConfiguration : IEntityTypeConfiguration<Item>
     {
-        public void Configure(EntityTypeBuilder<CartItem> builder)
+        public void Configure(EntityTypeBuilder<Item> builder)
         {
-            builder.ToTable("cart_items");
+            builder.ToTable("items");
 
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-                .HasColumnName("cart_item_id");
+                .HasColumnName("item_id");
 
             builder.Property(ci => ci.Quantity)
                 .HasColumnName("quantity")
@@ -31,7 +31,7 @@ namespace OnlineShop.Infrastructure.Data.Configurations
 
             // Настройка связи с Product (один-ко-многим)
             builder.HasOne(ci => ci.Product)
-                .WithMany(p => p.CartItems)
+                .WithMany(p => p.Items)
                 .HasForeignKey(ci => ci.ProductId)
                 .OnDelete(DeleteBehavior.Restrict); // Не удалять Product при удалении CartItem
 

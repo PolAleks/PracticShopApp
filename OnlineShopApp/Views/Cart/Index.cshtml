@@ -16,24 +16,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (var i = 0; i < Model.Items.Count; i++)
+                    @foreach (var cartItem in Model.CartItemsWithIndex)
                     {
                         <tr align="center">
-                            <td class="fw-bold">@(i+1)</td>
-                            <td align="left">@Model.Items[i].Product!.Name</td>
-                            <td align="left">@Model.Items[i].Product!.Cost.ToString("c")</td>
+                            <td class="fw-bold">@cartItem.Index</td>
+                            <td align="left">@cartItem.Item.ProductName</td>
+                            <td align="left">@cartItem.Item.FormattedProductPrice</td>
                             <td>
                                 <a class="btn btn-success me-2"
                                    asp-controller="Cart"
-                                   asp-action="Subtract"
-                                   asp-route-productId="@Model.Items[i].Product!.Id">-</a>
-                                @Model.Items[i].Quantity
+                                   asp-action="Decrease"
+                                   asp-route-productId="@cartItem.Item.ProductId">-</a>
+                                @cartItem.Item.Quantity
                                 <a class="btn btn-success ms-2"
                                    asp-controller="Cart"
-                                   asp-action="Add"
-                                   asp-route-productId="@Model.Items[i].Product!.Id">+</a>
+                                   asp-action="Increase"
+                                   asp-route-productId="@cartItem.Item.ProductId">+</a>
                             </td>
-                            <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
+                            <td class="fw-bold">@cartItem.Item.FormattedTotalCost</td>
                         </tr>
                     }
                 </tbody>
@@ -41,7 +41,7 @@
                     <tr align="center">
                         <th colspan="2"></th>
                         <th colspan="2">
-                            Общая стоимость: @Model.TotalCost?.ToString("c")
+                            Общая стоимость: @Model.FormattedTotalCost
                         </th>
                         <th colspan="1">
                             <a class="btn btn-success"

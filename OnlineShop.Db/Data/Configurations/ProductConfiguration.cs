@@ -36,7 +36,7 @@ namespace OnlineShop.Infrastructure.Data.Configurations
 
 
             // Настройка связи с CarItem (один-ко-многим)
-            builder.HasMany(p => p.CartItems)
+            builder.HasMany(p => p.Items)
                 .WithOne(ci => ci.Product)
                 .HasForeignKey(ci => ci.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);

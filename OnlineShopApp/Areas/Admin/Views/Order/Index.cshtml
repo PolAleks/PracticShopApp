@@ -31,11 +31,11 @@
                             {
                                 <tr align="center" class="align-baseline">
                                     <td class="fw-bold">@(i + 1)</td>
-                                    <td>@Model[i].TotalCost?.ToString("c")</td>
+                                    <td>@Model[i].FormattedTotalCost</td>
                                     <td>@Html.DisplayFor(m => m[i].Status)</td>
                                     <td>@Model[i].UserId</td>
-                                    <td>@Model[i].CreationDateTime.ToString("dd.MM.yyyy")</td>
-                                    <td>@Model[i].CreationDateTime.ToString("HH:mm")</td>
+                                    <td>@Model[i].CreationDate</td>
+                                    <td>@Model[i].CreationTime</td>
                                     <td align="left">
                                         <a class="text-success"
                                            asp-area="Admin"

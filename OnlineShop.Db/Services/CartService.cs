@@ -23,7 +23,7 @@ namespace OnlineShop.Infrastructure.Services
             return cartDto;
         }
 
-        public async Task<CartDto> AddToCartAsync(string userId, int productId)
+        public async Task AddToCartAsync(string userId, int productId)
         {
             var cart = await GetOrCreateCartAsync(userId);
 
@@ -35,25 +35,23 @@ namespace OnlineShop.Infrastructure.Services
             }
             else
             {
-                CartItem item = new()
+                Item item = new()
                 {
                     CartId = cart.Id,
                     ProductId = productId,
                     Quantity = 1                    
                 };
 
-                _context.CartItems.Add(item);
+                _context.Items.Add(item);
             }
             await _context.SaveChangesAsync();
-
-            return await GetCartAsync(userId);
         }
 
-        public async Task<CartDto> IncreaseQuantityAsync(string userId, Guid cartItemId)
+        public async Task IncreaseQuantityAsync(string userId, int productId)
         {
-            var existingItem = await _context.CartItems
+            var existingItem = await _context.Items
                 .Include(ci => ci.Cart)
-                .FirstOrDefaultAsync(ci => ci.Cart!.UserId == userId && ci.Id == cartItemId);
+                .FirstOrDefaultAsync(ci => ci.Cart!.UserId == userId && ci.ProductId == productId);
 
             if (existingItem == null)
             {
@@ -63,15 +61,13 @@ namespace OnlineShop.Infrastructure.Services
             existingItem.Quantity++;
 
             await _context.SaveChangesAsync();
-
-            return await GetCartAsync(userId);
         }
 
-        public async Task<CartDto> DecreaseQuantityAsync(string userId, Guid cartItemId)
+        public async Task DecreaseQuantityAsync(string userId, int productId)
         {
-            var exisringItem = await _context.CartItems
+            var exisringItem = await _context.Items
                 .Include(ci => ci.Cart)
-                .FirstOrDefaultAsync(ci => ci.Cart.UserId == userId && ci.Id == cartItemId);
+                .FirstOrDefaultAsync(ci => ci.Cart.UserId == userId && ci.ProductId == productId);
 
             if (exisringItem == null)
             {
@@ -80,15 +76,13 @@ namespace OnlineShop.Infrastructure.Services
 
             if (exisringItem.Quantity == 1)
             {
-                _context.CartItems.Remove(exisringItem);
+                _context.Items.Remove(exisringItem);
             }
             else
             {
                 exisringItem.Quantity--;
             }
             await _context.SaveChangesAsync();
-
-            return await GetCartAsync(userId);
         }
 
         public async Task ClearCartAsync(string userId)
@@ -99,7 +93,7 @@ namespace OnlineShop.Infrastructure.Services
 
             if (cart != null)
             {
-                _context.CartItems.RemoveRange(cart.Items);
+                _context.Items.RemoveRange(cart.Items);
                 await _context.SaveChangesAsync();
             }
         }

@@ -9,7 +9,7 @@
         public string? PhotoPath { get; set; }
 
         // Навигационные свойства
-        public ICollection<CartItem> CartItems { get; set; } = [];
+        public ICollection<Item> Items { get; set; } = [];
         public ICollection<Favorite> Favorites { get; set; } = [];
         public ICollection<Comparison> Comparisons { get; set; } = [];
         public ICollection<ComparisonProduct> ComparisonProducts { get; set; } = new HashSet<ComparisonProduct>();

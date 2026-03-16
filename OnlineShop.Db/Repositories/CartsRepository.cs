@@ -28,7 +28,7 @@ namespace OnlineShop.Infrastructure.Repositories
                     Items = []
                 };
 
-                newCart.Items = [ new CartItem()
+                newCart.Items = [ new Item()
                 {
                     Product = product,
                     Quantity = 1
@@ -42,14 +42,14 @@ namespace OnlineShop.Infrastructure.Repositories
 
                 if (existingItem is null)
                 {
-                    CartItem item = new()
+                    Item item = new()
                     {
                         Cart = existingCart,
                         Product = product,
                         Quantity = 1
                     };
 
-                    databaseContext.CartItems.Add(item);
+                    databaseContext.Items.Add(item);
                 }
                 else
                 {
