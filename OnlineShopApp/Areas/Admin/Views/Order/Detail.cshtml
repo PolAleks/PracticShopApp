@@ -115,15 +115,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for(int i = 0; i < Model.Items.Count; i++)
-                                    @*@foreach(var item in Model.OrderItemsWithIndex)*@
+                                    @foreach (var order in Model.OrderItemsWithIndex)
                                     {
                                         <tr align="center" class="align-baseline">
-                                            <td class="fw-bold">@(i+1)</td>
-                                            <td align="left">@Model.Items[i].ProductName</td>
-                                            <td align="left">@Model.Items[i].FormattedProductPrice</td>
-                                            <td>@Model.Items[i].Quantity</td>
-                                            <td class="fw-bold">@Model.Items[i].FormattedTotalCost</td>
+                                            <td class="fw-bold">@order.Index</td>
+                                            <td align="left">@order.Item.ProductName</td>
+                                            <td align="left">@order.Item.FormattedProductPrice</td>
+                                            <td>@order.Item.Quantity</td>
+                                            <td class="fw-bold">@order.Item.FormattedTotalCost</td>
                                         </tr>
                                     }
                                 </tbody>

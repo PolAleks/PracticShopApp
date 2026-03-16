@@ -17,7 +17,7 @@ namespace OnlineShop.Web.ViewModels
         public OrderStatusViewModel Status { get; set; } = OrderStatusViewModel.Created;
 
         [Required]
-        public DeliveryUserViewModel DeliveryUser { get; set; }
+        public DeliveryUserViewModel DeliveryUser { get; set; } = null!;
 
         [ValidateNever]
         public List<ItemViewModel> Items { get; set; } = [];
@@ -35,11 +35,13 @@ namespace OnlineShop.Web.ViewModels
         public string CreationDate { get; set; } = string.Empty;
         [ValidateNever]
         public string CreationTime { get; set; } = string.Empty;
+
+
+        public IEnumerable<ItemIndexedViewModel> OrderItemsWithIndex =>
+            Items.Select((item, index) => new ItemIndexedViewModel()
+            {
+                Index = index + 1,
+                Item = item
+            });
     }
 }
-        //public IEnumerable<ItemIndexedViewModel> OrderItemsWithIndex =>
-        //    Items.Select((item, index) => new ItemIndexedViewModel()
-        //    {
-        //        Index = index + 1,
-        //        Item = item
-        //    });

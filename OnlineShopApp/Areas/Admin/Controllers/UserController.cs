@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.Core.DTO.User;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Web.Interfaces;
-using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Areas.Admin.Controllers

@@ -67,7 +67,7 @@ namespace OnlineShop.Infrastructure.Services
         {
             var exisringItem = await _context.Items
                 .Include(ci => ci.Cart)
-                .FirstOrDefaultAsync(ci => ci.Cart.UserId == userId && ci.ProductId == productId);
+                .FirstOrDefaultAsync(ci => ci.Cart!.UserId == userId && ci.ProductId == productId);
 
             if (exisringItem == null)
             {

@@ -16,24 +16,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var cartItem in Model.CartItemsWithIndex)
+                    @foreach (var cart in Model.CartItemsWithIndex)
                     {
                         <tr align="center">
-                            <td class="fw-bold">@cartItem.Index</td>
-                            <td align="left">@cartItem.Item.ProductName</td>
-                            <td align="left">@cartItem.Item.FormattedProductPrice</td>
+                            <td class="fw-bold">@cart.Index</td>
+                            <td align="left">@cart.Item.ProductName</td>
+                            <td align="left">@cart.Item.FormattedProductPrice</td>
                             <td>
                                 <a class="btn btn-success me-2"
                                    asp-controller="Cart"
                                    asp-action="Decrease"
-                                   asp-route-productId="@cartItem.Item.ProductId">-</a>
-                                @cartItem.Item.Quantity
+                                   asp-route-productId="@cart.Item.ProductId">-</a>
+                                @cart.Item.Quantity
                                 <a class="btn btn-success ms-2"
                                    asp-controller="Cart"
                                    asp-action="Increase"
-                                   asp-route-productId="@cartItem.Item.ProductId">+</a>
+                                   asp-route-productId="@cart.Item.ProductId">+</a>
                             </td>
-                            <td class="fw-bold">@cartItem.Item.FormattedTotalCost</td>
+                            <td class="fw-bold">@cart.Item.FormattedTotalCost</td>
                         </tr>
                     }
                 </tbody>
