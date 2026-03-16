@@ -60,13 +60,14 @@ namespace OnlineShop.Web.Mappings
             #region Order
             // OrderDto -> OrderViewModel
             CreateMap<OrderDto,  OrderViewModel>()
-                .ForMember(dest => dest.TotalCost, opt => opt.MapFrom(src => src.Items.Sum(oi => oi.ProductPrice * oi.Quantity)))
-                .ForMember(dest => dest.TotalQuantity, opt => opt.MapFrom(src => src.Items.Sum(oi => oi.Quantity)))
                 .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDateTime.ToString("dd.MM.yyyy")))
                 .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationDateTime.ToString("HH:mm")));
 
-            // CreationOrderViewModel
+            // OrderViewModel - OrderDto
+            CreateMap<OrderViewModel, OrderDto>();
             #endregion
+
+            CreateMap<DeliveryUserViewModel, DeliveryUserDto>().ReverseMap();
         }
     }
 }

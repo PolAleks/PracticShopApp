@@ -5,32 +5,32 @@ namespace OnlineShop.Web.Helpers.Mapping
 {
     public static class CartMapping
     {
-        public static CartItemViewModel ToViewModel(this CartItem item)
+        public static ItemViewModel ToViewModel(this Item item)
         {
-            return new CartItemViewModel()
+            return new ItemViewModel()
             {
                 Id = item.Id,
-                Product = item.Product.ToViewModel(),
+                //Product = item.Product.ToViewModel(),
                 Quantity = item.Quantity
             };
         }
 
-        public static IEnumerable<CartItemViewModel> ToViewModels(this IEnumerable<CartItem> items)
+        public static IEnumerable<ItemViewModel> ToViewModels(this IEnumerable<Item> items)
         {
             return items.Select(ToViewModel);
         }
 
-        public static IEnumerable<CartItem> ToModels(this IEnumerable<CartItemViewModel> cartItemViewModels)
+        public static IEnumerable<Item> ToModels(this IEnumerable<ItemViewModel> cartItemViewModels)
         {
             return cartItemViewModels.Select(ToModel).ToList();
         }
 
-        public static CartItem ToModel(this CartItemViewModel cartItemViewModel)
+        public static Item ToModel(this ItemViewModel cartItemViewModel)
         {
-            return new CartItem()
+            return new Item()
             {
-                Id= cartItemViewModel.Id,
-                Product = cartItemViewModel.Product!.ToDbModel(),
+                Id = cartItemViewModel.Id,
+                //Product = cartItemViewModel.Product!.ToDbModel(),
                 Quantity = cartItemViewModel.Quantity
             };
         }

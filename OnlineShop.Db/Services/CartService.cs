@@ -87,13 +87,11 @@ namespace OnlineShop.Infrastructure.Services
 
         public async Task ClearCartAsync(string userId)
         {
-            var cart = await _context.Carts
-                .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == userId);
+            var cart = await GetOrCreateCartAsync(userId);
 
-            if (cart != null)
+            if(cart != null)
             {
-                _context.Items.RemoveRange(cart.Items);
+                _context.Carts.Remove(cart);
                 await _context.SaveChangesAsync();
             }
         }

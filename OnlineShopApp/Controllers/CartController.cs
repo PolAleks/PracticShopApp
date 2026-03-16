@@ -1,41 +1,47 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Core.Interfaces.Repositories;
-using OnlineShop.Web.Helpers.Mapping;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
     [Authorize]
-    public class CartController(ICartsRepository cartsRepository, IProductsRepository productsRepository) : Controller
+    public class CartController(ICartService cartService, IMapper mapper) : Controller
     {
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartsRepository.TryGetByUserId(Constans.UserId);
+            var cartDto = await cartService.GetCartAsync(Constans.UserId);
 
-            return View(cart?.ToViewModel());
+            var cartModel = mapper.Map<CartViewModel>(cartDto);
+
+            return View(cartModel);
         }
 
-        public IActionResult Add(int productId)
+        public async Task<IActionResult> AddToCart(int productId)
         {
-            var product = productsRepository.TryGetById(productId);
-            if (product is not null)
-            {
-                cartsRepository.Add(product, Constans.UserId);
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult Subtract(int productId)
-        {
-            cartsRepository.Subtract(productId, Constans.UserId);
+            await cartService.AddToCartAsync(Constans.UserId, productId); ;
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Clear()
+        public async Task<IActionResult> Increase(int productId)
         {
-            cartsRepository.Clear(Constans.UserId);
+            await cartService.IncreaseQuantityAsync(Constans.UserId, productId);
+
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Decrease(int productId)
+        {
+            await cartService.DecreaseQuantityAsync(Constans.UserId, productId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Clear()
+        {
+            await cartService.ClearCartAsync(Constans.UserId);
+
             return RedirectToAction(nameof(Index));
         }
     }

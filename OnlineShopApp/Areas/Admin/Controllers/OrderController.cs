@@ -1,34 +1,39 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Core.Interfaces.Repositories;
+using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
-using OnlineShop.Web.Helpers.Mapping;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class OrderController(IOrdersRepository ordersRepository) : Controller
+    public class OrderController(IOrderService orderService,
+                                 IMapper mapper) : Controller
     {     
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var orders = ordersRepository.GetAll();
+            var orders = await orderService.GetAllOrderAsync();
 
-            return View(orders.ToViewModels());
+            var ordersModel = mapper.Map<IEnumerable<OrderViewModel>>(orders);
+
+            return View(ordersModel);
         }
 
-        public IActionResult Detail(Guid id)
+        public async Task<IActionResult> Detail(Guid id)
         {
-            var order = ordersRepository.TryGetById(id);
+            var order = await orderService.GetOrderByIdAsync(id);
 
-            return View(order.ToViewModel());
+            var viewModel = mapper.Map<OrderViewModel>(order);
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult UpdateStatus(Guid id, OrderStatusViewModel status)
+        public async Task<IActionResult> UpdateStatus(Guid id, OrderStatusViewModel status)
         {
-            ordersRepository.UpdateStatus(id, (OrderStatus)status);
+            await orderService.UpdateStatusAsync(id, (OrderStatus)status);
 
             return RedirectToAction(nameof(Index));
         }

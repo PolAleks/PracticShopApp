@@ -11,6 +11,6 @@
 
         // Навигационные свойства
         public required DeliveryUser DeliveryUser { get; set; }
-        public ICollection<CartItem> Items { get; set; } = null!;
+        public ICollection<Item> Items { get; set; } = null!;
     }
 }

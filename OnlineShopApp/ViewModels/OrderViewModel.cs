@@ -8,13 +8,7 @@ namespace OnlineShop.Web.ViewModels
         public Guid Id { get; set; }
 
         [ValidateNever]
-        public string UserId { get; set; }
-
-        [ValidateNever]
-        public List<CartItemViewModel> Items { get; set; }
-
-        [Required]
-        public DeliveryUserViewModel DeliveryUser { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         [ValidateNever]
         public DateTime CreationDateTime { get; set; }
@@ -22,8 +16,30 @@ namespace OnlineShop.Web.ViewModels
         [Required]
         public OrderStatusViewModel Status { get; set; } = OrderStatusViewModel.Created;
 
-        public decimal? TotalCost => Items?.Sum(item => item.Cost);
+        [Required]
+        public DeliveryUserViewModel DeliveryUser { get; set; }
 
-        public int? ItemsQuantity => Items?.Sum(item => item.Quantity);
+        [ValidateNever]
+        public List<ItemViewModel> Items { get; set; } = [];
+
+        [ValidateNever]
+        public decimal TotalCost => Items.Sum(i => i.TotalCost);
+
+        [ValidateNever]
+        public int TotalQuantity => Items.Sum(i => i.Quantity);
+
+        // Formatted property
+        [ValidateNever]
+        public string FormattedTotalCost => TotalCost.ToString("C");
+        [ValidateNever]
+        public string CreationDate { get; set; } = string.Empty;
+        [ValidateNever]
+        public string CreationTime { get; set; } = string.Empty;
     }
 }
+        //public IEnumerable<ItemIndexedViewModel> OrderItemsWithIndex =>
+        //    Items.Select((item, index) => new ItemIndexedViewModel()
+        //    {
+        //        Index = index + 1,
+        //        Item = item
+        //    });

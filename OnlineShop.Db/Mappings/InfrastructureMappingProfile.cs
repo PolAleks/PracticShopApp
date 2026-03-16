@@ -47,9 +47,7 @@ namespace OnlineShop.Infrastructure.Mappings
             #endregion
 
             // DeliveryUserDto -> DeliveryUser
-            CreateMap<DeliveryUserDto, DeliveryUser>();
-
-            // 
+            CreateMap<DeliveryUserDto, DeliveryUser>().ReverseMap();
         }
     }
 }

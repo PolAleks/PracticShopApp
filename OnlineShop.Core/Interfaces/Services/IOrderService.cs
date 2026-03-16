@@ -7,7 +7,7 @@ namespace OnlineShop.Core.Interfaces.Services
     {
         Task<IEnumerable<OrderDto>> GetAllOrderAsync();
         Task<OrderDto> GetOrderByIdAsync(Guid id);
-        Task CreateOrderAsync(OrderDto orderDto);
+        Task CreateOrderAsync(CreateOrderDto orderDto);
         Task UpdateStatusAsync(Guid id, OrderStatus status);
         
     }
