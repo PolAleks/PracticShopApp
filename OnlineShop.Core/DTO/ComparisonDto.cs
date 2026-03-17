@@ -6,6 +6,6 @@ namespace OnlineShop.Core.DTO
     {
         public Guid Id { get; set; }
         public string UserId { get; set; } = string.Empty;
-        public IEnumerable<ProductDto> Products { get; set; } = [];        
+        public IReadOnlyCollection<ProductDto> Products { get; set; } = [];
     }
 }
