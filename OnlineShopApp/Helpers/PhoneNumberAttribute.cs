@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace OnlineShopApp.Helpers
+namespace OnlineShop.Web.Helpers
 {
     public class PhoneNumberAttribute : ValidationAttribute
     {

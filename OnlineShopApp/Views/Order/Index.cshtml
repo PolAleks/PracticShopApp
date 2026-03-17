@@ -1,5 +1,4 @@
-﻿@using OnlineShopApp.Models.ViewModel
-@model OrderViewModel
+﻿@model OrderViewModel
 @{
     ViewData["Title"] = "Оформление заказа";
 }
@@ -63,21 +62,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for (var i = 0; i < Model.Items.Count; i++)
+                                        @for(int i = 0; i < Model.Items.Count ; i++)
+                                        @*@foreach (var orderItem in Model.OrderItemsWithIndex)*@
                                         {
                                             <tr align="center" class="align-baseline">
-                                                <td class="fw-bold">@(i + 1)</td>
-                                                <td align="left">
-                                                    @Model.Items[i].Product!.Name
+                                                <td class="fw-bold">
+                                                    @(i+1)
                                                 </td>
                                                 <td align="left">
-                                                    @Model.Items[i].Product!.Cost.ToString("c")
+                                                    @Model.Items[i].ProductName
+                                                </td>
+                                                <td align="left">
+                                                    @Model.Items[i].ProductPrice
                                                 </td>
                                                 <td>
                                                     @Model.Items[i].Quantity
                                                 </td>
                                                 <td class="fw-bold">
-                                                    @Model.Items[i].Cost?.ToString("c")
+                                                    @Model.Items[i].TotalCost
                                                 </td>
                                             </tr>
                                         }
@@ -85,7 +87,7 @@
                                     <tfoot class="table-borderless ">
                                         <tr align="center">
                                             <th colspan="5">
-                                                Общая стоимость заказа: @Model.TotalCost?.ToString("c");
+                                                Общая стоимость заказа: @Model.FormattedTotalCost;
                                             </th>
                                         </tr>
                                     </tfoot>
@@ -100,7 +102,7 @@
         <div class="text-center">
             <button class="btn btn-outline-danger" type="submit"
                     asp-controller="Order"
-                    asp-action="Buy">
+                    asp-action="AddOrder">
                 Оплатить заказ
             </button>
         </div>

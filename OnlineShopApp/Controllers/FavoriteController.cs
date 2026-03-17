@@ -1,47 +1,42 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShopApp.Helpers;
-using OnlineShopApp.Helpers.Mapping;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.ViewModels;
+using System.Threading.Tasks;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShop.Web.Controllers
 {
     [Authorize]
-    public class FavoriteController(IFavoritesRepository favoritesRepository, IProductsRepository productsRepository) : Controller
+    public class FavoriteController(IFavoriteService favoriteService, IMapper mapper) : Controller
     {
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var favorite = favoritesRepository.TryGetByUserId(Constans.UserId);
+            var favoriteDto = await favoriteService.GetByUserIdAsync(Constans.UserId);
 
-            return View(favorite.ToViewModel());
+            var favoriteViewModel = mapper.Map<FavoriteViewModel>(favoriteDto);
+            
+            return View(favoriteViewModel);
         }
 
-        public IActionResult Add(int productId)
+        public async Task<IActionResult> Add(int productId)
         {
-            var product = productsRepository.TryGetById(productId);
-
-            if (product is not null)
-            {
-                favoritesRepository.Add(product, Constans.UserId);
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return RedirectToAction(nameof(Index), nameof(HomeController).Replace("Controller", ""));
-            }
-        }
-
-        public IActionResult Delete(int productId)
-        {
-            favoritesRepository.Delete(productId, Constans.UserId);
+            await favoriteService.AddToFavoriteAsync(productId, Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Clear()
+        public async Task<IActionResult> Delete(int productId)
         {
-            favoritesRepository.Clear(Constans.UserId);
+            await favoriteService.RemoveFromFavoriteAsync(productId, Constans.UserId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Clear()
+        {
+            await favoriteService.ClearFavoriteAsync(Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }

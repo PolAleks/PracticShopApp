@@ -1,13 +1,13 @@
-﻿using OnlineShopApp.Models;
+﻿using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Interfaces
+namespace OnlineShop.Web.Interfaces
 {
     public interface IRolesRepository
     {
-        List<Role> GetAll();
-        Role? TryGetById(Guid id);
-        Role? TryGetByName(string name);
-        void Add(Role role);
+        List<RoleViewModel> GetAll();
+        RoleViewModel? TryGetById(Guid id);
+        RoleViewModel? TryGetByName(string name);
+        void Add(RoleViewModel role);
         void Delete(Guid id);
     }
 }

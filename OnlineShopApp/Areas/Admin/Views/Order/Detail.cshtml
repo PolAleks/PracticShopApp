@@ -1,5 +1,4 @@
-﻿@using OnlineShopApp.Models.ViewModel
-@model OrderViewModel
+﻿@model OrderViewModel
 @{
     ViewData["Title"] = "Детали заказа";
 }
@@ -30,7 +29,7 @@
                                 </tr>
                                 <tr>
                                     <td class="w-25"><span>Стоимость</span></td>
-                                    <td class="fw-bold w-auto">@Model.TotalCost?.ToString("c")</td>
+                                    <td class="fw-bold w-auto">@Model.TotalCost</td>
                                 </tr>
                                 <tr>
                                     <td class="w-25"><span>Количество позиций</span></td>
@@ -38,7 +37,7 @@
                                 </tr>
                                 <tr>
                                     <td class="w-25"><span>Количество товаров</span></td>
-                                    <td class="w-auto">@Model.ItemsQuantity</td>
+                                    <td class="w-auto">@Model.TotalQuantity</td>
                                 </tr>
                                 <tr>
                                     <td class="w-25"><span>Статус заказа</span></td>
@@ -116,14 +115,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for (var i = 0; i < Model.Items.Count; i++)
+                                    @foreach (var order in Model.OrderItemsWithIndex)
                                     {
                                         <tr align="center" class="align-baseline">
-                                            <td class="fw-bold">@(i + 1)</td>
-                                            <td align="left">@Model.Items[i].Product!.Name</td>
-                                            <td align="left">@Model.Items[i].Product!.Cost.ToString("c")</td>
-                                            <td>@Model.Items[i].Quantity</td>
-                                            <td class="fw-bold">@Model.Items[i].Cost?.ToString("c")</td>
+                                            <td class="fw-bold">@order.Index</td>
+                                            <td align="left">@order.Item.ProductName</td>
+                                            <td align="left">@order.Item.FormattedProductPrice</td>
+                                            <td>@order.Item.Quantity</td>
+                                            <td class="fw-bold">@order.Item.FormattedTotalCost</td>
                                         </tr>
                                     }
                                 </tbody>

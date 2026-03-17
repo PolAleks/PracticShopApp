@@ -1,29 +1,29 @@
-﻿using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models;
+﻿using OnlineShop.Web.Interfaces;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Repositories
+namespace OnlineShop.Web.Repositories
 {
     public class InMemoryRolesRepository : IRolesRepository
     {
-        private readonly List<Role> _roles;
+        private readonly List<RoleViewModel> _roles;
 
         public InMemoryRolesRepository()
         {
             _roles = 
                 [
-                    new Role(){Id = Guid.NewGuid(), Name = "Admin"},
-                    new Role(){Id = Guid.NewGuid(), Name = "Moderator"},
-                    new Role(){Id = Guid.NewGuid(), Name = "User"},
-                    new Role(){Id = Guid.NewGuid(), Name = "Developer"},
-                    new Role(){Id = Guid.NewGuid(), Name = "Guest"}
+                    new RoleViewModel(){Id = Guid.NewGuid(), Name = "Admin"},
+                    new RoleViewModel(){Id = Guid.NewGuid(), Name = "Moderator"},
+                    new RoleViewModel(){Id = Guid.NewGuid(), Name = "User"},
+                    new RoleViewModel(){Id = Guid.NewGuid(), Name = "Developer"},
+                    new RoleViewModel(){Id = Guid.NewGuid(), Name = "Guest"}
                 ];
         }
 
-        public List<Role> GetAll() => _roles;
-        public Role? TryGetById(Guid id) => _roles.FirstOrDefault(role => role.Id.Equals(id));
-        public Role? TryGetByName(string name) => _roles.FirstOrDefault(role => role.Name.Equals(name));
+        public List<RoleViewModel> GetAll() => _roles;
+        public RoleViewModel? TryGetById(Guid id) => _roles.FirstOrDefault(role => role.Id.Equals(id));
+        public RoleViewModel? TryGetByName(string name) => _roles.FirstOrDefault(role => role.Name.Equals(name));
 
-        public void Add(Role role)
+        public void Add(RoleViewModel role)
         {
             role.Id = Guid.NewGuid();
 

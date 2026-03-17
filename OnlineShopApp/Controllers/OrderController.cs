@@ -1,58 +1,46 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
-using OnlineShopApp.Helpers.Mapping;
-using OnlineShopApp.Models.ViewModel;
+using OnlineShop.Core.DTO;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShop.Web.Controllers
 {
     [Authorize]
-    public class OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository) : Controller
+    public class OrderController(ICartService cartService,
+                                 IOrderService orderService,
+                                 IMapper mapper) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartsRepository.TryGetByUserId(Constans.UserId);
+            var cartDto = await cartService.GetCartAsync(Constans.UserId);
 
-            var order = new OrderViewModel()
+            var orderItems = mapper.Map<List<ItemViewModel>>(cartDto.Items);
+
+            var orderViewModel = new OrderViewModel
             {
-                Items = cart?.Items.ToViewModels().ToList() ?? []
+                Items = orderItems
             };
 
-            return View(order);
+            return View(orderViewModel);
         }
 
         [HttpPost]
-        public IActionResult Buy(OrderViewModel order)
+        public async Task<IActionResult> AddOrder(OrderViewModel orderViewModel)
         {
-            var cart = cartsRepository.TryGetByUserId(Constans.UserId);
-
-            if (cart == null)
-            {
-                return View(nameof(Index), order);
-            }
-
-            order.UserId = Constans.UserId;
-            order.Items = cart.Items.ToViewModels().ToList();
-
             if (!ModelState.IsValid)
             {
-                return View(nameof(Index), order);
+                return View(nameof(Index), orderViewModel);
             }
 
-            var orderDb = new Order()
+            CreateOrderDto orderDto = new()
             {
-                Id = order.Id,
-                UserId = order.UserId,
-                Items = cart.Items,
-                DeliveryUser = order.DeliveryUser.ToDbModel(),
-                CreationDateTime = order.CreationDateTime,
-                Status = (OrderStatus)order.Status,
+                UserId = Constans.UserId,
+                DeliveryUser = mapper.Map<DeliveryUserDto>(orderViewModel.DeliveryUser)
             };
 
-            ordersRepository.Add(orderDb);
-
-            cartsRepository.Clear(Constans.UserId);
+            await orderService.CreateOrderAsync(orderDto);
 
             return RedirectToAction(nameof(Success));
         }

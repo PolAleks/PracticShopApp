@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model RegisterViewModel
 @{
     ViewData["Title"] = "Добавление пользователя";
 }
@@ -24,19 +24,24 @@
 
             </p>
             <p>
-                <label class="form-label" asp-for="Phone"></label><br />
-                <input class="form-control" asp-for="Phone" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+                <label class="form-label" asp-for="PhoneNumber"></label><br />
+                <input class="form-control" asp-for="PhoneNumber" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </p>
             <p>
-                <label class="form-label" asp-for="Login"></label><br />
-                <input class="form-control" asp-for="Login" />
-                <span asp-validation-for="Login" class="text-danger"></span>
+                <label class="form-label" asp-for="UserName"></label><br />
+                <input class="form-control" asp-for="UserName" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </p>
             <p>
                 <label class="form-label" asp-for="Password"></label><br />
                 <input class="form-control" asp-for="Password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="ConfirmPassword"></label><br />
+                <input class="form-control" asp-for="ConfirmPassword" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </p>
         </div>
     </div>

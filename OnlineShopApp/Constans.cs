@@ -1,4 +1,4 @@
-﻿namespace OnlineShopApp
+﻿namespace OnlineShop.Web
 {
     public class Constans
     {

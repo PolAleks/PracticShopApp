@@ -1,18 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShopApp.Helpers.Mapping;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShop.Web.Controllers
 {
-    public class ProductController(IProductsRepository productsRepository) : Controller
+    public class ProductController(IProductService productService, IMapper mapper) : Controller
     {
-        private readonly IProductsRepository _productsRepository = productsRepository;
+        private readonly IProductService _productService = productService;
+        private readonly IMapper _mapper = mapper;
 
-        public IActionResult Index(int id)
+        public async Task<IActionResult> Index(int id)
         {
-            var product = _productsRepository.TryGetById(id);
+            var productDto = await _productService.GetProductByIdAsync(id);
+
+            var productViewModel = _mapper.Map<ProductViewModel>(productDto);
             
-            return View(product?.ToViewModel());
+            return View(productViewModel);
         }
     }
 }

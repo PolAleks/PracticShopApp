@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Models;
-using OnlineShop.Db.Models.IdentityEntities;
-using OnlineShopApp.Models.ViewModel;
+using OnlineShop.Domain.Entities;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShop.Web.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> userManager,
-                                   SignInManager<ApplicationUser> signInManager) : Controller
+    public class AccountController(UserManager<User> userManager,
+                                   SignInManager<User> signInManager) : Controller
     {
         #region Authorization
 
@@ -61,9 +60,9 @@ namespace OnlineShopApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegistrationViewModel registration, string? ReturnUrl)
+        public async Task<IActionResult> Registration(RegisterViewModel registration, string? ReturnUrl)
         {
-            if (registration.Login == registration.Password)
+            if (registration.UserName == registration.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
@@ -73,13 +72,13 @@ namespace OnlineShopApp.Controllers
                 return View(registration);
             }
 
-            ApplicationUser user = new()
+            User user = new()
             {
                 FirstName = registration.FirstName,
                 LastName = registration.LastName,
-                Email = registration.Login,
-                UserName = registration.Login,
-                PhoneNumber = registration.Phone
+                Email = registration.UserName,
+                UserName = registration.UserName,
+                PhoneNumber = registration.PhoneNumber
             };
 
             IdentityResult result = await userManager.CreateAsync(user, registration.Password);

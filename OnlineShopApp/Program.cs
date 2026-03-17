@@ -2,18 +2,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Db;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Migrations;
-using OnlineShop.Db.Models.IdentityEntities;
-using OnlineShop.Db.Repositories;
-using OnlineShopApp.Interfaces;
-using OnlineShopApp.Repositories;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Domain.Entities;
+using OnlineShop.Infrastructure.Data;
+using OnlineShop.Infrastructure.Mappings;
+using OnlineShop.Infrastructure.Services;
+using OnlineShop.Web.Interfaces;
+using OnlineShop.Web.Mappings;
+using OnlineShop.Web.Repositories;
 using Serilog;
 using System.Globalization;
-using System.Runtime;
 
-namespace OnlineShopApp
+namespace OnlineShop.Web
 {
     public class Program
     {
@@ -38,18 +38,20 @@ namespace OnlineShopApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
-            builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
-            builder.Services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
-            builder.Services.AddTransient<IComparisonRepository, ComparisonsDbRepository>();
-            builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
+            builder.Services.AddAutoMapper(typeof(InfrastructureMappingProfile).Assembly, typeof(WebMappingProfile).Assembly);
+
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IProductService, ProductService>();
+            builder.Services.AddTransient<ICartService, CartService>();
+            builder.Services.AddTransient<IOrderService, OrderService>();
+            builder.Services.AddTransient<IComparisonService, ComparisonService>();
+            builder.Services.AddTransient<IFavoriteService, FavoriteService>();
 
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
-            builder.Services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
 
             // Добавления в Ioc контейнер сервис аутентификации и настраиваем его
             // Указываем модели которые содержат пользователей и роли
-            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 5;
                 options.Password.RequireNonAlphanumeric = false;
@@ -65,9 +67,9 @@ namespace OnlineShopApp
                 // Указываем какой именно контекст БД использовать для работы с наборами пользователей и ролей!
                 .AddEntityFrameworkStores<DatabaseContext>()
                 // Настройка и создание автоматического хранилища пользователя(репозитория)
-                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, DatabaseContext, Guid>>()
+                .AddUserStore<UserStore<User, IdentityRole, DatabaseContext, string>>()
                 // Настройка хранилища для ролей
-                .AddRoleStore<RoleStore<ApplicationRole, DatabaseContext, Guid>>();
+                .AddRoleStore<RoleStore<IdentityRole, DatabaseContext, string>>();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
@@ -98,8 +100,8 @@ namespace OnlineShopApp
                 context.Database.Migrate();
 
                 // Добавляем роли у учетную запись администратора, если их нет
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
                 await IdentityInit.IntitFirstData(userManager, roleManager);
             }

@@ -1,27 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineShopApp.Interfaces;
-using OnlineShopApp.Models;
+using OnlineShop.Core.DTO.User;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.Interfaces;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShopApp.Areas.Admin.Controllers
+namespace OnlineShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class UserController(IUsersRepository usersRepository, IRolesRepository rolesRepository) : Controller
+    public class UserController(IUserService userService,
+                                IMapper mapper,
+                                IRolesRepository rolesRepository) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = usersRepository.GetAll();
+            var users = await userService.GetAllAsync();
 
-            return View(users);
+            var model = mapper.Map<IEnumerable<UserViewModel>>(users);
+
+            return View(model);
         }
 
-        public IActionResult Detail(Guid id)
+        public async Task<IActionResult> Detail(string id)
         {
-            var user = usersRepository.TryGetById(id);
+            var user = await userService.TryGetByIdAsync(id);
 
-            return View(user);
+            var model = mapper.Map<UserViewModel>(user);
+
+            return View(model);
         }
 
         [HttpGet]
@@ -31,62 +40,73 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(User newUser)
+        public async Task<IActionResult> Add(RegisterViewModel registerViewModel)
         {
-            var existingUser = usersRepository.TryGetByLogin(newUser.Login);
-
-            if (existingUser is not null)
-            {
-                ModelState.AddModelError("", "Такой пользователь уже существует!");
-            }
-
             if (!ModelState.IsValid)
             {
-                return View(newUser);
+                return View(registerViewModel);
             }
 
-            usersRepository.Add(newUser);
+            var existingUser = await userService.TryGetByLoginAsync(registerViewModel.UserName);
+
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("", "Такой пользователь уже существует!");
+                return View(registerViewModel);
+            }
+
+            var userDto = mapper.Map<RegisterUserDto>(registerViewModel);
+
+            await userService.CreateUserAsync(userDto);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(string id)
         {
-            usersRepository.Delete(id);
+            await userService.DeleteUserAsync(id);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> UpdateAsync(string id)
         {
-            var user = usersRepository.TryGetById(id);
+            var userDto = await userService.TryGetByIdAsync(id);
 
-            return View(user);
+            if (userDto == null) return NotFound();
+
+            var editUserModel = mapper.Map<EditUserViewModel>(userDto);
+
+            return View(editUserModel);
         }
 
         [HttpPost]
-        public IActionResult Update(User updateUser)
+        public async Task<IActionResult> UpdateAsync(EditUserViewModel editViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(updateUser);
+                return View(editViewModel);
             }
 
-            usersRepository.Update(updateUser);
+            var updateUserDto = mapper.Map<UpdateUserDto>(editViewModel);
+
+            await userService.UpdateUserAsync(updateUserDto);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult ChangeRole(Guid id)
+        public async Task<IActionResult> ChangeRole(string id)
         {
-            var existingUser = usersRepository.TryGetById(id);
+            var existingUser = await userService.TryGetByIdAsync(id);
 
-            var changeRole = new ChangeRole()
+            if (existingUser == null) return NotFound();
+
+            var changeRole = new ChangeRoleViewModel()
             {
-                Login = existingUser?.Login,
-                Role = existingUser?.Role?.ToString(),
+                Id = existingUser.Id,
+                Role = existingUser.Role,
                 Roles = rolesRepository.GetAll()
                     .Select(role => new SelectListItem { Text = role.Name.ToString(), Value = role.Name })
                     .ToList()
@@ -96,57 +116,63 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(ChangeRole changeRole)
+        public async Task<IActionResult> ChangeRole(ChangeRoleViewModel changeRole)
         {
             if (!ModelState.IsValid)
             {
                 return View(changeRole);
             }
 
-            var login = changeRole.Login;
             var role = rolesRepository.TryGetByName(changeRole.Role);
-            
+
             if (role is not null)
             {
-                usersRepository.ChangeRole(login, role);
+                var roleDto = mapper.Map<ChangeUserRoleDto>(changeRole);
+
+                await userService.ChangeRoleAsync(roleDto);
             }
 
-            return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(login)?.Id });
+            return RedirectToAction(nameof(Detail), new { changeRole.Id });
         }
 
         [HttpGet]
-        public IActionResult ChangePassword(Guid id)
+        public async Task<IActionResult> ChangePassword(string id)
         {
-            var existingUser = usersRepository.TryGetById(id);
+            var existingUser = await userService.TryGetByIdAsync(id);
 
-            ChangePassword changePassword = new() { Login = existingUser?.Login };
+            if(existingUser == null) return NotFound();
 
-            return View(changePassword);
+            var changePasswordViewModel = new ChangeUserPasswordViewModel() 
+            { 
+                Id = existingUser.Id 
+            };
+
+            return View(changePasswordViewModel);
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangePassword changePassword)
+        public async Task<IActionResult> ChangePassword(ChangeUserPasswordViewModel changePasswordViewModel)
         {
-            var existingUser = usersRepository.TryGetByLogin(changePassword.Login);
-
-            if (existingUser?.Password == changePassword.Password)
-            {
-                ModelState.AddModelError("", "Нельзя использовать старый пароль!");
-            }
-
-            if (changePassword.Login == changePassword.Password)
-            {
-                ModelState.AddModelError("", "Логин и пароль не должны совпадать!");
-            }
-
             if (!ModelState.IsValid)
             {
-                return View(changePassword);
+                return View(changePasswordViewModel);
             }
 
-            usersRepository.ChangePassword(changePassword.Login, changePassword.Password);
+            var changePasswordDto = mapper.Map<ChangeUserPasswordDto>(changePasswordViewModel);
 
-            return RedirectToAction(nameof(Detail), new { usersRepository.TryGetByLogin(changePassword.Login)?.Id });
+            var result = await userService.ChangePasswordAsync(changePasswordDto);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Detail), new { changePasswordViewModel.Id });
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return View(changePasswordViewModel);
         }
     }
 }

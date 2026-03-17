@@ -1,4 +1,5 @@
-﻿@model RegistrationViewModel
+﻿@using OnlineShop.Web.ViewModels
+@model RegisterViewModel
 @{
     ViewData["Title"] = "Регистрация пользователя";
 }
@@ -21,14 +22,14 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </p>
             <p>
-                <label asp-for="Phone" class="form-label"></label><br />
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="form-label"></label><br />
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </p>
             <p>
-                <label asp-for="Login" class="form-label"></label><br />
-                <input asp-for="Login" class="form-control" />
-                <span asp-validation-for="Login" class="text-danger"></span>
+                <label asp-for="UserName" class="form-label"></label><br />
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </p>
             <p>
                 <label asp-for="Password" class="form-label"></label><br />

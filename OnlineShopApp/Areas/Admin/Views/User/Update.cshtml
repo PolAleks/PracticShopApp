@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model EditUserViewModel
 @{
     ViewData["Title"] = "Редактирование данных пользователя";
 }
@@ -24,19 +24,14 @@
                 <span asp-validation-for="LastName"></span>
             </p>
             <p>
-                <label class="form-label" asp-for="Phone"></label><br />
-                <input class="form-control" asp-for="Phone" />
-                <span asp-validation-for="Phone"></span>
+                <label class="form-label" asp-for="PhoneNumber"></label><br />
+                <input class="form-control" asp-for="PhoneNumber" />
+                <span asp-validation-for="PhoneNumber"></span>
             </p>
             <p>
                 <label class="form-label" asp-for="Login"></label><br />
                 <input class="form-control" asp-for="Login" readonly="readonly" />
                 <span asp-validation-for="Login"></span>
-            </p>
-            <p>
-                <label class="form-label" asp-for="Password"></label><br />
-                <input class="form-control" asp-for="Password" value="@Model.Password" readonly="readonly" />
-                <span asp-validation-for="Password"></span>
             </p>
         </div>
     </div>
