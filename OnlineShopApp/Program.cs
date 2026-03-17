@@ -2,12 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Core.Interfaces.Repositories;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Infrastructure.Data;
 using OnlineShop.Infrastructure.Mappings;
-using OnlineShop.Infrastructure.Repositories;
 using OnlineShop.Infrastructure.Services;
 using OnlineShop.Web.Interfaces;
 using OnlineShop.Web.Mappings;
@@ -39,12 +37,6 @@ namespace OnlineShop.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-            builder.Services.AddTransient<ICartsRepository, CartsRepository>();
-            builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
-            builder.Services.AddTransient<IFavoritesRepository, FavoritesRepository>();
-            builder.Services.AddTransient<IComparisonRepository, ComparisonsRepository>();
-            builder.Services.AddTransient<IOrdersRepository, OrdersRepository>();
 
             builder.Services.AddAutoMapper(typeof(InfrastructureMappingProfile).Assembly, typeof(WebMappingProfile).Assembly);
 

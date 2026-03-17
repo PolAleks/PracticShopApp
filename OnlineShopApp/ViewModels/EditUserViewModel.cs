@@ -25,7 +25,7 @@ namespace OnlineShop.Web.ViewModels
         [PhoneNumber]
         [Required(ErrorMessage = "Не указан номер телефона")]
         [Display(Name = "Телефон", Prompt = "+7(XXX)XXX-XX-XX")]
-        public string? Phone { get; set; }
+        public string? PhoneNumber { get; set; }
 
         
     }
