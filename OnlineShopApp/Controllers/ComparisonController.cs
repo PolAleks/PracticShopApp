@@ -19,21 +19,21 @@ namespace OnlineShop.Web.Controllers
 
         public async Task<IActionResult> Add(int productId)
         {
-            await comparisonService.AddToComparison(productId, Constans.UserId);
+            await comparisonService.AddToComparisonAsync(productId, Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int productId)
         {
-            await comparisonService.RemoveFromComparison(productId, Constans.UserId);
+            await comparisonService.RemoveFromComparisonAsync(productId, Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Clear()
         {
-            await comparisonService.ClearComparison(Constans.UserId);
+            await comparisonService.ClearComparisonAsync(Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }

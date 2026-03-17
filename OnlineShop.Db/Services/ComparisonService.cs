@@ -9,7 +9,7 @@ namespace OnlineShop.Infrastructure.Services
 {
     public class ComparisonService(DatabaseContext context, IMapper mapper) : IComparisonService
     {
-        public async Task AddToComparison(int productId, string userId)
+        public async Task AddToComparisonAsync(int productId, string userId)
         {
             var comparison = await GetOrCreateComparisonAsync(userId);
 
@@ -27,7 +27,7 @@ namespace OnlineShop.Infrastructure.Services
             }
         }
 
-        public async Task ClearComparison(string userId)
+        public async Task ClearComparisonAsync(string userId)
         {
             var comparison = await GetOrCreateComparisonAsync(userId);
 
@@ -47,7 +47,7 @@ namespace OnlineShop.Infrastructure.Services
             return comparisonDto;
         }
 
-        public async Task RemoveFromComparison(int productId, string userId)
+        public async Task RemoveFromComparisonAsync(int productId, string userId)
         {
             var comparison = await GetOrCreateComparisonAsync(userId);
 

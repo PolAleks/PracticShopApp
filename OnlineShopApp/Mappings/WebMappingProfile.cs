@@ -50,7 +50,7 @@ namespace OnlineShop.Web.Mappings
                 .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Items.Sum(i => i.Quantity)));
 
             // OrderDto -> OrderViewModel
-            CreateMap<OrderDto,  OrderViewModel>()
+            CreateMap<OrderDto, OrderViewModel>()
                 .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDateTime.ToString("dd.MM.yyyy")))
                 .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationDateTime.ToString("HH:mm")));
 
@@ -62,6 +62,9 @@ namespace OnlineShop.Web.Mappings
 
             // ComparisonDto -> ComparisonViewModel
             CreateMap<ComparisonDto, ComparisonViewModel>();
+
+            // FavoriteDto -> FavoriteViewModel
+            CreateMap<FavoriteDto, FavoriteViewModel>();
         }
     }
 }

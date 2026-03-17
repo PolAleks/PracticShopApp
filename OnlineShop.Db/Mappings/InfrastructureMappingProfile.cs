@@ -41,6 +41,9 @@ namespace OnlineShop.Infrastructure.Mappings
 
             // Comparison -> ComparisonDto
             CreateMap<Comparison, ComparisonDto>();
+
+            // Favorite -> FavoriteDto
+            CreateMap<Favorite, FavoriteDto>();
         }
     }
 }

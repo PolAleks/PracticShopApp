@@ -14,7 +14,7 @@ namespace OnlineShop.Web.Helpers.Mapping
             {
                 Id = favorite.Id,
                 UserId = favorite.UserId,
-                Items = favorite.Products?.ToViewModels().ToList()
+                Products = favorite.Products?.ToViewModels().ToList()
             };
         }
     }
