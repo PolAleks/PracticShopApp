@@ -14,7 +14,7 @@ namespace OnlineShop.Web.Helpers.Mapping
             {
                 Id = comparison.Id,
                 UserId = comparison.UserId,
-                Items = comparison.Products?.ToViewModels().ToList()
+                Products = comparison.Products?.ToViewModels().ToList()
             };
         }
     }

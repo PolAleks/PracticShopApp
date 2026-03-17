@@ -10,15 +10,12 @@ namespace OnlineShop.Infrastructure.Mappings
     {
         public InfrastructureMappingProfile()
         {
-            #region User
             // RegisterDto -> User
             CreateMap<RegisterUserDto, User>();
 
             // User -> UserDto
             CreateMap<User, UserDto>();
-            #endregion
 
-            #region Product
             // ProductDto <-> Product
             CreateMap<ProductDto, Product>().ReverseMap();
 
@@ -27,27 +24,23 @@ namespace OnlineShop.Infrastructure.Mappings
 
             // UpdateProductDto -> Product
             CreateMap<UpdateProductDto, Product>();
-            #endregion
-
-            #region Item for Cart & Order
+            
             // Item -> ItemDto
             CreateMap<Item, ItemDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Cost));
-            #endregion
-
-            #region Cart
+            
             // Cart -> CartDto
             CreateMap<Cart, CartDto>();
-            #endregion
 
-            #region Order
             // Order -> OrderDto
             CreateMap<Order, OrderDto>();
-            #endregion
 
             // DeliveryUserDto -> DeliveryUser
             CreateMap<DeliveryUserDto, DeliveryUser>().ReverseMap();
+
+            // Comparison -> ComparisonDto
+            CreateMap<Comparison, ComparisonDto>();
         }
     }
 }

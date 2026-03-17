@@ -1,41 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Core.Interfaces.Repositories;
-using OnlineShop.Web.Helpers.Mapping;
-
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Core.Interfaces.Services;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
- 
-    public class ComparisonController(IComparisonRepository comparisonRepository, IProductsRepository productsRepository) : Controller
+    public class ComparisonController(IComparisonService comparisonService,
+                                      IMapper mapper) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var comparison = comparisonRepository.TryGetByUserId(Constans.UserId);
+            var comparisonDto = await comparisonService.GetByUserIdAsync(Constans.UserId);
 
-            return View(comparison.ToViewModel());
+            var comparisonViewModel = mapper.Map<ComparisonViewModel>(comparisonDto);
+
+            return View(comparisonViewModel);
         }
 
-        public IActionResult Add(int productId)
+        public async Task<IActionResult> Add(int productId)
         {
-            var product = productsRepository.TryGetById(productId);
-
-            if (product is not null)
-            {
-                comparisonRepository.Add(product, Constans.UserId);
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult Delete(int productId)
-        {
-            comparisonRepository.Delete(productId, Constans.UserId);
+            await comparisonService.AddToComparison(productId, Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Clear()
+        public async Task<IActionResult> Delete(int productId)
         {
-            comparisonRepository.Clear(Constans.UserId);
+            await comparisonService.RemoveFromComparison(productId, Constans.UserId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Clear()
+        {
+            await comparisonService.ClearComparison(Constans.UserId);
 
             return RedirectToAction(nameof(Index));
         }

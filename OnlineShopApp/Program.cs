@@ -52,6 +52,7 @@ namespace OnlineShop.Web
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<ICartService, CartService>();
             builder.Services.AddTransient<IOrderService, OrderService>();
+            builder.Services.AddTransient<IComparisonService, ComparisonService>();
 
             builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
 

@@ -9,7 +9,6 @@ namespace OnlineShop.Web.Mappings
     {
         public WebMappingProfile()
         {
-            #region User
             // UserDto -> UserViewModel
             CreateMap<UserDto, UserViewModel>();
 
@@ -28,9 +27,7 @@ namespace OnlineShop.Web.Mappings
 
             // ChangaRoleViewModel -> ChangeUserRoleDto
             CreateMap<ChangeRoleViewModel, ChangeUserRoleDto>();
-            #endregion
 
-            #region Product
             // ProductDto -> ProductViewModel
             CreateMap<ProductDto, ProductViewModel>();
 
@@ -42,22 +39,16 @@ namespace OnlineShop.Web.Mappings
 
             // UpdateProductViewModel -> UpdateProductDto
             CreateMap<UpdateProductViewModel, UpdateProductDto>();
-            #endregion
 
-            #region Item for Cart & Order
             // ItemDto -> ItemViewModel
             CreateMap<ItemDto, ItemViewModel>()
                .ForMember(dest => dest.TotalCost, opt => opt.MapFrom(src => (src.ProductPrice * src.Quantity)));
-            #endregion
 
-            #region Cart
             // CartDto -> CartViewModel
             CreateMap<CartDto, CartViewModel>()
                 .ForMember(dest => dest.TotalCost, opt => opt.MapFrom(src => src.Items.Sum(i => i.ProductPrice * i.Quantity)))
                 .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Items.Sum(i => i.Quantity)));
-            #endregion
 
-            #region Order
             // OrderDto -> OrderViewModel
             CreateMap<OrderDto,  OrderViewModel>()
                 .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDateTime.ToString("dd.MM.yyyy")))
@@ -65,9 +56,12 @@ namespace OnlineShop.Web.Mappings
 
             // OrderViewModel - OrderDto
             CreateMap<OrderViewModel, OrderDto>();
-            #endregion
 
+            // DeliveryUserViewModel <-> DeliveryUserDto
             CreateMap<DeliveryUserViewModel, DeliveryUserDto>().ReverseMap();
+
+            // ComparisonDto -> ComparisonViewModel
+            CreateMap<ComparisonDto, ComparisonViewModel>();
         }
     }
 }
