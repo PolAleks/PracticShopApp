@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineShop.Db\OnlineShop.Infrastructure.csproj" />
+    <ProjectReference Include="..\OnlineShop.Infrastructure\OnlineShop.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
