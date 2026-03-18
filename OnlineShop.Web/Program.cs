@@ -38,7 +38,7 @@ namespace OnlineShop.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddAutoMapper(typeof(InfrastructureMappingProfile).Assembly, typeof(WebMappingProfile).Assembly);
+            builder.Services.AddAutoMapper(cfg => { }, typeof(WebMappingProfile).Assembly, typeof(InfrastructureMappingProfile).Assembly);
 
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IProductService, ProductService>();
