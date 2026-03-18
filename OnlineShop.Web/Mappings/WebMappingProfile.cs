@@ -65,6 +65,9 @@ namespace OnlineShop.Web.Mappings
 
             // FavoriteDto -> FavoriteViewModel
             CreateMap<FavoriteDto, FavoriteViewModel>();
+
+            // RoleDto -> RoleViewModel
+            CreateMap<RoleDto, RoleViewModel>();
         }
     }
 }
