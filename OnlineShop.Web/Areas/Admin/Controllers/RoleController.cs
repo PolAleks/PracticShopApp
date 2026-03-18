@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Web.Interfaces;
+using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class RoleController(IRolesRepository rolesRepository) : Controller
+    public class RoleController(IRoleService roleService, IMapper mapper) : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var roles = rolesRepository.GetAll();
+            var rolesDto = await roleService.GetAllRolesAsync();
 
-            return View(roles);
+            var roleViewModel = mapper.Map<IEnumerable<RoleViewModel>>(rolesDto);
+
+            return View(roleViewModel);
         }
 
         [HttpGet]
@@ -23,28 +26,30 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(RoleViewModel role)
+        public async Task<IActionResult> Add(RoleViewModel role)
         {
-            var existingName = rolesRepository.TryGetByName(role.Name);
-
-            if (existingName is not null)
-            {
-                ModelState.AddModelError("", "Такая роль уже существует!");
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(role);
             }
 
-            rolesRepository.Add(role);
+            var result = await roleService.CreateRoleAsync(role.Name);
 
-            return RedirectToAction(nameof(Index));
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+            return View(role);
         }
 
-        public IActionResult Delete(Guid roleId)
+        public async Task<IActionResult> Delete(string roleId)
         {
-            rolesRepository.Delete(roleId);
+            await roleService.RemoveRoleByIdAsync(roleId);
 
             return RedirectToAction(nameof(Index));
         }

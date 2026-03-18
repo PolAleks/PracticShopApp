@@ -7,9 +7,7 @@ using OnlineShop.Domain.Entities;
 using OnlineShop.Infrastructure.Data;
 using OnlineShop.Infrastructure.Mappings;
 using OnlineShop.Infrastructure.Services;
-using OnlineShop.Web.Interfaces;
 using OnlineShop.Web.Mappings;
-using OnlineShop.Web.Repositories;
 using Serilog;
 using System.Globalization;
 
@@ -41,13 +39,13 @@ namespace OnlineShop.Web
             builder.Services.AddAutoMapper(cfg => { }, typeof(WebMappingProfile).Assembly, typeof(InfrastructureMappingProfile).Assembly);
 
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IRoleService, RoleService>();
+
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<ICartService, CartService>();
             builder.Services.AddTransient<IOrderService, OrderService>();
             builder.Services.AddTransient<IComparisonService, ComparisonService>();
             builder.Services.AddTransient<IFavoriteService, FavoriteService>();
-
-            builder.Services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
 
             // ƒобавлени€ в Ioc контейнер сервис аутентификации и настраиваем его
             // ”казываем модели которые содержат пользователей и роли

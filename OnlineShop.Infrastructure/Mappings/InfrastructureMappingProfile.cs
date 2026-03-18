@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using OnlineShop.Core.DTO;
 using OnlineShop.Core.DTO.User;
 using OnlineShop.Domain.Entities;
@@ -44,6 +45,9 @@ namespace OnlineShop.Infrastructure.Mappings
 
             // Favorite -> FavoriteDto
             CreateMap<Favorite, FavoriteDto>();
+
+            // IdentityRole -> RoleDto
+            CreateMap<IdentityRole, RoleDto>();
         }
     }
 }
