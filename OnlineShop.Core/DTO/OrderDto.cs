@@ -9,7 +9,7 @@ namespace OnlineShop.Core.DTO
         public DateTime CreationDateTime { get; set; }
         public OrderStatus Status { get; set; }
         public DeliveryUserDto DeliveryUser { get; set; } = new();
-        public List<ItemDto> Items { get; set; } = [];
+        public IReadOnlyCollection<ItemDto> Items { get; set; } = [];
     }
 
     public class CreateOrderDto

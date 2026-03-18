@@ -8,5 +8,5 @@ public class DeliveryUser
     public DateOnly Date { get; set; }
     public string? Comment { get; set; }
 
-    public Order Order { get; set; }
+    public Order Order { get; set; } = null!;
 }
