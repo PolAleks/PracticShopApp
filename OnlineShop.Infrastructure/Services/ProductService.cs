@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using OnlineShop.Core.DTO;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
@@ -65,7 +66,8 @@ namespace OnlineShop.Infrastructure.Services
                 return await GetAllProductsAsync();
 
             return await _context.Products
-                .Where(p => p.Name.Contains(query) || p.Description.Contains(query))
+                .Where(p => EF.Functions.Like(p.Name, $"%{query}%") || 
+                            EF.Functions.Like(p.Description, $"%{query}%"))
                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
