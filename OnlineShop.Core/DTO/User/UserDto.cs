@@ -2,12 +2,12 @@
 {
     public class UserDto
     {
-        public string Id { get; set; }
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Role { get; set; }
+        public required string Id { get; set; }
+        public required string UserName { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string PhoneNumber { get; set; }
+        public required string Role { get; set; }
         public DateTime CreationDateTime { get; set; }
     }
 }
