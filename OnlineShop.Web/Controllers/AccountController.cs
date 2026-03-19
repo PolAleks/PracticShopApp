@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
     public class AccountController(UserManager<User> userManager,
-                                   SignInManager<User> signInManager) : Controller
+                                   SignInManager<User> signInManager,
+                                   ICurrentUserService currentUser,
+                                   ICartService cartService) : Controller
     {
         #region Authorization
 
@@ -28,6 +31,8 @@ namespace OnlineShop.Web.Controllers
                 return View(authorization);
             }
 
+            var anonymousUser = currentUser.UserName;
+
             var result = await signInManager.PasswordSignInAsync(userName: authorization.Login, 
                                                                  password: authorization.Password, 
                                                                  isPersistent: authorization.IsRememberMe, 
@@ -35,6 +40,8 @@ namespace OnlineShop.Web.Controllers
 
             if (result.Succeeded) 
             {
+                await cartService.MergeCartAsync(anonymousUser, currentUser.UserName);
+
                 if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return LocalRedirect(returnUrl);
@@ -86,7 +93,12 @@ namespace OnlineShop.Web.Controllers
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, BaseTypeRole.User.ToString());
+
+                var anonymousUser = currentUser.UserName;
+
                 await signInManager.SignInAsync(user, isPersistent: false);
+
+                await cartService.MergeCartAsync(anonymousUser, currentUser.UserName);
 
                 if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
                 {
