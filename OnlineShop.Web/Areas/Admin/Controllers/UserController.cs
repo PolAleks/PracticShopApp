@@ -39,7 +39,7 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(RegisterViewModel registerViewModel)
+        public async Task<IActionResult> Add(UserRegisterViewModel registerViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
                 return View(registerViewModel);
             }
 
-            var userDto = mapper.Map<RegisterUserDto>(registerViewModel);
+            var userDto = mapper.Map<UserRegisterDto>(registerViewModel);
 
             await userService.CreateUserAsync(userDto);
 

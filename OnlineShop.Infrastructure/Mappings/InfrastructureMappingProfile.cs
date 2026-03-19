@@ -12,7 +12,7 @@ namespace OnlineShop.Infrastructure.Mappings
         public InfrastructureMappingProfile()
         {
             // RegisterDto -> User
-            CreateMap<RegisterUserDto, User>();
+            CreateMap<UserRegisterDto, User>();
 
             // User -> UserDto
             CreateMap<User, UserDto>();

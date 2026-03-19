@@ -10,11 +10,12 @@ namespace OnlineShop.Web.Controllers
     [Authorize]
     public class OrderController(ICartService cartService,
                                  IOrderService orderService,
-                                 IMapper mapper) : Controller
+                                 IMapper mapper,
+                                 ICurrentUserService currentUser) : Controller
     {
         public async Task<IActionResult> Index()
         {
-            var cartDto = await cartService.GetCartAsync(Constans.UserId);
+            var cartDto = await cartService.GetCartAsync(currentUser.UserName);
 
             var orderItems = mapper.Map<List<ItemViewModel>>(cartDto.Items);
 
@@ -36,7 +37,7 @@ namespace OnlineShop.Web.Controllers
 
             CreateOrderDto orderDto = new()
             {
-                UserId = Constans.UserId,
+                UserId = currentUser.UserName,
                 DeliveryUser = mapper.Map<DeliveryUserDto>(orderViewModel.DeliveryUser)
             };
 

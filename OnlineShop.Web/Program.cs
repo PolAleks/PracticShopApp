@@ -88,6 +88,10 @@ namespace OnlineShop.Web
                 options.SupportedUICultures = supportedCultures;
             });
 
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
             var app = builder.Build();
 
 

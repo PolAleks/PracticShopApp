@@ -13,7 +13,7 @@ namespace OnlineShop.Web.Mappings
             CreateMap<UserDto, UserViewModel>();
 
             // RegisterViewModel -> RegisterDto
-            CreateMap<RegisterViewModel, RegisterUserDto>()
+            CreateMap<UserRegisterViewModel, UserRegisterDto>()
                 .ForMember(u => u.Email, opt => opt.MapFrom(dto => dto.FirstName));
 
             // UserDto -> EditUserViewModel
@@ -68,6 +68,12 @@ namespace OnlineShop.Web.Mappings
 
             // RoleDto -> RoleViewModel
             CreateMap<RoleDto, RoleViewModel>();
+
+            // UserLoginViewModel -> UserLoginDto
+            CreateMap<UserLoginViewModel, UserLoginDto>();
+
+            // UserRegisterViewModel -> UserRegisterDto
+            CreateMap<UserRegisterViewModel, UserRegisterDto>();
         }
     }
 }

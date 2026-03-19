@@ -1,37 +1,37 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Domain.Entities;
+using OnlineShop.Core.DTO.User;
+using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    public class AccountController(UserManager<User> userManager,
-                                   SignInManager<User> signInManager) : Controller
+    public class AccountController(IAuthService authService, IMapper mapper) : Controller
     {
-        #region Authorization
 
+        #region Authorization
         public IActionResult Authorization()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization, string? returnUrl)
+        public async Task<IActionResult> Authorization(UserLoginViewModel loginViewModel , string? returnUrl)
         {
-            if (authorization.Login == authorization.Password)
+            if (loginViewModel.Login == loginViewModel.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
 
             if (!ModelState.IsValid)
             {
-                return View(authorization);
+                return View(loginViewModel);
             }
 
-            var result = await signInManager.PasswordSignInAsync(userName: authorization.Login, 
-                                                                 password: authorization.Password, 
-                                                                 isPersistent: authorization.IsRememberMe, 
-                                                                 lockoutOnFailure: false);
+            var loginDto = mapper.Map<UserLoginDto>(loginViewModel);
+
+            var result = await authService.LoginAsync(loginDto);
 
             if (result.Succeeded) 
             {
@@ -45,10 +45,9 @@ namespace OnlineShop.Web.Controllers
             else
             {
                 ModelState.AddModelError("", "Неправильный логин или пароль!");
-                return View(authorization);
+                return View(loginViewModel);
             }
         }
-
         #endregion
 
 
@@ -60,34 +59,24 @@ namespace OnlineShop.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegisterViewModel registration, string? ReturnUrl)
+        public async Task<IActionResult> Registration(UserRegisterViewModel registerViewModel, string? ReturnUrl)
         {
-            if (registration.UserName == registration.Password)
+            if (registerViewModel.UserName == registerViewModel.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
 
             if (!ModelState.IsValid)
             {
-                return View(registration);
+                return View(registerViewModel);
             }
 
-            User user = new()
-            {
-                FirstName = registration.FirstName,
-                LastName = registration.LastName,
-                Email = registration.UserName,
-                UserName = registration.UserName,
-                PhoneNumber = registration.PhoneNumber
-            };
+            var userRegisterDto = mapper.Map<UserRegisterDto>(registerViewModel);
 
-            IdentityResult result = await userManager.CreateAsync(user, registration.Password);
+            var result = await authService.RegisterAsync(userRegisterDto);
 
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(user, BaseTypeRole.User.ToString());
-                await signInManager.SignInAsync(user, isPersistent: false);
-
                 if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
                 {
                     return LocalRedirect(ReturnUrl);
@@ -101,14 +90,15 @@ namespace OnlineShop.Web.Controllers
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-                return View(registration);
+                return View(registerViewModel);
             }            
         }
         #endregion
 
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await authService.LogoutAsync();
+
             return RedirectToAction(nameof(Index), "Home");
         }
     }

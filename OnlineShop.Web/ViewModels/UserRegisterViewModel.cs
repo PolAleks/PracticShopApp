@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Web.ViewModels
 {
-    public class RegisterViewModel
+    public class UserRegisterViewModel
     {
         [Display(Name = "Логин", Prompt = "Ваш логин")]
         [Required(ErrorMessage = "Не указан логин")]

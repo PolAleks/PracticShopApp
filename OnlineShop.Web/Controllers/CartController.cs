@@ -6,12 +6,15 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    [Authorize]
-    public class CartController(ICartService cartService, IMapper mapper) : Controller
+    
+    public class CartController(ICartService cartService, 
+                                IMapper mapper,
+                                ICurrentUserService currentUser) : Controller
     {
         public async Task<IActionResult> Index()
         {
-            var cartDto = await cartService.GetCartAsync(Constans.UserId);
+
+            var cartDto = await cartService.GetCartAsync(currentUser.UserName);
 
             var cartModel = mapper.Map<CartViewModel>(cartDto);
 
@@ -20,27 +23,27 @@ namespace OnlineShop.Web.Controllers
 
         public async Task<IActionResult> AddToCart(int productId)
         {
-            await cartService.AddToCartAsync(Constans.UserId, productId); ;
+            await cartService.AddToCartAsync(currentUser.UserName, productId); ;
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Increase(int productId)
         {
-            await cartService.IncreaseQuantityAsync(Constans.UserId, productId);
+            await cartService.IncreaseQuantityAsync(currentUser.UserName, productId);
 
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Decrease(int productId)
         {
-            await cartService.DecreaseQuantityAsync(Constans.UserId, productId);
+            await cartService.DecreaseQuantityAsync(currentUser.UserName, productId);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Clear()
         {
-            await cartService.ClearCartAsync(Constans.UserId);
+            await cartService.ClearCartAsync(currentUser.UserName);
 
             return RedirectToAction(nameof(Index));
         }

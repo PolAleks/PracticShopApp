@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Web.ViewModels
 {
-    public class AuthorizationViewModel
+    public class UserLoginViewModel
     {
         [Display(Name = "Логин", Prompt = "Ваш логин")]
         [Required(ErrorMessage = "Не указан логин")]

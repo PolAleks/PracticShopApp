@@ -50,7 +50,7 @@ namespace OnlineShop.Infrastructure.Services
             return await userManager.AddToRoleAsync(user!, roleDto.Role);
         }
 
-        public async Task<IdentityResult> CreateUserAsync(RegisterUserDto registeredUser)
+        public async Task<IdentityResult> CreateUserAsync(UserRegisterDto registeredUser)
         {
             User user = mapper.Map<User>(registeredUser);
 
