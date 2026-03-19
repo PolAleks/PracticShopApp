@@ -1,6 +1,6 @@
 ﻿namespace OnlineShop.Core.DTO.User
 {
-    public class RegisterUserDto
+    public class UserRegisterDto
     {
         public required string UserName { get; set; }
         public required string Email { get; set; }

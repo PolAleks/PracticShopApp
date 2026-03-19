@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Core.DTO.User;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    public class AccountController(UserManager<User> userManager,
-                                   SignInManager<User> signInManager,
-                                   ICurrentUserService currentUser,
-                                   ICartService cartService) : Controller
+    public class AccountController(SignInManager<User> signInManager,
+                                   IAuthService authService,
+                                   IMapper mapper) : Controller
     {
         #region Authorization
 
@@ -19,29 +20,24 @@ namespace OnlineShop.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorization(AuthorizationViewModel authorization, string? returnUrl)
+        public async Task<IActionResult> Authorization(UserLoginViewModel loginViewModel , string? returnUrl)
         {
-            if (authorization.Login == authorization.Password)
+            if (loginViewModel.Login == loginViewModel.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
 
             if (!ModelState.IsValid)
             {
-                return View(authorization);
+                return View(loginViewModel);
             }
 
-            var anonymousUser = currentUser.UserName;
+            var loginDto = mapper.Map<UserLoginDto>(loginViewModel);
 
-            var result = await signInManager.PasswordSignInAsync(userName: authorization.Login, 
-                                                                 password: authorization.Password, 
-                                                                 isPersistent: authorization.IsRememberMe, 
-                                                                 lockoutOnFailure: false);
+            var result = await authService.LoginAsync(loginDto);
 
             if (result.Succeeded) 
             {
-                await cartService.MergeCartAsync(anonymousUser, currentUser.UserName);
-
                 if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return LocalRedirect(returnUrl);
@@ -52,7 +48,7 @@ namespace OnlineShop.Web.Controllers
             else
             {
                 ModelState.AddModelError("", "Неправильный логин или пароль!");
-                return View(authorization);
+                return View(loginViewModel);
             }
         }
 
@@ -67,39 +63,24 @@ namespace OnlineShop.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegisterViewModel registration, string? ReturnUrl)
+        public async Task<IActionResult> Registration(UserRegisterViewModel registerViewModel, string? ReturnUrl)
         {
-            if (registration.UserName == registration.Password)
+            if (registerViewModel.UserName == registerViewModel.Password)
             {
                 ModelState.AddModelError("", "Логин и пароль не должны совпадать");
             }
 
             if (!ModelState.IsValid)
             {
-                return View(registration);
+                return View(registerViewModel);
             }
 
-            User user = new()
-            {
-                FirstName = registration.FirstName,
-                LastName = registration.LastName,
-                Email = registration.UserName,
-                UserName = registration.UserName,
-                PhoneNumber = registration.PhoneNumber
-            };
+            var userRegisterDto = mapper.Map<UserRegisterDto>(registerViewModel);
 
-            IdentityResult result = await userManager.CreateAsync(user, registration.Password);
+            var result = await authService.RegisterAsync(userRegisterDto);
 
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(user, BaseTypeRole.User.ToString());
-
-                var anonymousUser = currentUser.UserName;
-
-                await signInManager.SignInAsync(user, isPersistent: false);
-
-                await cartService.MergeCartAsync(anonymousUser, currentUser.UserName);
-
                 if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
                 {
                     return LocalRedirect(ReturnUrl);
@@ -113,7 +94,7 @@ namespace OnlineShop.Web.Controllers
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-                return View(registration);
+                return View(registerViewModel);
             }            
         }
         #endregion
