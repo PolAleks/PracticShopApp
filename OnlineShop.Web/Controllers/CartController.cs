@@ -6,7 +6,7 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    [Authorize]
+    
     public class CartController(ICartService cartService, 
                                 IMapper mapper,
                                 ICurrentUserService currentUser) : Controller
