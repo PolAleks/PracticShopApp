@@ -4,16 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.Core.DTO.User;
 using OnlineShop.Core.Interfaces.Services;
-using OnlineShop.Web.Interfaces;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class UserController(IUserService userService,
-                                IMapper mapper,
-                                IRolesRepository rolesRepository) : Controller
+    public class UserController(IUserService userService, 
+                                IRoleService roleService,
+                                IMapper mapper) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -103,13 +102,17 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
 
             if (existingUser == null) return NotFound();
 
+            var roles = await roleService.GetAllRolesAsync();
+
             var changeRole = new ChangeRoleViewModel()
             {
                 Id = existingUser.Id,
                 Role = existingUser.Role,
-                Roles = rolesRepository.GetAll()
-                    .Select(role => new SelectListItem { Text = role.Name.ToString(), Value = role.Name })
-                    .ToList()
+                Roles = roles.Select(role => new SelectListItem 
+                { 
+                    Text = role.Name.ToString(), 
+                    Value = role.Name 
+                }).ToList()
             };
 
             return View(changeRole);
@@ -123,7 +126,7 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
                 return View(changeRole);
             }
 
-            var role = rolesRepository.TryGetByName(changeRole.Role);
+            var role = await roleService.GetRoleByNameAsync(changeRole.Role);
 
             if (role is not null)
             {
