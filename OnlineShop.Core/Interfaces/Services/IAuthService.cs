@@ -7,5 +7,6 @@ namespace OnlineShop.Core.Interfaces.Services
     {
         Task<SignInResult> LoginAsync(UserLoginDto userLoginDto);
         Task<IdentityResult> RegisterAsync(UserRegisterDto userRegisterDto);
+        Task LogoutAsync();
     }
 }

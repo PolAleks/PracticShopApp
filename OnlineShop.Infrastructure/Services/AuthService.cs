@@ -27,6 +27,7 @@ namespace OnlineShop.Infrastructure.Services
             return result;
         }
 
+
         public async Task<IdentityResult> RegisterAsync(UserRegisterDto userRegisterDto)
         {
             User user = new()
@@ -52,6 +53,11 @@ namespace OnlineShop.Infrastructure.Services
             } 
             
             return result;
+        }
+
+        public async Task LogoutAsync()
+        {
+            await signInManager.SignOutAsync();
         }
     }
 }

@@ -3,17 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.DTO.User;
 using OnlineShop.Core.Interfaces.Services;
-using OnlineShop.Domain.Entities;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    public class AccountController(SignInManager<User> signInManager,
-                                   IAuthService authService,
-                                   IMapper mapper) : Controller
+    public class AccountController(IAuthService authService, IMapper mapper) : Controller
     {
-        #region Authorization
 
+        #region Authorization
         public IActionResult Authorization()
         {
             return View();
@@ -51,7 +48,6 @@ namespace OnlineShop.Web.Controllers
                 return View(loginViewModel);
             }
         }
-
         #endregion
 
 
@@ -101,7 +97,8 @@ namespace OnlineShop.Web.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await authService.LogoutAsync();
+
             return RedirectToAction(nameof(Index), "Home");
         }
     }
