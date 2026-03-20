@@ -25,7 +25,7 @@ namespace OnlineShop.Infrastructure.Services
             }
         }
 
-        private string GetOrCreateAnonymousName(HttpContext httpContext)
+        private static string GetOrCreateAnonymousName(HttpContext httpContext)
         {
             const string coockieName = "AnonymousName";
 
