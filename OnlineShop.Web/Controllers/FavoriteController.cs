@@ -6,7 +6,6 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    [Authorize]
     public class FavoriteController(IFavoriteService favoriteService,
                                     IMapper mapper,
                                     ICurrentUserService currentUser) : Controller

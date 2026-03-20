@@ -89,8 +89,8 @@ namespace OnlineShop.Web
             });
 
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
 
             var app = builder.Build();
 

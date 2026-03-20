@@ -47,6 +47,7 @@ namespace OnlineShop.Infrastructure.Services
             return favoriteDto;
         }
 
+
         public async Task RemoveFromFavoriteAsync(int productId, string userId)
         {
             var favorite = await GetOrCreateFavoriteAsync(userId);
@@ -58,6 +59,36 @@ namespace OnlineShop.Infrastructure.Services
                 favorite.Products!.Remove(existingProduct);
                 await context.SaveChangesAsync();
             }
+        }
+
+        public async Task MergeFavoriteAsync(string sourceUserName, string destinationUserName)
+        {
+            if (string.IsNullOrEmpty(sourceUserName) ||
+                string.IsNullOrEmpty(destinationUserName) ||
+                sourceUserName == destinationUserName)
+                return;
+
+            if (!sourceUserName.StartsWith("anonymous_"))
+                return;
+
+            var anonymousFavorite = await GetOrCreateFavoriteAsync(sourceUserName);
+
+            if (anonymousFavorite.Products == null || anonymousFavorite.Products.Count == 0)
+                return;
+
+            var userFavorite = await GetOrCreateFavoriteAsync(destinationUserName);
+            
+            foreach (var product in anonymousFavorite.Products)
+            {
+                var userProduct = userFavorite.Products.FirstOrDefault(p => p.Id == product.Id);
+                if (userProduct == null)
+                {
+                    userFavorite.Products.Add(product);
+                }
+            }
+            context.Favorites.Remove(anonymousFavorite);
+
+            await context.SaveChangesAsync();
         }
 
         private async Task<Favorite> GetOrCreateFavoriteAsync(string userId)

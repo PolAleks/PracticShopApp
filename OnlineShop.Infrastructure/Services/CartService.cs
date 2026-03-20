@@ -125,13 +125,13 @@ namespace OnlineShop.Infrastructure.Services
                 anonymousUser == authenticatedUser)
                 return;
 
-            // Проверяем, что anonymousUser действительно анонимный (начинается с "anon_")
+            // Проверяем, что anonymousUser действительно анонимный (начинается с "anonymous_")
             if (!anonymousUser.StartsWith("anonymous_"))
                 return;
 
             var anonymousCart = await GetOrCreateCartAsync(anonymousUser);
 
-            if (anonymousCart?.Items == null || !anonymousCart.Items.Any())
+            if (anonymousCart?.Items == null || anonymousCart.Items.Count == 0)
                 return;
 
             var userCart = await GetOrCreateCartAsync(authenticatedUser);

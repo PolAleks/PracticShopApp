@@ -8,6 +8,7 @@ namespace OnlineShop.Infrastructure.Services
     public class AuthService(UserManager<User> userManager,
                              SignInManager<User> signInManager,
                              ICurrentUserService currentUser,
+                             IFavoriteService favoriteService,
                              ICartService cartService) : IAuthService
     {
         public async Task<SignInResult> LoginAsync(UserLoginDto userLoginDto)
@@ -22,6 +23,7 @@ namespace OnlineShop.Infrastructure.Services
             if (result.Succeeded)
             {
                 await cartService.MergeCartAsync(anonymousUser, currentUser.UserName);
+                await favoriteService.MergeFavoriteAsync(anonymousUser, currentUser.UserName);
             }
 
             return result;
@@ -50,6 +52,7 @@ namespace OnlineShop.Infrastructure.Services
                 await signInManager.SignInAsync(user, isPersistent: false);
 
                 await cartService.MergeCartAsync(anonymousUser, currentUser.UserName);
+                await favoriteService.MergeFavoriteAsync(anonymousUser, currentUser.UserName);
             } 
             
             return result;
