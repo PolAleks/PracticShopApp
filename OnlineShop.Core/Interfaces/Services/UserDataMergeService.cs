@@ -11,7 +11,7 @@
 
             await cartService.MergeCartAsync(sourceUserName, destinationUserName);
             await favoriteService.MergeFavoriteAsync(sourceUserName, destinationUserName);
-            
+            await comparisonService.MergeComparisonAsync(sourceUserName, destinationUserName);
         }
 
         private static bool ShouldSkipMerge(string sourceUserName, string destinationUserName)

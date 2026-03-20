@@ -60,20 +60,51 @@ namespace OnlineShop.Infrastructure.Services
             }
         }
 
+        public async Task MergeComparisonAsync(string sourceUserName, string destinationUserName)
+        {
+            var hasData = await HasDataAsync(sourceUserName);
+
+            if (!hasData) return;
+
+            var anonymousComparison = await GetOrCreateComparisonAsync(sourceUserName);
+
+            var userComparison = await GetOrCreateComparisonAsync(destinationUserName);
+
+            foreach (var product in anonymousComparison.Products)
+            {
+                var userProduct = userComparison.Products.FirstOrDefault(p => p.Id == product.Id);
+                if (userProduct == null)
+                {
+                    userComparison.Products.Add(product);
+                }
+            }
+            context.Comparisons.Remove(anonymousComparison);
+
+            await context.SaveChangesAsync();
+        }
+
         private async Task<Comparison> GetOrCreateComparisonAsync(string userId)
         {
             var comparison = await context.Comparisons
                 .Include(c => c.Products)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            if(comparison == null)
+            if (comparison == null)
             {
-                comparison = new() { UserId = userId};
+                comparison = new() { UserId = userId };
                 context.Comparisons.Add(comparison);
                 await context.SaveChangesAsync();
             }
 
             return comparison;
+        }
+
+        private async Task<bool> HasDataAsync(string userName)
+        {
+            return await context.Comparisons
+                .Where(c => c.UserId == userName)
+                .Select(c => c.Products.Any())
+                .FirstOrDefaultAsync();
         }
     }
 }
