@@ -8,5 +8,6 @@ namespace OnlineShop.Core.Interfaces.Services
         Task AddToComparisonAsync(int productId, string userId);
         Task RemoveFromComparisonAsync(int productId, string userId);
         Task ClearComparisonAsync(string userId);
+        Task MergeComparisonAsync(string sourceUserName, string destinationUserName);
     }
 }

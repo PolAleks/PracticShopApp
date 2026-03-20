@@ -8,5 +8,6 @@ namespace OnlineShop.Core.Interfaces.Services
         Task AddToFavoriteAsync(int productId, string userId);
         Task RemoveFromFavoriteAsync(int productId, string userID);
         Task ClearFavoriteAsync(string userId);
+        Task MergeFavoriteAsync(string sourceUserName, string destinationUserName);
     }
 }

@@ -5,6 +5,7 @@ using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Infrastructure.Data;
 using OnlineShop.Infrastructure.Exceptions;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Infrastructure.Services
 {
@@ -120,19 +121,11 @@ namespace OnlineShop.Infrastructure.Services
 
         public async Task MergeCartAsync(string anonymousUser, string authenticatedUser)
         {
-            if (string.IsNullOrEmpty(anonymousUser) ||
-                string.IsNullOrEmpty(authenticatedUser) ||
-                anonymousUser == authenticatedUser)
-                return;
+            bool hasData = await HasDataAsync(anonymousUser);
 
-            // Проверяем, что anonymousUser действительно анонимный (начинается с "anon_")
-            if (!anonymousUser.StartsWith("anonymous_"))
-                return;
+            if (!hasData) return;
 
             var anonymousCart = await GetOrCreateCartAsync(anonymousUser);
-
-            if (anonymousCart?.Items == null || !anonymousCart.Items.Any())
-                return;
 
             var userCart = await GetOrCreateCartAsync(authenticatedUser);
 
@@ -158,6 +151,14 @@ namespace OnlineShop.Infrastructure.Services
             _context.Carts.Remove(anonymousCart);
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<bool> HasDataAsync(string userName)
+        {
+            return await _context.Carts
+                .Where(c => c.UserId == userName)
+                .Select(c => c.Items.Any())
+                .FirstOrDefaultAsync();
         }
     }
 }

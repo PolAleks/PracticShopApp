@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Controllers
 {
-    [Authorize]
     public class FavoriteController(IFavoriteService favoriteService,
                                     IMapper mapper,
                                     ICurrentUserService currentUser) : Controller
