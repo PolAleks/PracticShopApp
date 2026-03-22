@@ -24,5 +24,6 @@ namespace OnlineShop.Core.DTO
         public string Name { get; set; } = string.Empty;
         public decimal Cost { get; set; }
         public string Description { get; set; } = string.Empty;
+        public IFormFile? Image { get; set; }
     }
 }
