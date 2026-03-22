@@ -32,6 +32,16 @@ namespace OnlineShop.Infrastructure.Services
             return $"/images/{folder}/{fileName}{extention}";
         }
 
+        public void DeleteImage(string imagePath)
+        {
+            var physicalPath = Path.Combine(environment.WebRootPath, imagePath.TrimStart('/'));
+
+            if(File.Exists(physicalPath))
+            {
+                File.Delete(physicalPath);
+            }
+        }
+
         private bool IsValidImage(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -44,5 +54,6 @@ namespace OnlineShop.Infrastructure.Services
             
             return _allowedExtentions.Contains(extention);
         }
+
     }
 }
