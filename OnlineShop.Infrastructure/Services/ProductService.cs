@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using OnlineShop.Core.DTO;
 using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Domain.Entities;
