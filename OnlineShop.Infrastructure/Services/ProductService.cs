@@ -61,7 +61,7 @@ namespace OnlineShop.Infrastructure.Services
 
                 if (createProductDto.Image != null)
                 {
-                    var fileName = $"{product.Id}_{Guid.NewGuid():N}";
+                    string fileName = GetFileName(product);
 
                     var imagePath = await imageService.SaveImageAsync(createProductDto.Image, "product", fileName);
 
@@ -84,6 +84,7 @@ namespace OnlineShop.Infrastructure.Services
             }
         }
 
+
         public async Task<IEnumerable<ProductDto>> SearchProductsAsync(string? query)
         {
             if (string.IsNullOrEmpty(query))
@@ -99,13 +100,31 @@ namespace OnlineShop.Infrastructure.Services
         public async Task<ProductDto> UpdateProductAsync(UpdateProductDto updateProductDto)
         {
             var product = await context.Products.FirstOrDefaultAsync(p => p.Id == updateProductDto.Id)
-                ?? throw new Exception($"Товар и идентификатором: {updateProductDto.Id} не найден");
+                ?? throw new Exception($"Товар с идентификатором: {updateProductDto.Id} не найден");
 
             mapper.Map(updateProductDto, product);
+
+            if(updateProductDto.Image != null)
+            {
+                if (!string.IsNullOrEmpty(product.PhotoPath))
+                {
+                    imageService.DeleteImage(product.PhotoPath);
+                }
+
+                var fileName = GetFileName(product);
+
+                product.PhotoPath = await imageService.SaveImageAsync(updateProductDto.Image, "product", fileName);
+            }
 
             await context.SaveChangesAsync();
 
             return mapper.Map<ProductDto>(product);
         }
+
+        private static string GetFileName(Product product)
+        {
+            return $"{product.Id}_{Guid.NewGuid():N}";
+        }
+
     }
 }
