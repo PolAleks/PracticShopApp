@@ -6,7 +6,7 @@
 <div class="text-center text-uppercase text-success mb-5 mt-5">
     <h2 class="row-title">Добавление нового товара</h2>
 </div>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="row justify-content-center mt-3">
         <div class="col-6 mb-3">
             <div asp-validation-summary="All" class="text-uppercase text-danger fw-bold"></div>
@@ -25,6 +25,21 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </p>
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Изображение товара</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Image" class="form-label fw-bold"></label>
+                        <input asp-for="Image" type="file" class="form-control" accept="image/jpeg,image/png,image/gif" />
+                        <div class="form-text">
+                            <small>Поддерживаемые форматы: JPG, PNG, GIF. Максимальный размер: 5MB на файл.</small><br />
+                        </div>
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="text-center m-3">
