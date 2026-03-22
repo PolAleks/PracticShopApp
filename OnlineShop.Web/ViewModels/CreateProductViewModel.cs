@@ -19,6 +19,8 @@ namespace OnlineShop.Web.ViewModels
         [MaxLength(4069, ErrorMessage = "Описание товара не должно превышать {1} символов")]
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
-        public string PhotoPath { get; set; } = "/img/product.png";
+        
+        [Display(Name = "Изображение товара")]
+        public IFormFile? Image { get; set; }
     }
 }
