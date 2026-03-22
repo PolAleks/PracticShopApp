@@ -92,6 +92,7 @@ namespace OnlineShop.Web
             builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IUserDataMergeService, UserDataMergeService>();
+            builder.Services.AddTransient<IImageService, ImageService>();
 
             var app = builder.Build();
 
