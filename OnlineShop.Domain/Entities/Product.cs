@@ -14,5 +14,6 @@
         public ICollection<Comparison> Comparisons { get; set; } = [];
         public ICollection<ComparisonProduct> ComparisonProducts { get; set; } = new HashSet<ComparisonProduct>();
         public ICollection<FavoriteProduct> FavoriteProducts { get; set; } = new HashSet<FavoriteProduct>();
+        public ICollection<ProductImage> ProductImages { get; set; } = new HashSet<ProductImage>();
     }
 }
