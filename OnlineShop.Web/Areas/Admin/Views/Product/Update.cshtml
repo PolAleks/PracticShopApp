@@ -6,25 +6,47 @@
 <div class="text-center text-uppercase text-success mb-5 mt-5">
     <h2 class="row-title">Редактирование товара</h2>
 </div>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="row justify-content-center mt-3">
         <div class="col-6 mb-3">
             <input type="hidden" name="Id" value="@Model.Id" />
             <div asp-validation-summary="All" class="text-uppercase text-danger fw-bold"></div>
             <p>
-                <label asp-for="Name" class="form-label">Наименование товара</label><br />
+                <label asp-for="Name" class="form-label fw-bold">Наименование товара</label><br />
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </p>
             <p>
-                <label asp-for="Cost" class="form-label"></label><br />
+                <label asp-for="Cost" class="form-label fw-bold"></label><br />
                 <input asp-for="Cost" class="form-control" type="number" />
                 <span asp-validation-for="Cost" class="text-danger"></span>
             </p>
             <p>
-                <label asp-for="Description" class="form-label"></label><br />
+                <label asp-for="Description" class="form-label fw-bold"></label><br />
                 <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </p>
+            <!-- Блок с изображением -->
+            <p>
+                <label asp-for="PhotoPath" class="form-label fw-bold"></label><br />
+                @if (!string.IsNullOrEmpty(Model.PhotoPath))
+                {
+                    <div class="text-center">
+                        <img src="@Model.PhotoPath"
+                             style="max-width: 200px; max-height: 200px; object-fit: contain;"
+                             class="img-thumbnail mb-2" />
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">Изображение отсутствует</div>
+                }
+            </p>
+            <p>
+                <label asp-for="Image" class="form-label fw-bold"></label><br />
+                <input asp-for="Image" type="file" class="form-control" accept="image/jpeg,image/png,image/gif" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+                <div class="form-text">Поддерживаемые форматы: JPG, PNG, GIF, WEBP. Максимальный размер: 5MB</div>
             </p>
         </div>
     </div>
