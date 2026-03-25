@@ -4,12 +4,13 @@ using OnlineShop.Core.Interfaces.Services;
 
 namespace OnlineShop.Infrastructure.Services
 {
+
     public class ImageService(IWebHostEnvironment environment) : IImageService
     {
         private readonly string[] _allowedExtentions = { ".jpg", ".jpeg", ".png", ".gif" };
         private const int MaxFileSize = 5 * 1024 * 1024;
 
-        public async Task<string> SaveImageAsync(IFormFile file, string folder, string fileName)
+        public async Task<string> SaveImageAsync(IFormFile file, string fileName, string folder = "product")
         {
             if (!IsValidImage(file))
                 throw new ArgumentException("Недопустимый файл изображения");
@@ -32,11 +33,25 @@ namespace OnlineShop.Infrastructure.Services
             return $"/images/{folder}/{fileName}{extention}";
         }
 
+        public async Task<IEnumerable<string>> SaveProductImagesAsync(IEnumerable<IFormFile> files, int productId)
+        {
+            List<string> imagesPath = [];
+
+            foreach (var file in files)
+            {
+                var fileName = $"{productId}_{Guid.NewGuid():N}";
+                var imagePath = await SaveImageAsync(file, fileName);
+                imagesPath.Add(imagePath);
+            }
+
+            return imagesPath;
+        }
+
         public void DeleteImage(string imagePath)
         {
             var physicalPath = Path.Combine(environment.WebRootPath, imagePath.TrimStart('/'));
 
-            if(File.Exists(physicalPath))
+            if (File.Exists(physicalPath))
             {
                 File.Delete(physicalPath);
             }
@@ -51,9 +66,8 @@ namespace OnlineShop.Infrastructure.Services
                 return false;
 
             var extention = Path.GetExtension(file.FileName).ToLowerInvariant();
-            
+
             return _allowedExtentions.Contains(extention);
         }
-
     }
 }
