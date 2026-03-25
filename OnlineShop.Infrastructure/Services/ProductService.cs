@@ -16,9 +16,18 @@ namespace OnlineShop.Infrastructure.Services
     {
         public async Task<bool> DeleteProductByIdAsync(int id)
         {
-            var product = context.Products.FirstOrDefault(p => p.Id == id);
+            var product = context.Products
+                .Include(p => p.ProductImages)
+                .FirstOrDefault(p => p.Id == id);
+
             if (product != null)
             {
+                // Удаление изображений товара с сервера
+                foreach (var image in product.ProductImages)
+                {
+                    imageService.DeleteImage(image.ImagePath);
+                }
+
                 context.Products.Remove(product);
                 await context.SaveChangesAsync();
                 return true;
@@ -55,24 +64,29 @@ namespace OnlineShop.Infrastructure.Services
             try
             {
                 var product = mapper.Map<Product>(createProductDto);
+                product.ProductImages = new HashSet<ProductImage>();
 
                 context.Products.Add(product);
                 await context.SaveChangesAsync();
 
-                if (createProductDto.Image != null)
+                if (createProductDto.Images != null && createProductDto.Images.Any())
                 {
-                    string fileName = GetFileName(product);
+                    var images = await imageService.SaveProductImagesAsync(createProductDto.Images, product.Id);
 
-                    var imagePath = await imageService.SaveImageAsync(createProductDto.Image, "product", fileName);
+                    var productImages = images.Select((path, index) => new ProductImage()
+                    {
+                        ProductId = product.Id,
+                        ImagePath = path,
+                        IsMain = index == 0
+                    });
 
-                    product.PhotoPath = imagePath;
+                    await context.ProductImages.AddRangeAsync(productImages);
+
+                    product.PhotoPath = productImages.First(i => i.IsMain).ImagePath;
+
+                    await context.SaveChangesAsync();
                 }
-                else
-                {
-                    product.PhotoPath = "/img/product.png";
-                }
 
-                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
                 return mapper.Map<ProductDto>(product);
@@ -99,32 +113,91 @@ namespace OnlineShop.Infrastructure.Services
 
         public async Task<ProductDto> UpdateProductAsync(UpdateProductDto updateProductDto)
         {
-            var product = await context.Products.FirstOrDefaultAsync(p => p.Id == updateProductDto.Id)
-                ?? throw new Exception($"Товар с идентификатором: {updateProductDto.Id} не найден");
-
-            mapper.Map(updateProductDto, product);
-
-            if(updateProductDto.Image != null)
+            using var transaction = context.Database.BeginTransaction();
+            try
             {
-                if (!string.IsNullOrEmpty(product.PhotoPath))
+                var product = await context.Products
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefaultAsync(p => p.Id == updateProductDto.Id)
+                    ?? throw new Exception($"Товар с идентификатором: {updateProductDto.Id} не найден");
+
+                // Обновляем основные поля
+                mapper.Map(updateProductDto, product);
+
+                // Удаляем отмеченные изображения
+                if (updateProductDto.ImagesToDelete != null && updateProductDto.ImagesToDelete.Any())
                 {
-                    imageService.DeleteImage(product.PhotoPath);
+                    var imagesToDelete = product.ProductImages
+                        .Where(img => updateProductDto.ImagesToDelete.Contains(img.Id));
+
+                    foreach (var image in imagesToDelete)
+                    {
+                        imageService.DeleteImage(image.ImagePath);
+
+                        context.ProductImages.Remove(image);
+                    }
                 }
 
-                var fileName = GetFileName(product);
+                // Добавляем новое изображение
+                if (updateProductDto.NewImages != null && updateProductDto.NewImages.Any())
+                {
+                    var newImagesPath = await imageService.SaveProductImagesAsync(updateProductDto.NewImages, updateProductDto.Id);
 
-                product.PhotoPath = await imageService.SaveImageAsync(updateProductDto.Image, "product", fileName);
+                    var newProductImages = newImagesPath.Select((path, index) => new ProductImage()
+                    {
+                        ProductId = product.Id,
+                        ImagePath = path,
+                        IsMain = !product.ProductImages.Any() && index == 0
+                    });
+
+                    await context.ProductImages.AddRangeAsync(newProductImages);
+                }
+                await context.SaveChangesAsync();
+
+                // Обновляем PhotoPath для обратной совместимости
+                var mainImage = product.ProductImages.FirstOrDefault(i => i.IsMain);
+                if (mainImage != null)
+                {
+                    product.PhotoPath = mainImage.ImagePath;
+                }
+                else if (product.ProductImages.Any())
+                {
+                    // Если нет основного изображения, делаем первое основным
+                    var firstImage = product.ProductImages.First();
+                    firstImage.IsMain = true;
+                    product.PhotoPath = firstImage.ImagePath;
+
+                    // Обновляем в базе данных
+                    context.ProductImages.Update(firstImage);
+                }
+                else
+                {
+                    product.PhotoPath = null;
+                }
+
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return mapper.Map<ProductDto>(product);
+
             }
-
-            await context.SaveChangesAsync();
-
-            return mapper.Map<ProductDto>(product);
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
-        private static string GetFileName(Product product)
+        public async Task<ProductDto> GetProductWithImagesByIdAsync(int id)
         {
-            return $"{product.Id}_{Guid.NewGuid():N}";
-        }
+            var product = await context.Products
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id)
+                ?? throw new NotFoundException($"Товар с идентификатором: {id} не найден");
 
+            var productDto = mapper.Map<ProductDto>(product);
+
+            return productDto;
+        }
     }
 }
