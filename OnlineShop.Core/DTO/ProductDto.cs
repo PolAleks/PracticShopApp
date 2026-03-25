@@ -9,6 +9,7 @@ namespace OnlineShop.Core.DTO
         public decimal Cost { get; set; }
         public string Description { get; set; } = string.Empty;
         public string PhotoPath { get; set; } = string.Empty;
+        public IEnumerable<ProductImageDto> ProductImages { get; set; } = [];
     }
 
     public class CreateProductDto
@@ -16,7 +17,7 @@ namespace OnlineShop.Core.DTO
         public string Name { get; set; } = string.Empty;
         public decimal Cost { get; set; }
         public string Description { get; set; } = string.Empty;
-        public IFormFile? Image { get; set; }
+        public IEnumerable<IFormFile> Images { get; set; } = [];
     }
     public class UpdateProductDto
     {
@@ -24,6 +25,8 @@ namespace OnlineShop.Core.DTO
         public string Name { get; set; } = string.Empty;
         public decimal Cost { get; set; }
         public string Description { get; set; } = string.Empty;
-        public IFormFile? Image { get; set; }
+        public IEnumerable<ProductImageDto> Images { get; set; } = [];
+        public IEnumerable<Guid> ImagesToDelete { get; set; } = [];
+        public IEnumerable<IFormFile> NewImages { get; set; } = [];
     }
 }
