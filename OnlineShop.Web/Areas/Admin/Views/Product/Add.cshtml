@@ -27,16 +27,16 @@
             </p>
             <div class="card">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">Изображение товара</h5>
+                    <h5 class="mb-0">Изображения товара</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label asp-for="Image" class="form-label fw-bold"></label>
-                        <input asp-for="Image" type="file" class="form-control" accept="image/jpeg,image/png,image/gif" />
+                        <label asp-for="Images" class="form-label fw-bold"></label>
+                        <input asp-for="Images" type="file" class="form-control" multiple accept="image/jpeg,image/png,image/gif" />
                         <div class="form-text">
                             <small>Поддерживаемые форматы: JPG, PNG, GIF. Максимальный размер: 5MB на файл.</small><br />
                         </div>
-                        <span asp-validation-for="Image" class="text-danger"></span>
+                        <span asp-validation-for="Images" class="text-danger"></span>
                     </div>
                 </div>
             </div>
