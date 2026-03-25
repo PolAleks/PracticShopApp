@@ -22,10 +22,13 @@ namespace OnlineShop.Web.ViewModels
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
 
-        [Display(Name = "Текущее изображение:")]
-        public string? PhotoPath { get; set; }
+        [Display(Name = "Существующие изображения:")]
+        public List<ProductImageViewModel> ExistingImages { get; set; } = [];
 
-        [Display(Name = "Новое изображение:")]
-        public IFormFile? Image { get; set; }
+        [Display(Name = "Изображения для удаления:")]
+        public List<Guid> ImagesToDelete { get; set; } = [];
+
+        [Display(Name = "Выберите изображения для загрузки:")]
+        public List<IFormFile> NewImages { get; set; } = [];
     }
 }

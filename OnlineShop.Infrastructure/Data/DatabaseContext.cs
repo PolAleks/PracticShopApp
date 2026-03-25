@@ -13,8 +13,7 @@ namespace OnlineShop.Infrastructure.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Comparison> Comparisons { get; set; }
-
-      
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<DeliveryUser> DeliveryUsers { get; set; } = null!;
 

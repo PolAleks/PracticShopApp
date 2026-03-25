@@ -4,7 +4,6 @@ using OnlineShop.Core.DTO;
 using OnlineShop.Core.DTO.User;
 using OnlineShop.Domain.Entities;
 
-
 namespace OnlineShop.Infrastructure.Mappings
 {
     public class InfrastructureMappingProfile : Profile
@@ -24,8 +23,8 @@ namespace OnlineShop.Infrastructure.Mappings
             CreateMap<CreateProductDto, Product>();
 
             // UpdateProductDto -> Product
-            CreateMap<UpdateProductDto, Product>();
-            
+            CreateMap<UpdateProductDto, Product>().ReverseMap();
+                        
             // Item -> ItemDto
             CreateMap<Item, ItemDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
@@ -48,6 +47,8 @@ namespace OnlineShop.Infrastructure.Mappings
 
             // IdentityRole -> RoleDto
             CreateMap<IdentityRole, RoleDto>();
+
+            CreateMap<ProductImage, ProductImageDto>();
         }
     }
 }

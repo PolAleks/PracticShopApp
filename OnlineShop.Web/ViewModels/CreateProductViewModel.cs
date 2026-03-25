@@ -8,7 +8,7 @@ namespace OnlineShop.Web.ViewModels
         [Required(ErrorMessage = "Не указано наименование товара")]
         [DataType(DataType.Text)]
         [StringLength(200, ErrorMessage = "Наименование товара должно содержать от {2} до {1} символов", MinimumLength = 2)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Display(Name = "Цена, руб.", Prompt = "Цена, руб.")]
         [Required(ErrorMessage = "Не указана цена товара")]
@@ -19,8 +19,8 @@ namespace OnlineShop.Web.ViewModels
         [MaxLength(4069, ErrorMessage = "Описание товара не должно превышать {1} символов")]
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
-        
-        [Display(Name = "Изображение товара")]
-        public IFormFile? Image { get; set; }
+
+        [Display(Name = "Изображения товара")]
+        public List<IFormFile> Images { get; set; } = [];
     }
 }

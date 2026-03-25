@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Web.ViewModels;
-using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Core.DTO;
+using OnlineShop.Core.Interfaces.Services;
 using OnlineShop.Infrastructure.Exceptions;
+using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.Web.Areas.Admin.Controllers
 {
@@ -53,9 +53,23 @@ namespace OnlineShop.Web.Areas.Admin.Controllers
         {
             try
             {
-                var productDto = await productService.GetProductByIdAsync(id);
+                var product = await productService.GetProductWithImagesByIdAsync(id);
 
-                return View(mapper.Map<UpdateProductViewModel>(productDto));
+                var productViewModel = new UpdateProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Cost = product.Cost,
+                    Description = product.Description,
+                    ExistingImages = product.ProductImages.Select(img => new ProductImageViewModel
+                    {
+                        Id = img.Id,
+                        ImagePath = img.ImagePath,
+                        IsMain = img.IsMain
+                    }).ToList()
+                };
+
+                return View(productViewModel);
             }
             catch (NotFoundException)
             {
